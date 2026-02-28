@@ -322,11 +322,10 @@
 
   <script src="common.js"></script>
   <script>
-    let currentPose = { emoji: '🧍', name: 'スタンディング' };
+    let currentPose = { name: 'スタンディング' };
 
-    function selectPose(emoji, name) {
-      currentPose = { emoji, name };
-      document.getElementById('posePreview').textContent = emoji;
+    function selectPose(name) {
+      currentPose = { name };
       document.getElementById('poseText').textContent = name;
       showToast(`✅ ${name} を選択しました`, 2000, 'success');
     }
