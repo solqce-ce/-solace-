@@ -382,7 +382,7 @@
         const description = generateSinglePose();
         const div = document.createElement('div');
         div.className = 'preview-section';
-        div.innerHTML = `<div class="preview-text-large">案${i+1}\n${description}</div>`;
+        div.innerHTML = `<div class="preview-text-large">案${i+1}\n${sanitizeHTML(description)}</div>`;
         container.appendChild(div);
       }
       

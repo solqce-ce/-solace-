@@ -447,12 +447,12 @@
           card.className = 'card';
           card.style.marginBottom = '0';
           card.innerHTML = `
-            <div class="card-header"><h3>キャラ ${i+1} - ${c.role}</h3></div>
+            <div class="card-header"><h3>キャラ ${i+1} - ${sanitizeHTML(c.role)}</h3></div>
             <div style="padding:16px;">
-              <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${c.name}（${c.age}）</div>
-              <div style="margin-bottom:6px;">容姿: ${c.appearance} / 服装: ${c.clothes}</div>
-              <div style="margin-bottom:6px;">性格: ${c.personality}${c.trait ? ' / 特徴: ' + c.trait : ''}</div>
-              <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${c.world}</div>
+              <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
+              <div style="margin-bottom:6px;">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
+              <div style="margin-bottom:6px;">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
+              <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${sanitizeHTML(c.world)}</div>
             </div>
           `;
           charGrid.appendChild(card);

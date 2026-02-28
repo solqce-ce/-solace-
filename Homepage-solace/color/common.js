@@ -3,6 +3,24 @@
  * テーマ・トースト通知・ナビゲーション・ユーティリティ
  */
 
+// ========== サニタイズ ==========
+
+function sanitizeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
+function sanitizeURL(url) {
+  if (typeof url !== 'string') return '#';
+  if (/^[\w\-\.\/]+$/.test(url)) return url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') return url;
+  } catch (e) { /* invalid URL */ }
+  return '#';
+}
+
 // ========== テーマ管理 ==========
 
 function applyTheme() {
@@ -163,11 +181,11 @@ function buildHistoryNav(currentPage) {
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;">
         ${history.slice(0, 6).map((item, idx) => `
-          <a href="${item.url}" style="padding: 10px 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 8px; text-decoration: none; color: inherit; text-align: center; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500;"
+          <a href="${sanitizeURL(item.url)}" style="padding: 10px 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 8px; text-decoration: none; color: inherit; text-align: center; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500;"
              onmouseover="this.style.background='rgba(102, 126, 234, 0.1)'; this.style.transform='translateY(-2px)';"
              onmouseout="this.style.background='rgba(255, 255, 255, 0.8)'; this.style.transform='translateY(0)';">
-            <span style="font-size: 20px;">${item.emoji}</span>
-            <span>${item.name}</span>
+            <span style="font-size: 20px;">${sanitizeHTML(item.emoji)}</span>
+            <span>${sanitizeHTML(item.name)}</span>
           </a>
         `).join('')}
       </div>
