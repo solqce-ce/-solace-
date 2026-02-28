@@ -321,9 +321,9 @@
       </select>
       <label for="variantNum" style="font-weight:600;">複数案</label>
       <select id="variantNum" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
-        <option value="1">1帯</option>
-        <option value="3">3帯</option>
-        <option value="5" selected>5帯</option>
+        <option value="1">1案</option>
+        <option value="3">3案</option>
+        <option value="5" selected>5案</option>
       </select>
       <button class="btn btn-primary" id="generateBtn" style="width:auto;">🎲 ランダム生成</button>
     </div>
@@ -416,10 +416,14 @@
         showToast('⚠️ 生成された構成がありません', 2000, 'warning');
         return;
       }
-      navigator.clipboard && navigator.clipboard.writeText(text).then(() => {
+      if (!navigator.clipboard || !window.isSecureContext) {
+        showToast('ℹ️ コピー不可の環境です。下の詳細テキストを手動でコピーしてください', 2800, 'info');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
         showToast('✅ 構成をクリップボードにコピーしました', 2000, 'success');
       }).catch(() => {
-        showToast('✅ 構成を保存しました（コピーに失敗しました）', 2000, 'success');
+        showToast('⚠️ コピーに失敗しました。詳細テキストを手動でコピーしてください', 2800, 'warning');
       });
     }
 
@@ -462,7 +466,7 @@
         grid.appendChild(variantDiv);
       }
       
-      showToast(`🎲 ${count}人の${variantNum}りバリエーションを生成しました`, 1200, 'success');
+      showToast(`🎲 ${count}人の${variantNum}案を生成しました`, 1200, 'success');
     }
 
     document.addEventListener('DOMContentLoaded', () => {

@@ -89,6 +89,79 @@
             flex-wrap: wrap;
         }
 
+        .quick-start {
+            margin-bottom: 72px;
+            padding: 28px;
+            border-radius: 18px;
+            background: rgba(102, 126, 234, 0.06);
+            border: 1px solid rgba(102, 126, 234, 0.16);
+        }
+
+        .quick-start h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .quick-start p {
+            opacity: 0.75;
+            margin-bottom: 18px;
+        }
+
+        .quick-start-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .quick-start-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        html.dark .quick-start-card {
+            background: rgba(22, 22, 32, 0.9);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .quick-step {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 56px;
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(102, 126, 234, 0.14);
+            color: #667eea;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .quick-start-card h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .quick-start-card p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            opacity: 0.72;
+        }
+
+        .quick-start-link {
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .quick-start-link:hover {
+            text-decoration: underline;
+        }
+
         .btn {
             padding: 14px 32px;
             border: none;
@@ -327,6 +400,15 @@
                 flex-direction: column;
             }
 
+            .quick-start {
+                margin-bottom: 56px;
+                padding: 20px;
+            }
+
+            .quick-start-grid {
+                grid-template-columns: 1fr;
+            }
+
             .btn {
                 width: 100%;
                 justify-content: center;
@@ -363,6 +445,31 @@
             <div class="hero-cta">
                 <a href="emoji-generator-enterprise.html" class="btn btn-primary">🚀 すぐ始める</a>
                 <a href="random-color.html" class="btn btn-secondary">🎨 カラー生成</a>
+            </div>
+        </section>
+
+        <section class="quick-start" aria-label="初めての方向けガイド">
+            <h2>はじめての3ステップ</h2>
+            <p>迷ったらこの順番で使えば、最短で作品づくりを始められます。</p>
+            <div class="quick-start-grid">
+                <article class="quick-start-card">
+                    <span class="quick-step">STEP 1</span>
+                    <h3>作る</h3>
+                    <p>まずは絵文字やポーズを生成して、アイデアを形にします。</p>
+                    <a href="emoji-generator-enterprise.html" class="quick-start-link">絵文字ジェネレーターへ →</a>
+                </article>
+                <article class="quick-start-card">
+                    <span class="quick-step">STEP 2</span>
+                    <h3>保存する</h3>
+                    <p>良い案をギャラリーに集めて、あとで見返しやすくします。</p>
+                    <a href="gallery.html" class="quick-start-link">ギャラリーへ →</a>
+                </article>
+                <article class="quick-start-card">
+                    <span class="quick-step">STEP 3</span>
+                    <h3>共有する</h3>
+                    <p>設定ページからデータを書き出して、チームと共有できます。</p>
+                    <a href="settings-enterprise.html" class="quick-start-link">設定ページへ →</a>
+                </article>
             </div>
         </section>
 
@@ -407,7 +514,7 @@
                 </div>
             </a>
 
-            <a href="gallery-enterprise.html" class="feature-card">
+            <a href="gallery.html" class="feature-card">
                 <div class="feature-card-inner">
                     <div class="feature-icon">🎨</div>
                     <h3 class="feature-title">ギャラリー</h3>

@@ -62,6 +62,8 @@ function showToast(msg, duration = 2500, type = "default") {
     toast = document.createElement("div");
     toast.id = "toast";
     toast.className = "toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
     document.body.appendChild(toast);
   }
   
@@ -76,7 +78,7 @@ function showToast(msg, duration = 2500, type = "default") {
 // ========== お気に入り機能 ==========
 
 function addToFavorites(itemId, itemName, itemEmoji = '⭐') {
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  const favorites = getFavorites();
   
   // 重複チェック
   if (favorites.some(fav => fav.id === itemId)) {
@@ -92,24 +94,24 @@ function addToFavorites(itemId, itemName, itemEmoji = '⭐') {
     addedAt: new Date().toISOString()
   });
   
-  localStorage.setItem('favorites', JSON.stringify(favorites));
+  saveData('favorites', favorites);
   showToast(`❤️ ${itemName} をお気に入りに追加しました`, 2000, 'success');
   return true;
 }
 
 function removeFavorite(itemId) {
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  const favorites = getFavorites();
   const filtered = favorites.filter(fav => fav.id !== itemId);
-  localStorage.setItem('favorites', JSON.stringify(filtered));
+  saveData('favorites', filtered);
 }
 
 function isFavorite(itemId) {
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  return favorites.some(fav => fav.id === itemId);
+  return getFavorites().some(fav => fav.id === itemId);
 }
 
 function getFavorites() {
-  return JSON.parse(localStorage.getItem('favorites')) || [];
+  const favorites = loadData('favorites', []);
+  return Array.isArray(favorites) ? favorites : [];
 }
 
 function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '⭐') {
@@ -131,7 +133,7 @@ function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '⭐') {
 // ========== 履歴機能 ==========
 
 function addToHistory(pageUrl, pageName, pageEmoji = '📄') {
-  const history = JSON.parse(localStorage.getItem('visitHistory')) || [];
+  const history = getHistory();
   
   // 同じページを再度訪問した場合は古い履歴を削除
   const filtered = history.filter(item => item.url !== pageUrl);
@@ -145,11 +147,12 @@ function addToHistory(pageUrl, pageName, pageEmoji = '📄') {
   
   // 最新50件のみ保存
   const limited = filtered.slice(0, 50);
-  localStorage.setItem('visitHistory', JSON.stringify(limited));
+  saveData('visitHistory', limited);
 }
 
 function getHistory() {
-  return JSON.parse(localStorage.getItem('visitHistory')) || [];
+  const history = loadData('visitHistory', []);
+  return Array.isArray(history) ? history : [];
 }
 
 function clearHistory() {
@@ -203,14 +206,14 @@ function buildNav(activePage = "") {
   }
 
   const links = [
-    { href: "index.html", icon: "🏠", label: "ホーム", key: "index" },
-    { href: "emoji-generator.html", icon: "😊", label: "絵文字", key: "emoji" },
-    { href: "pose-generator.html", icon: "🧍", label: "ポーズ", key: "pose" },
-    { href: "chara-generator.html", icon: "👥", label: "キャラ", key: "chara" },
+    { href: "index-enterprise.html", icon: "🏠", label: "ホーム", key: "index" },
+    { href: "emoji-generator-enterprise.html", icon: "😊", label: "絵文字", key: "emoji" },
+    { href: "pose-generator-enterprise.html", icon: "🧍", label: "ポーズ", key: "pose" },
+    { href: "chara-generator-enterprise.html", icon: "👥", label: "キャラ", key: "chara" },
     { href: "random-color.html", icon: "🌈", label: "カラー", key: "random" },
     { href: "gallery.html", icon: "🎨", label: "ギャラリー", key: "gallery" },
-    { href: "profile.html", icon: "👤", label: "プロフ", key: "profile" },
-    { href: "settings.html", icon: "⚙️", label: "設定", key: "settings" }
+    { href: "profile-enterprise.html", icon: "👤", label: "プロフ", key: "profile" },
+    { href: "settings-enterprise.html", icon: "⚙️", label: "設定", key: "settings" }
   ];
 
   nav.innerHTML = `
@@ -252,6 +255,12 @@ function buildNav(activePage = "") {
       menu.classList.toggle("active");
     });
   }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu.classList.contains("active")) {
+      menu.classList.remove("active");
+    }
+  });
 
   // 外側クリックで閉じる
   document.addEventListener("click", (e) => {
@@ -530,6 +539,11 @@ function injectCommonStyles() {
       color: #fff;
     }
 
+    .toast.warning {
+      background: rgba(249, 115, 22, 0.95);
+      color: #fff;
+    }
+
     /* ===== モバイルレスポンシブ ===== */
     @media (max-width: 768px) {
       #mainNav {
@@ -626,6 +640,37 @@ function confirmAction(message) {
   return confirm(message);
 }
 
+function copyTextToClipboard(text, options = {}) {
+  const {
+    successMessage = '📋 コピーしました',
+    emptyMessage = '⚠️ コピー対象がありません',
+    fallbackMessage = 'ℹ️ コピー不可の環境です。手動でコピーしてください',
+    errorMessage = '⚠️ コピーに失敗しました。手動でコピーしてください',
+    toastDuration = 2000
+  } = options;
+
+  const normalized = String(text ?? '').trim();
+  if (!normalized) {
+    showToast(emptyMessage, 2200, 'warning');
+    return Promise.resolve(false);
+  }
+
+  if (!navigator.clipboard || !window.isSecureContext) {
+    showToast(fallbackMessage, 2800, 'info');
+    return Promise.resolve(false);
+  }
+
+  return navigator.clipboard.writeText(normalized)
+    .then(() => {
+      showToast(successMessage, toastDuration, 'success');
+      return true;
+    })
+    .catch(() => {
+      showToast(errorMessage, 2800, 'warning');
+      return false;
+    });
+}
+
 // ========== 初期化 ==========
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -635,5 +680,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // 現在のページを履歴に追加
   const pageName = document.title.split(' - ')[0] || 'ページ';
   const pageEmoji = '📄';
-  addToHistory(window.location.pathname.split('/').pop() || 'index.html', pageName, pageEmoji);
+  addToHistory(window.location.pathname.split('/').pop() || 'index-enterprise.html', pageName, pageEmoji);
 });

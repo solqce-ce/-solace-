@@ -491,8 +491,11 @@
 
       function copyPalette() {
         const codes = Array.from(paletteEl.children).map(sw => sw.querySelector('.code').textContent).join(' ');
-        navigator.clipboard.writeText(codes);
-        showToast('📋 コピーしました', 1500, 'success');
+        copyTextToClipboard(codes, {
+          successMessage: '📋 パレットをコピーしました',
+          emptyMessage: '⚠️ 先にカラーを生成してください',
+          fallbackMessage: 'ℹ️ コピー不可の環境です。カラーコードを手動でコピーしてください'
+        });
       }
 
       function savePaletteAsImage() {

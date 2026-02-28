@@ -455,6 +455,23 @@
     };
 
     let selectedCategories = ['all'];
+    let countSelectRef = null;
+
+    function loadEmojiSettings() {
+      const s = JSON.parse(localStorage.getItem('emojiSettings') || '{}');
+      if (s.categories) {
+        selectedCategories = s.categories;
+      }
+      if (s.count && countSelectRef) {
+        countSelectRef.value = s.count;
+      }
+    }
+
+    function saveEmojiSettings() {
+      if (!countSelectRef) return;
+      const s = { categories: selectedCategories, count: countSelectRef.value };
+      localStorage.setItem('emojiSettings', JSON.stringify(s));
+    }
 
     function getEmojisForCategories(categories) {
       if (categories.includes('all')) {
@@ -514,15 +531,16 @@
         `;
         item.style.cursor = 'pointer';
         item.onclick = () => {
-          navigator.clipboard.writeText(emoji);
-          showToast('📋 コピーしました！', 2000, 'success');
+          copyTextToClipboard(emoji, {
+            successMessage: '📋 コピーしました！'
+          });
         };
         grid.appendChild(item);
       });
 
       container.style.display = 'none';
       grid.style.display = 'grid';
-      saveSettings();
+      saveEmojiSettings();
     }
 
     function clearEmojis() {
@@ -540,20 +558,7 @@
       const countSelect = document.getElementById('countSelect');
       const copyAllBtn = document.getElementById('copyAllBtn');
       const saveImgBtn = document.getElementById('saveImgBtn');
-
-      function loadSettings() {
-        const s = JSON.parse(localStorage.getItem('emojiSettings') || '{}');
-        if (s.categories) {
-          selectedCategories = s.categories;
-        }
-        if (s.count) countSelect.value = s.count;
-        updateButtonStates();
-      }
-
-      function saveSettings() {
-        const s = { categories: selectedCategories, count: countSelect.value };
-        localStorage.setItem('emojiSettings', JSON.stringify(s));
-      }
+      countSelectRef = countSelect;
 
       function updateButtonStates() {
         Array.from(categoryButtons.querySelectorAll('.category-btn')).forEach(btn => {
@@ -584,22 +589,26 @@
             }
           }
           updateButtonStates();
-          saveSettings();
+          saveEmojiSettings();
         }
       });
 
-      countSelect.addEventListener('change', saveSettings);
+      countSelect.addEventListener('change', saveEmojiSettings);
       copyAllBtn.addEventListener('click', copyAllEmojis);
       saveImgBtn.addEventListener('click', saveEmojisAsImage);
 
-      loadSettings();
+      loadEmojiSettings();
+      updateButtonStates();
     });
 
     function copyAllEmojis() {
       const grid = document.getElementById('emojiGrid');
       const text = Array.from(grid.querySelectorAll('.emoji-large')).map(el => el.textContent).join(' ');
-      navigator.clipboard.writeText(text);
-      showToast('📋 コピーしました', 1500, 'success');
+      copyTextToClipboard(text, {
+        successMessage: '📋 すべてコピーしました',
+        emptyMessage: '⚠️ 先に絵文字を生成してください',
+        fallbackMessage: 'ℹ️ コピー不可の環境です。表示された絵文字を手動でコピーしてください'
+      });
     }
 
     function saveEmojisAsImage() {
