@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="個人向けポートフォリオ。個人ゲーム開発、グッズ制作、同人活動など小規模プロジェクトの実績をご紹介。">
+    <meta name="keywords" content="個人向けイラスト,同人,グッズイラスト,個人開発">
+    <meta name="theme-color" content="#E67E22">
+    <title>個人向けポートフォリオ | solace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <!-- ===== ナビゲーション ===== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+            
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="portfolio-corporate.html" class="nav-link">企業向け</a></li>
+                <li><a href="portfolio-personal.html" class="nav-link">個人向け</a></li>
+                <li><a href="blog.html" class="nav-link">ブログ</a></li>
+                <li><a href="index.html#contact" class="nav-link">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== ページヘッダー ===== -->
+    <section class="page-header">
+        <div class="section-container">
+            <h1>個人向けポートフォリオ</h1>
+            <p>個人ゲーム開発、グッズ制作、同人活動などの実績</p>
+        </div>
+    </section>
+
+    <!-- ===== 個人向けサービスの特徴 ===== -->
+    <section style="background: var(--bg-white);">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">個人向けサービスの特徴</h3>
+                <p class="section-subtitle">気軽にご依頼いただけます</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-xl);">
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-smile" style="margin-right: var(--spacing-md);"></i>気軽な相談</h5>
+                    <p>企業向けとは違う、ラフな雰囲気で相談できます。「こんなのできる？」という相談も大歓迎。</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-tag" style="margin-right: var(--spacing-md);"></i>固定料金プラン</h5>
+                    <p>シンプルで分かりやすい料金体系。相談の段階で料金が決まるので、追加費用の心配がありません。</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-bolt" style="margin-right: var(--spacing-md);"></i>迅速な対応</h5>
+                    <p>個人向けプロジェクトは柔軟なスケジュール対応が可能。「〇〜△日で欲しい」といったご要望も相談可。</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-hands-helping" style="margin-right: var(--spacing-md);"></i>サポート充実</h5>
+                    <p>SNS DMでもメールでも好きな方で相談可。「細かい修正」も大丈夫です。</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-share-alt" style="margin-right: var(--spacing-md);"></i>SNS掲載OK</h5>
+                    <p>完成後、SNSに掲載できます。「◇◇さんから依頼されました」とタグ付けしてもOK。</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(230,126,34,0.1) 0%, rgba(243,156,18,0.1) 100%); padding: var(--spacing-xl); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h5 style="margin-bottom: var(--spacing-md); color: var(--accent);"><i class="fas fa-heart" style="margin-right: var(--spacing-md);"></i>応援します</h5>
+                    <p>同人活動、個人ゲーム開発など、クリエイターの活動を応援する気持ちで対応しています。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 実績事例 ===== -->
+    <section class="blog-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">実績事例</h3>
+                <p class="section-subtitle">個人依頼からの実績をご紹介</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-xl);">
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">個人ゲーム開発</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                            個人開発のインディーゲーム向けに、メインキャラクター3体 + SNS用アイコンを制作。納期は柔軟に対応。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥25,000</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">同人活動応援</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                            同人誌のカバーイラストと本文のSDキャラを担当。「◇◇さんのイラストです」と紹介していただけました。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥15,000</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">グッズ制作用イラスト</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                            自分で描いたキャラをグッズ化したいとのことで、グッズ化に適した形でイラスト化。データ確認も丁寧に対応。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥12,000</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">Webサイトのイラスト</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                            個人ブログのトップイラストと複数のアイコンを制作。修正も何度も対応して完成させました。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥18,000</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, #27AE60 0%, #229954 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">ゲーム実況ナビキャラ</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                            YouTubeゲーム実況用のアバターキャラを制作。配信画面に映すSD版と立ち絵版の両方対応。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥20,000</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="height: 200px; overflow: hidden; background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px;">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div style="padding: var(--spacing-lg);">
+                        <h5 style="margin-bottom: var(--spacing-sm);">修正・リテイク対応</h5>
+                        <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                        既存イラストの色直しと背景加筆を依頼いただきました。細かいご要望も全て対応しました。
+                        </p>
+                        <p style="font-size: var(--font-size-sm); color: var(--accent); font-weight: 600;">料金：¥8,000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 個人向け料金表 ===== -->
+    <section style="background: var(--bg-light);">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">個人向け料金表</h3>
+                <p class="section-subtitle">シンプルで分かりやすい料金設定</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-xl);">
+                <div style="background: var(--bg-white); padding: var(--spacing-xl); border-radius: 12px; border: 2px solid var(--border);">
+                    <h5 style="margin-bottom: var(--spacing-lg);">シンプルイラスト</h5>
+                    <div style="font-size: var(--font-size-2xl); color: var(--accent); font-weight: 700; margin-bottom: var(--spacing-lg);">
+                        ¥8,000〜
+                    </div>
+                    <ul style="list-style: none; padding: 0; color: var(--text-light); font-size: var(--font-size-sm);">
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>半身イラスト</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>背景なし</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>修正1回</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-white); padding: var(--spacing-xl); border-radius: 12px; border: 2px solid var(--accent); position: relative;">
+                    <div style="position: absolute; top: -12px; right: 20px; background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: var(--font-size-sm); font-weight: 700;">人気</div>
+                    <h5 style="margin-bottom: var(--spacing-lg);">標準イラスト</h5>
+                    <div style="font-size: var(--font-size-2xl); color: var(--accent); font-weight: 700; margin-bottom: var(--spacing-lg);">
+                        ¥15,000〜
+                    </div>
+                    <ul style="list-style: none; padding: 0; color: var(--text-light); font-size: var(--font-size-sm);">
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>フル身体イラスト</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>シンプル背景</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>修正2回</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-white); padding: var(--spacing-xl); border-radius: 12px; border: 2px solid var(--border);">
+                    <h5 style="margin-bottom: var(--spacing-lg);">複雑なイラスト</h5>
+                    <div style="font-size: var(--font-size-2xl); color: var(--accent); font-weight: 700; margin-bottom: var(--spacing-lg);">
+                        ¥25,000〜
+                    </div>
+                    <ul style="list-style: none; padding: 0; color: var(--text-light); font-size: var(--font-size-sm);">
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>複数キャラクター</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>詳細な背景</li>
+                        <li style="margin-bottom: var(--spacing-sm);"><i class="fas fa-check" style="color: var(--success); margin-right: var(--spacing-sm);"></i>修正3回</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: var(--text-light); margin-top: var(--spacing-2xl);">
+                ※ 詳細な料金はお問い合わせ時にご相談させていただきます。<br>複雑さ、納期、修正回数などによって変動します。
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; padding: var(--spacing-2xl) var(--spacing-lg);">
+        <div class="section-container" style="text-align: center;">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">個人向けご依頼フォーム</h3>
+            <p style="color: #BDC3C7; margin-bottom: var(--spacing-lg);">気軽にお気持ちでご依頼ください！<br>SNS DMでも、メールでも大丈夫です。</p>
+            <a href="request-personal.html" class="btn btn-primary">依頼フォームへ</a>
+        </div>
+    </section>
+
+    <!-- ===== フッター ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration & Character Design Studio</p>
+            </div>
+
+            <div class="footer-section">
+                <h5>リンク</h5>
+                <ul>
+                    <li><a href="index.html">ホーム</a></li>
+                    <li><a href="blog.html">ブログ</a></li>
+                    <li><a href="before-after.html">ビフォアアフター</a></li>
+                    <li><a href="index.html#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h5>フォロー</h5>
+                <div class="footer-social">
+                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

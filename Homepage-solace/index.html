@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="solace（そらす）はゲーム業界を中心に活動するプロフェッショナルなイラストレーター。キャラクターデザイン、ゲームイラスト、コンセプトアートなど、感情に届くイラスト制作を提供します。">
+    <meta name="keywords" content="イラストレーター,キャラクターデザイン,ゲーム制作,イラスト依頼,アニメーション,デジタルアート">
+    <meta name="author" content="solace">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="canonical" href="https://solace-illustration.com/">
+    <meta property="og:title" content="solace - Professional Illustration & Character Design">
+    <meta property="og:description" content="感情に届くイラスト制作。ゲーム、アニメーション、商用プロジェクト対応。">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#E67E22">
+    <title>solace | Professional Illustration & Character Design Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // ⚠️ 注意：G-XXXXXXXXXXをあなたのGoogle Analytics IDに置き換えてください
+        gtag('config', 'G-XXXXXXXXXX', {
+            'page_path': window.location.pathname,
+            'page_title': document.title
+        });
+
+        // カスタムイベント - お問い合わせフォーム送信
+        function trackFormSubmit() {
+            gtag('event', 'form_submit', {
+                'event_category': 'engagement',
+                'event_label': 'contact_form'
+            });
+        }
+
+        // カスタムイベント - ボタンクリック
+        function trackButtonClick(buttonName) {
+            gtag('event', 'button_click', {
+                'event_category': 'navigation',
+                'event_label': buttonName
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- ===== ナビゲーション ===== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+            
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">ホーム</a></li>
+                <li><a href="#about" class="nav-link">プロフィール</a></li>
+                <li><a href="#services" class="nav-link">サービス</a></li>
+                <li><a href="#portfolio" class="nav-link">ポートフォリオ</a></li>
+                <li><a href="#pricing" class="nav-link">料金</a></li>
+                <li><a href="#contact" class="nav-link">お問い合わせ</a></li>
+                <li><a href="color/index.html" class="nav-link">カラー</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== ヒーロー ===== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2 class="hero-title">感情に届くイラスト制作</h2>
+            <p class="hero-subtitle">ゲーム業界からエンターテインメント業界まで、<br>プロフェッショナルなイラストレーション制作サービス</p>
+            <div class="hero-cta">
+                <a href="#target-selection" class="btn btn-primary">依頼する</a>
+                <a href="#portfolio" class="btn btn-secondary">作品を見る</a>
+                <a href="color/index.html" class="btn btn-tertiary">カラージェネレーター</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="gradient-blob blob-1"></div>
+            <div class="gradient-blob blob-2"></div>
+            <div class="gradient-blob blob-3"></div>
+        </div>
+    </section>
+
+    <!-- ===== ターゲット選択セクション ===== -->
+    <section class="target-selection" id="target-selection">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">ご依頼について</h3>
+                <p class="section-subtitle">目的に応じた最適なプランをご案内します</p>
+            </div>
+
+            <div class="target-cards-grid">
+                <div class="target-card corporate">
+                    <div class="target-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h4>企業・団体向け</h4>
+                    <p>ゲーム開発、アニメーション制作、商用プロジェクト向け</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 大規模案件対応</li>
+                        <li><i class="fas fa-check"></i> カスタム見積もり</li>
+                        <li><i class="fas fa-check"></i> 専用窓口対応</li>
+                        <li><i class="fas fa-check"></i> 企業実績多数</li>
+                    </ul>
+                    <a href="portfolio-corporate.html" class="btn btn-primary">詳しく見る</a>
+                </div>
+
+                <div class="target-card personal">
+                    <div class="target-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>個人・小規模向け</h4>
+                    <p>個人ゲーム開発、グッズ制作、同人活動など</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 気軽にご相談</li>
+                        <li><i class="fas fa-check"></i> 固定料金プラン</li>
+                        <li><i class="fas fa-check"></i> 迅速対応</li>
+                        <li><i class="fas fa-check"></i> サポート充実</li>
+                    </ul>
+                    <a href="portfolio-personal.html" class="btn btn-primary">詳しく見る</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== プロフィール ===== -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">プロフィール</h3>
+                <p class="section-subtitle">solaceについて</p>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-main">
+                    <div class="profile-image">
+                        <div class="image-placeholder">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                    <div class="profile-bio">
+                        <h4>solace（そらす）</h4>
+                        <p class="role">Professional Illustrator & Character Designer</p>
+                        <p class="bio-text">
+                            ゲーム・アニメーション・エンターテインメント業界を中心に、キャラクターデザインからコンセプトアート、背景イラストまで幅広いジャンルのイラスト制作に対応しています。
+                        </p>
+                        <p class="bio-text">
+                            「感情に届く」をテーマに、クリエイティブに実現することを大切にしています。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <h5>実績</h5>
+                        <p class="stat-number">50+</p>
+                        <p class="stat-label">案件完了</p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>クライアント</h5>
+                        <p class="stat-number">99%</p>
+                        <p class="stat-label">クライアント満足度</p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>経験年数</h5>
+                        <p class="stat-number">5+</p>
+                        <p class="stat-label">プロフェッショナル</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h4>スキル / ツール</h4>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <i class="fas fa-image"></i>
+                        <h5>Adobe Photoshop</h5>
+                        <p>イラストレーション、画像編集</p>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h5>Clip Studio Paint</h5>
+                        <p>キャラクターデザイン、漫画制作</p>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-bezier-curve"></i>
+                        <h5>Adobe Illustrator</h5>
+                        <p>ベクターイラスト、ロゴデザイン</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== サービス ===== -->
+    <section class="services" id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">サービス</h3>
+                <p class="section-subtitle">提供しているサービス内容</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h4>キャラクターデザイン</h4>
+                    <p>ゲーム、アニメ、エンターテインメント用のキャラクターデザイン。コンセプト段階から最終イラストまで対応。</p>
+                    <ul class="service-list">
+                        <li>フル身体デザイン</li>
+                        <li>顔のバリエーション</li>
+                        <li>コスチュームデザイン</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h4>ゲームイラスト</h4>
+                    <p>ゲーム用イラストレーション全般。UI、背景、NPCキャラまで、ゲーム開発に必要なアセット制作。</p>
+                    <ul class="service-list">
+                        <li>キャラクターアセット</li>
+                        <li>背景イラスト</li>
+                        <li>UIイラスト</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>SDキャラ（デフォルメ）</h4>
+                    <p>可愛らしいSDキャラクターのデザイン。ゲーム内アイコン、グッズ、プロモーション用途に最適。</p>
+                    <ul class="service-list">
+                        <li>SDキャラデザイン</li>
+                        <li>表情バリエーション</li>
+                        <li>ポーズバリエーション</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4>コンセプトアート</h4>
+                    <p>プロジェクトの初期段階でのビジュアルコンセプト制作。方向性確立のためのアート制作。</p>
+                    <ul class="service-list">
+                        <li>背景コンセプト</li>
+                        <li>ワールドビルディング</li>
+                        <li>スタイルガイド</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4>イラストレーション</h4>
+                    <p>本、雑誌、Webサイト用のイラストレーション。装画から挿絵まで様々なタイプに対応。</p>
+                    <ul class="service-list">
+                        <li>装画</li>
+                        <li>挿絵</li>
+                        <li>ブックカバー</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                    <h4>修正・加筆</h4>
+                    <p>既存イラストの修正や加筆、色調補正などの調整サービス。品質向上をお手伝いします。</p>
+                    <ul class="service-list">
+                        <li>修正対応</li>
+                        <li>色調補正</li>
+                        <li>背景加筆</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ポートフォリオ ===== -->
+    <section class="portfolio" id="portfolio">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">ポートフォリオ</h3>
+                <p class="section-subtitle">過去の作品と実績</p>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="game">ゲーム系</button>
+                <button class="filter-btn" data-filter="character">キャラクターデザイン</button>
+                <button class="filter-btn" data-filter="sd">SDキャラ</button>
+                <button class="filter-btn" data-filter="concept">コンセプト</button>
+            </div>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-filter="game">
+                    <div class="portfolio-image">
+                        <img src="images/sample1.jpg" alt="ゲームキャラクター イラスト" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>ゲームキャラクター</h5>
+                            <p>2025 / Photoshop</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-filter="character">
+                    <div class="portfolio-image">
+                        <img src="images/sample2.jpg" alt="キャラクターデザイン 立ち絵" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>キャラクターデザイン</h5>
+                            <p>2024 / Clip Studio</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-filter="sd">
+                    <div class="portfolio-image">
+                        <img src="images/sample3.jpg" alt="SDキャラクター デフォルメキャラ" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>SDキャラデザイン</h5>
+                            <p>2025 / Illustrator</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-filter="game">
+                    <div class="portfolio-image">
+                        <img src="images/sample1.jpg" alt="ゲーム背景 背景美術" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>ゲーム背景</h5>
+                            <p>2024 / Photoshop</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-filter="concept">
+                    <div class="portfolio-image">
+                        <img src="images/sample2.jpg" alt="コンセプトアート ビジュアル開発" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>コンセプトアート</h5>
+                            <p>2025 / Photoshop</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item" data-filter="character">
+                    <div class="portfolio-image">
+                        <img src="images/sample3.jpg" alt="キャラクター立ち絵 表情差分" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <h5>キャラクター立ち絵</h5>
+                            <p>2024 / Clip Studio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-cta">
+                <p>その他の作品はSNSをチェック</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/solqc_e/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" title="Pixiv"><i class="fab fa-pixiv"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 料金表 ===== -->
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">料金表</h3>
+                <p class="section-subtitle">サービス別の料金参考値</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h4>キャラクターデザイン</h4>
+                    <div class="price">
+                        <span class="currency">¥</span>
+                        <span class="amount">30,000</span>
+                        <span class="unit">～</span>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-check"></i> フル身体デザイン</li>
+                        <li><i class="fas fa-check"></i> 顔のバリエーション（3種）</li>
+                        <li><i class="fas fa-check"></i> 修正2回まで</li>
+                        <li><i class="fas fa-times"></i> 背景は別途相談</li>
+                    </ul>
+                    <button class="btn btn-outline">詳細を見る</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="badge">推奨</div>
+                    <h4>ゲームキャラセット</h4>
+                    <div class="price">
+                        <span class="currency">¥</span>
+                        <span class="amount">80,000</span>
+                        <span class="unit">～</span>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-check"></i> キャラ3体分まで</li>
+                        <li><i class="fas fa-check"></i> 多数の表情・ポーズ</li>
+                        <li><i class="fas fa-check"></i> UI/アイコン含む</li>
+                        <li><i class="fas fa-check"></i> 修正3回まで</li>
+                    </ul>
+                    <button class="btn btn-primary">このプランを選ぶ</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h4>SDキャラクター</h4>
+                    <div class="price">
+                        <span class="currency">¥</span>
+                        <span class="amount">15,000</span>
+                        <span class="unit">～</span>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-check"></i> SDデフォルメキャラ</li>
+                        <li><i class="fas fa-check"></i> 表情8パターン</li>
+                        <li><i class="fas fa-check"></i> 高解像度デス</li>
+                        <li><i class="fas fa-check"></i> 修正1回</li>
+                    </ul>
+                    <button class="btn btn-outline">詳細を見る</button>
+                </div>
+            </div>
+
+            <div class="pricing-note">
+                <p>※ 上記は参考料金です。複雑さや納期によって変動します。</p>
+                <p>詳細なお見積もりはお気軽にお問い合わせください。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== テスティモニアル ===== -->
+    <section class="testimonials">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">クライアントの声</h3>
+                <p class="section-subtitle">実際のお客様からのご意見</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        「当社のゲーム開発プロジェクトでキャラクターデザインを依頼しました。細かい要望にも丁寧に対応していただき、納期も守っていただけました。品質も高く、非常に満足しています。」
+                    </p>
+                    <p class="testimonial-author">
+                        <strong>ゲーム開発企業 A様</strong>
+                    </p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        「修正対応が素晴らしく、こちらの意図をしっかり理解してくれました。コミュニケーションも円滑で、今後も継続的にお願いしたいと考えています。」
+                    </p>
+                    <p class="testimonial-author">
+                        <strong>アニメーション制作会社 B様</strong>
+                    </p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        「SNSで見かけたsolaceさんの作品に惹かれて依頼しました。期待以上のクオリティでした！本当にありがとうございます。」
+                    </p>
+                    <p class="testimonial-author">
+                        <strong>個人ゲーム開発者 C様</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">よくある質問</h3>
+                <p class="section-subtitle">よくいただくご質問と回答</p>
+            </div>
+
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>納期はどのくらいですか？</summary>
+                    <p>通常、シンプルなイラストは2～3週間、複雑なキャラクターデザインは3～4週間です。急な依頼の場合はご相談ください。追加料金で対応できる場合があります。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>修正は何回まで可能ですか？</summary>
+                    <p>プランによって異なります。基本的には1～3回の修正が含まれています。大幅な変更については追加料金がかかる場合があります。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>商用利用は可能ですか？</summary>
+                    <p>はい、可能です。ゲーム、本、グッズなど、幅広い商用利用に対応しています。ご用途に応じて契約内容をご相談させていただきます。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>ラフから完成まで、どのような流れですか？</summary>
+                    <p>1) ご依頼内容のヒアリング、2) ラフスケッチの制作・確認、3) 線画・色塗りの進行、4) 最終調整・納品、という流れで進めます。各段階でご確認いただけます。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>返金対応はありますか？</summary>
+                    <p>納品物に対する満足が得られない場合、契約内容に応じて対応いたします。詳細はご依頼時にご相談ください。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>著作権はどうなりますか？</summary>
+                    <p>基本的に著作権はsolaceに帰属します。ただし、商用利用される場合は著作権譲渡も可能です。ご依頼時にご相談ください。</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== お問い合わせ ===== -->
+    <section class="contact" id="contact">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">お問い合わせ</h3>
+                <p class="section-subtitle">ご依頼・ご相談をお受けします</p>
+            </div>
+
+            <div class="target-cards-grid">
+                <div class="target-card corporate">
+                    <div class="target-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h4>企業向け依頼フォーム</h4>
+                    <p>ゲーム開発、アニメーション制作、<br>商用プロジェクト向け</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 大規模案件対応</li>
+                        <li><i class="fas fa-check"></i> カスタム見積もり</li>
+                        <li><i class="fas fa-check"></i> 詳細なヒアリング</li>
+                    </ul>
+                    <a href="request-corporate.html" class="btn btn-primary">企業向けフォームへ</a>
+                </div>
+
+                <div class="target-card personal">
+                    <div class="target-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>個人向け依頼フォーム</h4>
+                    <p>個人ゲーム開発、グッズ制作、<br>同人活動向け</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 気軽にご相談</li>
+                        <li><i class="fas fa-check"></i> 固定料金プラン</li>
+                        <li><i class="fas fa-check"></i> 迅速対応</li>
+                    </ul>
+                    <a href="request-personal.html" class="btn btn-primary">個人向けフォームへ</a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border);">
+                <h5 style="margin-bottom: var(--spacing-md);">または</h5>
+                <p style="color: var(--text-light); margin-bottom: var(--spacing-lg);">
+                    SNS DM でもお気軽にお問い合わせください
+                </p>
+                <div class="social-links">
+                    <a href="https://instagram.com/solqc_e" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== フッター ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration & Character Design Studio</p>
+            </div>
+
+            <div class="footer-section">
+                <h5>リンク</h5>
+                <ul>
+                    <li><a href="#about">プロフィール</a></li>
+                    <li><a href="#services">サービス</a></li>
+                    <li><a href="#portfolio">ポートフォリオ</a></li>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h5>フォロー</h5>
+                <div class="footer-social">
+                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

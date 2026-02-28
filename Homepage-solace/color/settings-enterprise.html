@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>設定 - Palette Generator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #667eea;
+      --primary-dark: #764ba2;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-dark: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.light {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      color: var(--text-dark);
+    }
+
+    html.dark {
+      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+      color: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 40px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      opacity: 0.7;
+      font-weight: 500;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .settings-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: var(--transition);
+    }
+
+    html.dark .settings-card {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .settings-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+    }
+
+    .settings-card-header {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    html.dark .settings-card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .settings-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .settings-card p {
+      opacity: 0.7;
+      margin-bottom: 16px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(102, 126, 234, 0.1);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .danger-zone {
+      border-left: 4px solid var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    html.dark .setting-item {
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .setting-description {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .toggle-switch.on {
+      background: var(--success);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: var(--transition);
+    }
+
+    .toggle-switch.on::after {
+      left: 22px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px 50px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .settings-card {
+        padding: 24px;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .settings-card {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .settings-card-header h3 {
+        font-size: 1rem;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+
+      .setting-item {
+        padding: 10px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .toggle-switch {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav"></nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>⚙️ 設定</h1>
+      <p>アプリケーションの設定をカスタマイズできます</p>
+    </div>    <div class="history-nav" id="historyNav"></div>
+    <div class="settings-grid">
+      <!-- テーマ設定 -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>🌙 外観設定</h3>
+        </div>
+        <p>ダーク/ライトモードを切り替えて、快適な環境を作りましょう。</p>
+        <button class="btn btn-secondary" onclick="toggleTheme(); setTimeout(() => location.reload(), 300);">💡 テーマを切り替え</button>
+      </div>
+
+      <!-- データ管理 -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>📦 データ管理</h3>
+        </div>
+        <p>ローカルに保存されたすべてのデータ（作品、カラーパレット、プロフィール）をバックアップまたはリセットできます。</p>
+        <button class="btn btn-success" onclick="exportAllData()">📥 データをエクスポート</button>
+        <button class="btn btn-secondary" onclick="importData()">📤 データをインポート</button>
+      </div>
+
+      <!-- 通知設定 -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>🔔 通知設定</h3>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">保存通知</div>
+            <div class="setting-description">作品保存時に通知を表示</div>
+          </div>
+          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">削除確認</div>
+            <div class="setting-description">削除前に確認ダイアログを表示</div>
+          </div>
+          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+        </div>
+      </div>
+
+      <!-- パフォーマンス設定 -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>⚡ パフォーマンス</h3>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">自動保存</div>
+            <div class="setting-description">定期的に作品を自動保存</div>
+          </div>
+          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">アニメーション</div>
+            <div class="setting-description">スムーズなアニメーション効果を有効</div>
+          </div>
+          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+        </div>
+      </div>
+
+      <!-- 危険ゾーン -->
+      <div class="settings-card danger-zone">
+        <div class="settings-card-header">
+          <h3>⚠️ 危険ゾーン</h3>
+        </div>
+        <p>⚡ 注意：この操作は取り消せません。すべてのデータが削除されます。</p>
+        <button class="btn btn-danger" onclick="resetAllData()">🗑️ すべてのデータを削除</button>
+      </div>
+
+      <!-- バージョン情報 -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>ℹ️ バージョン情報</h3>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">アプリケーション</div>
+            <div class="setting-description">Palette Generator Pro</div>
+          </div>
+          <span style="opacity: 0.7;">v1.0</span>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">最終更新</div>
+            <div class="setting-description">2024年2月27日</div>
+          </div>
+          <span style="opacity: 0.7;">Latest</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="importFile" style="display:none;" accept=".json">
+
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      document.documentElement.className = t;
+    })();
+  </script>
+
+  <script src="common.js"></script>
+  <script>
+    function toggleNotification(el) {
+      el.classList.toggle('on');
+    }
+
+    function resetAllData() {
+      if (confirm("⚠️ 本当にすべてのデータを削除しますか？")) {
+        if (confirm("🚨 この操作は取り消せません。削除しますか？")) {
+          localStorage.clear();
+          showToast('✅ すべてのデータを削除しました。ページをリロードします...', 2000, 'success');
+          setTimeout(() => location.reload(), 1500);
+        }
+      }
+    }
+
+    function exportAllData() {
+      const allData = {
+        profile: localStorage.getItem('profile'),
+        stats: localStorage.getItem('stats'),
+        gallery: localStorage.getItem('gallery'),
+        theme: localStorage.getItem('theme'),
+        exportDate: new Date().toISOString()
+      };
+      const dataStr = JSON.stringify(allData, null, 2);
+      const blob = new Blob([dataStr], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `palette-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 データをエクスポートしました', 2000, 'success');
+    }
+
+    function importData() {
+      document.getElementById('importFile').click();
+    }
+
+    document.getElementById('importFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (data.profile) localStorage.setItem('profile', data.profile);
+          if (data.stats) localStorage.setItem('stats', data.stats);
+          if (data.gallery) localStorage.setItem('gallery', data.gallery);
+          if (data.theme) localStorage.setItem('theme', data.theme);
+          showToast('✅ データをインポートしました', 2000, 'success');
+          setTimeout(() => location.reload(), 1000);
+        } catch(err) {
+          showToast('❌ ファイルが無効です', 2000, 'error');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildNav('settings');
+      buildHistoryNav('settings-enterprise.html');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>絵文字ジェネレーター - Palette Generator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #667eea;
+      --primary-dark: #764ba2;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-dark: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.light {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      color: var(--text-dark);
+    }
+
+    html.dark {
+      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+      color: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 40px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      opacity: 0.7;
+      font-weight: 500;
+    }
+
+    .controls {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1.5px solid rgba(102, 126, 234, 0.15);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      align-items: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html.dark .controls {
+      background: rgba(22, 22, 32, 0.95);
+      border-color: rgba(102, 126, 234, 0.2);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.08);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dark);
+    }
+
+    html.dark label {
+      color: #b0b8d8;
+    }
+
+    .category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .category-btn {
+      padding: 8px 14px;
+      background: rgba(0, 212, 255, 0.08);
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    .category-btn:hover {
+      background: #00d4ff;
+      color: #0a0e27;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+
+    .category-btn.active {
+      background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+    }
+
+    html.dark .category-btn {
+      background: rgba(0, 212, 255, 0.15);
+      border-color: #00d4ff;
+      color: #00ffff;
+    }
+
+    html.dark .category-btn:hover {
+      background: #00d4ff;
+      color: #0a0e27;
+    }
+
+    html.dark .category-btn.active {
+      background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+      color: white;
+      border-color: transparent;
+    }
+
+    input, select {
+      padding: 10px 14px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--text-dark);
+      transition: var(--transition);
+    }
+
+    html.dark input,
+    html.dark select {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #f3f4f6;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+    }
+
+    .btn-secondary:hover {
+      background: #00d4ff;
+      color: #0a0e27;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary.active {
+      background: #00d4ff;
+      color: #0a0e27;
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .emoji-item {
+      padding: 24px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emoji-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .emoji-item:hover::before {
+      left: 100%;
+    }
+
+    html.dark .emoji-item {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(102, 126, 234, 0.15);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .emoji-item:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.25);
+      border-color: rgba(102, 126, 234, 0.4);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    html.dark .emoji-item:hover {
+      background: rgba(22, 22, 32, 0.95);
+    }
+
+    .emoji-large {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+
+    .emoji-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(102, 126, 234, 0.08);
+      border: 2px dashed rgba(102, 126, 234, 0.3);
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      opacity: 0.6;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px 50px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .form-group {
+        width: 100%;
+      }
+
+      input, select, .btn {
+        width: 100%;
+      }
+
+      .emoji-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 16px;
+      }
+
+      .emoji-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+      }
+
+      .emoji-item {
+        padding: 16px 12px;
+        border-radius: 12px;
+      }
+
+      .emoji-large {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .controls {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .form-group {
+        gap: 6px;
+      }
+
+      .emoji-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+      }
+
+      .emoji-item {
+        padding: 12px 8px;
+        border-radius: 10px;
+      }
+
+      .emoji-large {
+        font-size: 2rem;
+      }
+
+      .emoji-name {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav"></nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>😊 絵文字ジェネレーター</h1>
+      <p>カスタム絵文字を自由に作成・管理できます</p>
+    </div>
+    <div class="history-nav" id="historyNav"></div>
+
+    <div class="controls">
+      <div class="form-group">
+        <label>カテゴリ（複数選択可）</label>
+        <div class="category-buttons" id="categoryButtons">
+          <button type="button" class="category-btn active" data-category="all">すべて</button>
+          <button type="button" class="category-btn" data-category="face">顔</button>
+          <button type="button" class="category-btn" data-category="nature">自然</button>
+          <button type="button" class="category-btn" data-category="food">食べ物</button>
+          <button type="button" class="category-btn" data-category="activity">活動</button>
+          <button type="button" class="category-btn" data-category="objects">オブジェクト</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="countSelect">数</label>
+        <select id="countSelect">
+          <option value="1">1個</option>
+          <option value="2">2個</option>
+          <option value="3">3個</option>
+          <option value="4">4個</option>
+          <option value="5">5個</option>
+          <option value="6">6個</option>
+          <option value="7">7個</option>
+          <option value="8">8個</option>
+          <option value="9">9個</option>
+          <option value="10" selected>10個</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" onclick="generateEmojis()">🎲 ジェネレート</button>
+      <button class="btn btn-secondary" onclick="clearEmojis()">🗑️ クリア</button>
+      <button id="copyAllBtn" class="btn btn-secondary">📋 全部コピー</button>
+      <button id="saveImgBtn" class="btn btn-secondary">🖼️ 画像保存</button>
+    </div>
+
+    <div id="emojiContainer" class="empty-state">
+      <div class="empty-state-icon">😊</div>
+      <h2>絵文字を作成</h2>
+      <p>「ジェネレート」ボタンをクリックして、絵文字を作成してください</p>
+    </div>
+
+    <div class="emoji-grid" id="emojiGrid" style="display: none;"></div>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+    const emojis = {
+      face: ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '😉', '😊', '😇', '🙂', '🙃', '😌', '😔', '😍', '🥰', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😌', '😑', '😐', '😏', '😒', '🙁', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤮', '🤢', '🤮', '🤒', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾'],
+      nature: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🙈', '🙉', '🙊', '🐒', '🐔', '🐧', '🐦', '🐤', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🪱', '🐛', '🦋', '🐌', '🐞', '🐜', '🪰', '🪲', '🦟', '🦗', '🕷️', '🦂', '🐢', '🐍', '🦎', '🦖', '🦕', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', '🐋'],
+      food: ['🍏', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥑', '🍆', '🍅', '🌶️', '🌽', '🥒', '🥬', '🥦', '🧄', '🧅', '🍄', '🥜', '🌰', '🍞', '🥐', '🥖', '🥨', '🥯', '🥞', '🧇', '🥚', '🍳', '🧈', '🥞', '🥓', '🥞', '🍗', '🍖', '🌭', '🍔', '🍟', '🍕', '🥪', '🥙', '🧆', '🌮', '🌯', '🥗', '🥘', '🥫', '🍝', '🍜', '🍲', '🍛', '🍣', '🍱', '🥟', '🦪', '🍤', '🍙', '🍚', '🍘', '🍥', '🥠', '🥮', '🍢', '🍡', '🍧', '🍨', '🍦', '🍰', '🎂', '🧁', '🍮', '🍭', '🍬', '🍫', '🍿', '🍩', '🍪', '🌰', '🍯', '🥛', '🍼', '☕', '🍵', '🍶', '🍾', '🍷', '🍸', '🍹', '🍺', '🍻', '🥂', '🥃'],
+      activity: ['⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🏉', '🥏', '🎳', '🏓', '🏸', '🏒', '🏑', '🥍', '🏌️', '⛳', '🎣', '🎽', '🎿', '⛷️', '🏂', '🪂', '🛼', '🛹', '🛷', '🥌', '🎯', '🪀', '🪃', '🎪', '🎨', '🎬', '🎤', '🎧', '🎼', '🎹', '🥁', '🎷', '🎺', '🎸', '🪔', '🎻', '🎲', '♟️', '🎯', '🎳', '🎮', '🎰'],
+      objects: ['📱', '📲', '💻', '⌨️', '🖥️', '🖨️', '🖱️', '🖲️', '🕹️', '🗜️', '💽', '💾', '💿', '📀', '🧮', '🎥', '🎬', '📺', '📷', '📸', '📹', '🎞️', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🧭', '⏱️', '⏲️', '⏰', '🕰️', '⌚', '⌛', '⏳', '📡', '🔋', '🔌', '💡', '🔦', '🕯️', '🪔', '🧯', '🛢️', '💸', '💵', '💴', '💶', '💷', '💰', '💳', '🧾', '✉️', '📩', '📨', '📤', '📥', '📦', '🏷️', '🧧', '📪', '📫', '📬', '📭', '📮', '📯', '📜', '📃', '📄', '📑', '🧾', '🧻', '📖', '📕', '📗', '📘', '📙', '📚', '📓', '📔', '📒', '📑', '🧒', '📐', '📏', '🧮', '📌', '📍', '✂️', '🖊️', '🖋️', '✒️', '🖌️', '🖍️', '📝', '✏️', '🔍', '🔎']
+    };
+
+    let selectedCategories = ['all'];
+
+    function getEmojisForCategories(categories) {
+      if (categories.includes('all')) {
+        return Object.values(emojis).flat();
+      }
+      const combined = [];
+      categories.forEach(cat => {
+        if (emojis[cat]) {
+          combined.push(...emojis[cat]);
+        }
+      });
+      return combined;
+    }
+
+    function generateEmojis() {
+      const count = parseInt(document.getElementById('countSelect').value);
+      const grid = document.getElementById('emojiGrid');
+      const container = document.getElementById('emojiContainer');
+
+      let selectedEmojis = [];
+
+      // 複数カテゴリ選択時：各カテゴリから最低1個ずつ
+      if (selectedCategories.length > 1 && !selectedCategories.includes('all')) {
+        const categoryCount = selectedCategories.length;
+        const minLimit = Math.min(categoryCount, count);
+        
+        // 各カテゴリから1個ずつ選ぶ
+        selectedCategories.forEach(cat => {
+          const categoryList = emojis[cat] || [];
+          const emoji = categoryList[Math.floor(Math.random() * categoryList.length)];
+          selectedEmojis.push(emoji);
+        });
+
+        // 残りをランダムに選ぶ
+        const remaining = count - minLimit;
+        const availableEmojis = getEmojisForCategories(selectedCategories);
+        for (let i = 0; i < remaining; i++) {
+          const emoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
+          selectedEmojis.push(emoji);
+        }
+      } else {
+        // 「すべて」または単一カテゴリ選択時
+        const availableEmojis = getEmojisForCategories(selectedCategories);
+        for (let i = 0; i < count; i++) {
+          const emoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
+          selectedEmojis.push(emoji);
+        }
+      }
+
+      grid.innerHTML = '';
+      selectedEmojis.forEach(emoji => {
+        const item = document.createElement('div');
+        item.className = 'emoji-item';
+        item.innerHTML = `
+          <div class="emoji-large">${sanitizeHTML(emoji)}</div>
+          <div class="emoji-name">Copy</div>
+        `;
+        item.style.cursor = 'pointer';
+        item.onclick = () => {
+          navigator.clipboard.writeText(emoji);
+          showToast('📋 コピーしました！', 2000, 'success');
+        };
+        grid.appendChild(item);
+      });
+
+      container.style.display = 'none';
+      grid.style.display = 'grid';
+      saveSettings();
+    }
+
+    function clearEmojis() {
+      const grid = document.getElementById('emojiGrid');
+      const container = document.getElementById('emojiContainer');
+      grid.innerHTML = '';
+      grid.style.display = 'none';
+      container.style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildNav('emoji');
+      buildHistoryNav('emoji-generator-enterprise.html');
+      const categoryButtons = document.getElementById('categoryButtons');
+      const countSelect = document.getElementById('countSelect');
+      const copyAllBtn = document.getElementById('copyAllBtn');
+      const saveImgBtn = document.getElementById('saveImgBtn');
+
+      function loadSettings() {
+        const s = JSON.parse(localStorage.getItem('emojiSettings') || '{}');
+        if (s.categories) {
+          selectedCategories = s.categories;
+        }
+        if (s.count) countSelect.value = s.count;
+        updateButtonStates();
+      }
+
+      function saveSettings() {
+        const s = { categories: selectedCategories, count: countSelect.value };
+        localStorage.setItem('emojiSettings', JSON.stringify(s));
+      }
+
+      function updateButtonStates() {
+        Array.from(categoryButtons.querySelectorAll('.category-btn')).forEach(btn => {
+          const category = btn.getAttribute('data-category');
+          if (selectedCategories.includes(category) || (category === 'all' && selectedCategories[0] === 'all')) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+
+      categoryButtons.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-btn')) {
+          const category = e.target.getAttribute('data-category');
+          if (category === 'all') {
+            selectedCategories = ['all'];
+          } else {
+            selectedCategories = selectedCategories.filter(c => c !== 'all');
+            const idx = selectedCategories.indexOf(category);
+            if (idx > -1) {
+              selectedCategories.splice(idx, 1);
+            } else {
+              selectedCategories.push(category);
+            }
+            if (selectedCategories.length === 0) {
+              selectedCategories = ['all'];
+            }
+          }
+          updateButtonStates();
+          saveSettings();
+        }
+      });
+
+      countSelect.addEventListener('change', saveSettings);
+      copyAllBtn.addEventListener('click', copyAllEmojis);
+      saveImgBtn.addEventListener('click', saveEmojisAsImage);
+
+      loadSettings();
+    });
+
+    function copyAllEmojis() {
+      const grid = document.getElementById('emojiGrid');
+      const text = Array.from(grid.querySelectorAll('.emoji-large')).map(el => el.textContent).join(' ');
+      navigator.clipboard.writeText(text);
+      showToast('📋 コピーしました', 1500, 'success');
+    }
+
+    function saveEmojisAsImage() {
+      const grid = document.getElementById('emojiGrid');
+      const emojis = Array.from(grid.querySelectorAll('.emoji-large')).map(el => el.textContent);
+      if (emojis.length === 0) return;
+      const cols = Math.min(5, emojis.length);
+      const rows = Math.ceil(emojis.length / cols);
+      const size = 120;
+      const canvas = document.createElement('canvas');
+      canvas.width = cols * size;
+      canvas.height = rows * size;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '80px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      emojis.forEach((e, i) => {
+        const x = (i % cols) * size + size / 2;
+        const y = Math.floor(i / cols) * size + size / 2;
+        ctx.fillText(e, x, y);
+      });
+      const link = document.createElement('a');
+      link.download = 'emojis.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+</body>
+</html>

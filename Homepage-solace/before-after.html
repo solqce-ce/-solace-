@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="イラスト修正・改善の実例。Before/Afterで制作過程を詳しく解説します。色彩改善、背景詳細化など実際の事例をご紹介。">
+    <meta name="keywords" content="イラスト修正,ビフォアアフター,色彩改善,背景制作">
+    <meta name="theme-color" content="#E67E22">
+    <title>ビフォアアフター | solace - Professional Illustration Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <style>
+        .before-after-container {
+            max-width: 600px;
+            margin: 0 auto var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .before-after-img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .img-before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .img-before img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-after img {
+            width: 100%;
+            display: block;
+        }
+
+        .img-comparison-slider {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .img-before-label,
+        .img-after-label {
+            position: absolute;
+            top: 20px;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-weight: 600;
+            border-radius: 4px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .img-before-label {
+            left: 20px;
+        }
+
+        .img-after-label {
+            right: 20px;
+        }
+
+        .img-comparison-slider input[type='range'] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 5;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .img-comparison-slider input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.3);
+        }
+
+        .img-comparison-slider input[type='range']::-moz-range-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.3);
+        }
+
+        .img-comparison-slider .comparison-slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            transform: translateX(-50%);
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(230,126,34,0.4);
+            z-index: 3;
+        }
+
+        .before-after-info {
+            background: var(--bg-light);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .before-after-info h4 {
+            margin-bottom: var(--spacing-md);
+            color: var(--accent);
+        }
+
+        .before-after-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .before-after-info li {
+            padding: var(--spacing-sm) 0;
+            padding-left: var(--spacing-lg);
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .before-after-info li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .portfolio-carousel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .carousel-item {
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ナビゲーション ===== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+            
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="index.html#about" class="nav-link">プロフィール</a></li>
+                <li><a href="blog.html" class="nav-link">ブログ</a></li>
+                <li><a href="before-after.html" class="nav-link">ビフォアアフター</a></li>
+                <li><a href="index.html#contact" class="nav-link">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== ページヘッダー ===== -->
+    <section class="page-header">
+        <div class="section-container">
+            <h1>修正・改善事例</h1>
+            <p>当studio実績からの修正ビフォアアフターをご紹介</p>
+        </div>
+    </section>
+
+    <!-- ===== ビフォアアフター比較 ===== -->
+    <section class="blog-section">
+        <div class="section-container">
+            <div class="section-header" style="margin-bottom: var(--spacing-2xl);">
+                <h3 class="section-title">ビフォアアフター</h3>
+                <p class="section-subtitle">スライダーを左右に動かして比較してください</p>
+            </div>
+
+            <!-- 比較 1 -->
+            <div style="margin-bottom: var(--spacing-2xl);">
+                <h4 style="text-align: center; margin-bottom: var(--spacing-lg); font-size: var(--font-size-lg);">
+                    キャラクター配色の改善
+                </h4>
+                
+                <div class="img-comparison-slider">
+                    <figure>
+                        <div style="overflow: hidden; border-radius: 12px;">
+                            <img src="images/sample1.jpg" alt="修正後" class="before-after-img">
+                            <div class="img-before">
+                                <img src="images/sample1.jpg" alt="修正前">
+                            </div>
+                            <label class="img-before-label">修正前</label>
+                            <label class="img-after-label">修正後</label>
+                        </div>
+                        <input type="range" min="0" max="100" value="50" class="img-comparison-slider-input">
+                        <div class="comparison-slider-handle">
+                            <div class="slider-button">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+
+                <div class="before-after-info">
+                    <h4>修正内容</h4>
+                    <ul>
+                        <li>色彩バランスの改善 - 主色と補色の配置を最適化</li>
+                        <li>コントラストの強化 - キャラが背景から引き立つよう調整</li>
+                        <li>肌色の補正 - より自然で引き立つ肌色に変更</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 比較 2 -->
+            <div style="margin-bottom: var(--spacing-2xl);">
+                <h4 style="text-align: center; margin-bottom: var(--spacing-lg); font-size: var(--font-size-lg);">
+                    背景の詳細化と雰囲気調整
+                </h4>
+                
+                <div class="img-comparison-slider">
+                    <figure>
+                        <div style="overflow: hidden; border-radius: 12px;">
+                            <img src="images/sample2.jpg" alt="修正後" class="before-after-img">
+                            <div class="img-before">
+                                <img src="images/sample2.jpg" alt="修正前">
+                            </div>
+                            <label class="img-before-label">修正前</label>
+                            <label class="img-after-label">修正後</label>
+                        </div>
+                        <input type="range" min="0" max="100" value="50" class="img-comparison-slider-input">
+                        <div class="comparison-slider-handle">
+                            <div class="slider-button">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+
+                <div class="before-after-info">
+                    <h4>修正内容</h4>
+                    <ul>
+                        <li>背景の詳細化 - シンプルな背景から情報量豊かな背景へ</li>
+                        <li>照明効果の追加 - キャラに光を当てて立体感を向上</li>
+                        <li>雰囲気の統一 - 全体のトーンを統一して上品さを強調</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 比較 3 -->
+            <div style="margin-bottom: var(--spacing-2xl);">
+                <h4 style="text-align: center; margin-bottom: var(--spacing-lg); font-size: var(--font-size-lg);">
+                    表情と目の輝きの強調
+                </h4>
+                
+                <div class="img-comparison-slider">
+                    <figure>
+                        <div style="overflow: hidden; border-radius: 12px;">
+                            <img src="images/sample3.jpg" alt="修正後" class="before-after-img">
+                            <div class="img-before">
+                                <img src="images/sample3.jpg" alt="修正前">
+                            </div>
+                            <label class="img-before-label">修正前</label>
+                            <label class="img-after-label">修正後</label>
+                        </div>
+                        <input type="range" min="0" max="100" value="50" class="img-comparison-slider-input">
+                        <div class="comparison-slider-handle">
+                            <div class="slider-button">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+
+                <div class="before-after-info">
+                    <h4>修正内容</h4>
+                    <ul>
+                        <li>目の輝きの追加 - より生き生きとした目元に</li>
+                        <li>顔の立体感 - 影を調整して顔の丸みを強調</li>
+                        <li>表情の調整 - キャラクターのイメージに合わせた表情へ</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; padding: var(--spacing-2xl) var(--spacing-lg);">
+        <div class="section-container" style="text-align: center;">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">修正・改善が必要ですか？</h3>
+            <p style="color: #BDC3C7; margin-bottom: var(--spacing-lg);">既存のイラストを新しく生まれ変わらせます</p>
+            <a href="index.html#target-selection" class="btn btn-primary">依頼する</a>
+        </div>
+    </section>
+
+    <!-- ===== フッター ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration & Character Design Studio</p>
+            </div>
+
+            <div class="footer-section">
+                <h5>リンク</h5>
+                <ul>
+                    <li><a href="index.html#about">プロフィール</a></li>
+                    <li><a href="blog.html">ブログ</a></li>
+                    <li><a href="before-after.html">ビフォアアフター</a></li>
+                    <li><a href="index.html#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h5>フォロー</h5>
+                <div class="footer-social">
+                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Before/After スライダー機能
+        const sliders = document.querySelectorAll('.img-comparison-slider-input');
+        
+        sliders.forEach(slider => {
+            slider.addEventListener('input', function() {
+                const beforeDiv = this.parentElement.querySelector('.img-before');
+                beforeDiv.style.width = this.value + '%';
+            });
+        });
+    </script>
+</body>
+</html>

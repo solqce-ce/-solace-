@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>依頼ページ | solace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="top-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="request.html" class="active">依頼ページ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メイン -->
+  <main id="request">
+    <section class="intro">
+      <h1>個人向け依頼ページ</h1>
+      <p>イラスト制作のご依頼はこちらから承ります。必要事項をご入力の上、「送信」ボタンを押してください。</p>
+      <p>料金や制作サンプルはトップページをご覧ください。</p>
+    </section>
+
+    <!-- 依頼フォーム -->
+    <section class="form-section">
+      <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
+        <label>お名前:<br>
+          <input type="text" name="name" required>
+        </label>
+
+        <label>メールアドレス:<br>
+          <input type="email" name="email" required>
+        </label>
+
+        <label>依頼内容:<br>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+
+        <label>希望納期:<br>
+          <input type="text" name="deadline">
+        </label>
+
+        <label>参考画像URL（任意）:<br>
+          <input type="url" name="reference">
+        </label>
+
+        <div class="form-buttons">
+          <input type="submit" value="送信">
+          <input type="reset" value="リセット">
+        </div>
+      </form>
+    </section>
+
+    <!-- SNSアイコン -->
+    <section id="sns">
+      <div class="sns-icons">
+        <a href="https://www.instagram.com/solqc_e/" target="_blank" title="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://x.com/solqc_e" target="_blank" title="X">
+          <i class="fa-brands fa-x-twitter"></i>
+        </a>
+        <a href="https://www.youtube.com/@solqc_e" target="_blank" title="YouTube">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="https://www.tiktok.com/@solqc_e" target="_blank" title="TikTok">
+          <i class="fa-brands fa-tiktok"></i>
+        </a>
+        <a href="https://www.pixiv.net/users/87167514" target="_blank" title="Pixiv">
+          <i class="fa-brands fa-pixiv"></i>
+        </a>
+        <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" title="Wick">
+          <img src="images/wick-logo.png" alt="Wick" class="sns-img">
+        </a>
+        <a href="https://solqce.fanbox.cc/" target="_blank" title="Fanbox">
+          <img src="images/fanbox-logo.png" alt="Fanbox" class="sns-img">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer>
+    <p>&copy; 2026 solace | All Rights Reserved</p>
+  </footer>
+</body>
+</html>

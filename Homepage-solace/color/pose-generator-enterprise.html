@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポーズジェネレーター - Palette Generator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #667eea;
+      --primary-dark: #764ba2;
+      --text-dark: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.light {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      color: var(--text-dark);
+    }
+
+    html.dark {
+      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+      color: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 40px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      opacity: 0.7;
+      font-weight: 500;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: var(--transition);
+      margin-bottom: 24px;
+    }
+
+    html.dark .card {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    html.dark .card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .card-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .poses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+    }
+
+    .pose-item {
+      padding: 28px 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pose-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+      pointer-events: none;
+    }
+
+    .pose-item:hover::after {
+      left: 100%;
+    }
+
+    html.dark .pose-item {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.08) 100%);
+    }
+
+    .pose-item:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.4);
+    }
+
+    .pose-icon {
+      font-size: 0; /* icon removed; keep rule for legacy */
+    }
+
+    .pose-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--text-primary);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .preview-section {
+      text-align: center;
+      padding: 36px 28px;
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 16px;
+      border: 2px dashed rgba(102, 126, 234, 0.18);
+    }
+
+    .preview-text-large {
+      font-size: 1.1rem;
+      font-weight: 700;
+      opacity: 0.95;
+      color: var(--text-primary);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px 50px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .poses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 12px;
+      }
+
+      .pose-item {
+        padding: 20px 16px;
+        border-radius: 12px;
+      }
+
+      .pose-icon {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .poses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+      }
+
+      .pose-item {
+        padding: 16px 12px;
+        border-radius: 10px;
+      }
+
+      .pose-icon {
+        font-size: 1.8rem;
+        margin-bottom: 6px;
+      }
+
+      .pose-name {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav"></nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>🧍 ポーズジェネレーター</h1>
+      <p>キャラクターの自然なポーズを作成・編集できます</p>
+    </div>
+    <div class="history-nav" id="historyNav"></div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>ポーズを選択</h2>
+      </div>
+      <div class="poses-grid">
+        <div class="pose-item" onclick="selectPose('スタンディング')">
+          <div class="pose-name">スタンディング</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('ジャンプ')">
+          <div class="pose-name">ジャンプ</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('座位')">
+          <div class="pose-name">座位</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('スロー')">
+          <div class="pose-name">スロー</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('ラン')">
+          <div class="pose-name">ラン</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('ウォーク')">
+          <div class="pose-name">ウォーク</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('プレゼン')">
+          <div class="pose-name">プレゼン</div>
+        </div>
+        <div class="pose-item" onclick="selectPose('コラボ')">
+          <div class="pose-name">コラボ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>プレビュー</h2>
+      </div>
+      <div id="variantsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:16px;">
+        <div class="preview-section">
+          <div class="preview-text-large" id="poseText">スタンディング</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;">
+      <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:16px;">
+        <label for="variantCount" style="font-weight:600;">案数</label>
+        <select id="variantCount" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+          <option value="1">1案</option>
+          <option value="3">3案</option>
+          <option value="6" selected>6案</option>
+        </select>
+        <button class="btn btn-primary" onclick="generateMultiplePoses()" style="width:auto;">🎲 ランダム生成</button>
+        <button class="btn btn-primary" onclick="savePose()" style="width:auto;">💾 ポーズを保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+    let currentPose = { emoji: '🧍', name: 'スタンディング' };
+
+    function selectPose(emoji, name) {
+      currentPose = { emoji, name };
+      document.getElementById('posePreview').textContent = emoji;
+      document.getElementById('poseText').textContent = name;
+      showToast(`✅ ${name} を選択しました`, 2000, 'success');
+    }
+
+    function savePose() {
+      showToast(`💾 ${currentPose.name} を保存しました`, 2000, 'success');
+    }
+
+    // ランダム文生成のための語彙リスト（大幅拡張版）
+    const compositions = [
+      'バストアップ','全身','ローアングル','ハイアングル','斜め構図','クローズアップ','三分割構図','対角線構図','中心配置','広角ショット','望遠寄り','パノラマ調',
+      'オーバーショルダー','ハンドヘルド','ジンバル動かし','パンニング','フルショット','ミディアムショット','エクストリームクローズアップ','俯瞰','仰角','平行','放射状'
+    ];
+    const poses = [
+      'スタンディング','ジャンプ','座位','スロー','ラン','ウォーク','プレゼン','コラボ','振り向き','振り上げ',
+      '片膝立て','腕を組む','片手で顎に触れる','腰に手を当てる','背伸び','振りかぶる','片足を上げる','抱きしめる','寄り添う','肩に手を置く',
+      '片手を添える','しゃがむ','背中合わせ','膝に手を置く','座って顎を支える','寝そべる','ジャンプキック','ターン動作',
+      'バレエのポーズ','剣を構える','提を持つ','祈り手','腕を伸ばす','片足を前に','Y字ポーズ','ハイキック','身をかがめる','片肘を立てる',
+      'クッションに寄りかかる','壁に寄りかかる','地面に座り込む','膝をつく','横たわる','立てひざ','指でハート','ピースサイン','両手を合わせる','手を差し伸べる'
+    ];
+    const gazes = [
+      'カメラ目線','遠くを見る','斜め上','斜め下','横を向く','目線をそらす','下を見ている','視線が合っていない','伏し目がち','睨むように',
+      '瞑想瞳','虚ろな瞳','鋭い眼光','キラキラ瞳','半目','うつろな表情','横目','目を閉じている','片目を瞑る','上目遣い','目を見開く','天を見上げる'
+    ];
+    const expressions = [
+      '微笑み','真剣','驚き','笑顔','無表情','困惑','困り顔','満面の笑み','切なげ','憂いを帯びた表情','嘲笑','にやりと笑う',
+      'オタ顔','泣き顔','激怒','冷たい表情','幻想的な笑み','照れ顔','誇らしげ','失望','安堵','不安','陶酔','恍惚'
+    ];
+    const handPositions = [
+      '両手を腰に','片手を挙げる','手を組む','片手ポケット','手を広げる','片手で髪を触る','顎に触れる','拳を握る','差し伸べる','指を顎にかける',
+      '肩に手を置く','背中に手を回す','手を重ねる','手で顔を覆う','ハートを作る',
+      '両手を頭の後ろで組む','片手を首に','手を胸に','手を祈る形','指をくわえる','手をポケットに深く','腕を交差','手をぎゅっと握る',
+      'V字形に掲げる','手で額を覆う','指を立てる','手を言う','肌に触れ続ける','手で耳を隠す','手をふるふる振る','手を上げて波を打つ'
+    ];
+
+    function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function generateSinglePose(){
+      const comp = rand(compositions);
+      const pose = rand(poses);
+      const gaze = rand(gazes);
+      const expr = rand(expressions);
+      const hands = rand(handPositions);
+      return `構図: ${comp} | ポーズ: ${pose} | 視線: ${gaze} | 表情: ${expr} | 手: ${hands}`;
+    }
+
+    function generateMultiplePoses(){
+      const count = parseInt(document.getElementById('variantCount').value) || 1;
+      const container = document.getElementById('variantsContainer');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < count; i++) {
+        const description = generateSinglePose();
+        const div = document.createElement('div');
+        div.className = 'preview-section';
+        div.innerHTML = `<div class="preview-text-large">案${i+1}\n${description}</div>`;
+        container.appendChild(div);
+      }
+      
+      currentPose = { name: '複数案を生成しました' };
+      showToast(`🎲 ${count}案を生成しました`, 1200, 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildNav('pose');
+      buildHistoryNav('pose-generator-enterprise.html');
+    });
+  </script>
+</body>
+</html>

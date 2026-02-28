@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="イラスト制作に関するブログ。制作過程、制作Tips、業界ニュースなど、クリエイターに役立つ情報を配信します。">
+    <meta name="keywords" content="イラスト制作,デジタルアート,キャラクターデザイン,制作技法">
+    <meta name="theme-color" content="#E67E22">
+    <title>ブログ | solace - Professional Illustration Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <!-- ===== ナビゲーション ===== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+            
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="index.html#about" class="nav-link">プロフィール</a></li>
+                <li><a href="blog.html" class="nav-link">ブログ</a></li>
+                <li><a href="before-after.html" class="nav-link">ビフォアアフター</a></li>
+                <li><a href="index.html#contact" class="nav-link">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== ブログヘッダー ===== -->
+    <section class="page-header">
+        <div class="section-container">
+            <h1>ブログ</h1>
+            <p>制作過程、業界ニュース、イラスト制作のTipsなど</p>
+        </div>
+    </section>
+
+    <!-- ===== ブログ一覧 ===== -->
+    <section class="blog-section">
+        <div class="section-container">
+            <div class="blog-filters">
+                <button class="blog-filter active" data-filter="all">すべて</button>
+                <button class="blog-filter" data-filter="process">制作過程</button>
+                <button class="blog-filter" data-filter="tips">制作Tips</button>
+                <button class="blog-filter" data-filter="news">業界ニュース</button>
+            </div>
+
+            <div class="blog-grid">
+                <!-- ブログ記事カード 1 -->
+                <article class="blog-card" data-filter="process">
+                    <div class="blog-image">
+                        <img src="images/sample1.jpg" alt="ゲームキャラクターの制作過程">
+                        <span class="blog-category">制作過程</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=1">ゲームキャラクターの制作過程 - スケッチから完成まで</a></h3>
+                        <p class="blog-excerpt">RPGゲームの主人公キャラクターを制作する過程を詳しく解説します。ラフスケッチから線画、色塗り、最終調整までの全工程をご紹介。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年2月20日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=1" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+
+                <!-- ブログ記事カード 2 -->
+                <article class="blog-card" data-filter="tips">
+                    <div class="blog-image">
+                        <img src="images/sample2.jpg" alt="キャラクター配色のコツ">
+                        <span class="blog-category">制作Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=2">キャラクター配色で魅力を引き出す5つのコツ</a></h3>
+                        <p class="blog-excerpt">キャラクターの色選びは第一印象を左右する重要な要素。色彩心理学を活用した配色テクニックを5つ紹介します。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年2月15日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=2" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+
+                <!-- ブログ記事カード 3 -->
+                <article class="blog-card" data-filter="tips">
+                    <div class="blog-image">
+                        <img src="images/sample3.jpg" alt="デジタルイラストの基本ソフト比較">
+                        <span class="blog-category">制作Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=3">Photoshop vs Clip Studio Paint - イラストレーター向け比較</a></h3>
+                        <p class="blog-excerpt">デジタルイラスト制作で使われる2大ソフトを徹底比較。それぞれの特徴を解説し、選択のポイントをご紹介します。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年2月10日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=3" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+
+                <!-- ブログ記事カード 4 -->
+                <article class="blog-card" data-filter="news">
+                    <div class="blog-image">
+                        <img src="images/sample1.jpg" alt="2025年ゲーム業界のトレンド">
+                        <span class="blog-category">業界ニュース</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=4">2025年ゲーム業界のイラストトレンド</a></h3>
+                        <p class="blog-excerpt">AI時代のゲーム業界でイラストレーターに求められるスキルが変わりつつあります。今後の業界動向を分析します。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年2月5日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=4" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+
+                <!-- ブログ記事カード 5 -->
+                <article class="blog-card" data-filter="process">
+                    <div class="blog-image">
+                        <img src="images/sample2.jpg" alt="SDキャラの可愛い描き方">
+                        <span class="blog-category">制作過程</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=5">SDキャラクターの可愛らしさを引き出す描き方</a></h3>
+                        <p class="blog-excerpt">デフォルメされたSDキャラの魅力は比例関係にあります。頭身比から表情まで、可愛さの秘密を解き明かします。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年1月30日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=5" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+
+                <!-- ブログ記事カード 6 -->
+                <article class="blog-card" data-filter="news">
+                    <div class="blog-image">
+                        <img src="images/sample3.jpg" alt="フリーランスイラストレーターの契約書作成">
+                        <span class="blog-category">業界ニュース</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="blog-post.html?id=6">イラストレーターが知るべき契約書のポイント</a></h3>
+                        <p class="blog-excerpt">著作権トラブルを防ぐため、契約書作成は必須。重要な条項をチェックリスト化しました。</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="fas fa-calendar"></i> 2025年1月25日</span>
+                            <span class="blog-author"><i class="fas fa-user"></i> solace</span>
+                        </div>
+                        <a href="blog-post.html?id=6" class="read-more">続きを読む →</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- ページネーション -->
+            <div class="pagination">
+                <button class="page-btn disabled">前へ</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">次へ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ニュースレター購読 ===== -->
+    <section class="newsletter">
+        <div class="section-container">
+            <h3>最新のブログ記事をメールで受け取る</h3>
+            <p>新しい記事が公開されたらすぐにお知らせします</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="メールアドレスを入力" required>
+                <button type="submit" class="btn btn-primary">購読する</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== フッター ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration & Character Design Studio</p>
+            </div>
+
+            <div class="footer-section">
+                <h5>リンク</h5>
+                <ul>
+                    <li><a href="index.html#about">プロフィール</a></li>
+                    <li><a href="blog.html">ブログ</a></li>
+                    <li><a href="before-after.html">ビフォアアフター</a></li>
+                    <li><a href="index.html#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h5>フォロー</h5>
+                <div class="footer-social">
+                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // ブログフィルター機能
+        const blogFilters = document.querySelectorAll('.blog-filter');
+        const blogCards = document.querySelectorAll('.blog-card');
+
+        blogFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                const category = filter.getAttribute('data-filter');
+                
+                blogFilters.forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+
+                blogCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-filter') === category) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.style.opacity = '1', 10);
+                    } else {
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

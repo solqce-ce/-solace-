@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログ記事 | solace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .article-content { max-width: 800px; margin: 0 auto; line-height: 1.8; }
+        .article-content h2 { font-size: 28px; margin: 30px 0 15px 0; }
+        .article-content h3 { font-size: 20px; margin: 20px 0 10px 0; color: var(--accent); }
+        .article-content p { margin-bottom: 15px; color: var(--text-dark); }
+        .article-content img { max-width: 100%; height: auto; margin: 20px 0; border-radius: 8px; }
+        .article-meta { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+        .article-meta-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-light); }
+        .related-articles { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--border); }
+        @media (max-width: 480px) {
+            .article-meta { flex-direction: column; gap: 10px; }
+            .article-content h2 { font-size: 22px; }
+            .article-content h3 { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ナビゲーション ===== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+            
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="index.html#about" class="nav-link">プロフィール</a></li>
+                <li><a href="blog.html" class="nav-link">ブログ</a></li>
+                <li><a href="index.html#contact" class="nav-link">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== 記事ヘッダー ===== -->
+    <section class="page-header">
+        <div class="section-container">
+            <h1 id="article-title">ブログ記事</h1>
+            <p id="article-subtitle">制作過程やTipsをお届けします</p>
+        </div>
+    </section>
+
+    <!-- ===== 記事コンテンツ ===== -->
+    <section style="background: var(--bg-white); padding: var(--spacing-2xl) var(--spacing-lg);">
+        <div class="article-content">
+            <!-- メタデータ -->
+            <div class="article-meta">
+                <div class="article-meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span id="article-date">2025年2月26日</span>
+                </div>
+                <div class="article-meta-item">
+                    <i class="fas fa-user"></i>
+                    <span>solace</span>
+                </div>
+                <div class="article-meta-item">
+                    <i class="fas fa-tag"></i>
+                    <span id="article-category">制作過程</span>
+                </div>
+            </div>
+
+            <!-- 記事画像 -->
+            <img id="article-image" src="images/sample1.jpg" alt="記事メイン画像">
+
+            <!-- 記事本文 -->
+            <div id="article-body">
+                <h2>ブログ記事のタイトル</h2>
+                
+                <p>
+                    このページはブログ記事用のテンプレートです。
+                    JavaScriptで動的に記事内容を読み込むことができます。
+                </p>
+
+                <h3>セクション1</h3>
+                <p>
+                    ここに記事の内容が入ります。
+                    各ブログ記事は、blog.html からこのページにリンクされます。
+                </p>
+
+                <h3>セクション2</h3>
+                <p>
+                    複数のセクションで記事を構成できます。
+                    画像も自由に挿入できます。
+                </p>
+            </div>
+
+            <!-- 関連記事 -->
+            <div class="related-articles">
+                <h3>関連記事</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                    <a href="blog.html" style="padding: var(--spacing-lg); background: var(--bg-light); border-radius: 8px; text-decoration: none; color: var(--text-dark); transition: all var(--transition-base);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <h5 style="margin-bottom: var(--spacing-sm);">← ブログ一覧に戻る</h5>
+                        <p style="color: var(--text-light); font-size: 14px;">すべてのブログ記事を確認する</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== フッター ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration & Character Design Studio</p>
+            </div>
+
+            <div class="footer-section">
+                <h5>リンク</h5>
+                <ul>
+                    <li><a href="index.html">ホーム</a></li>
+                    <li><a href="blog.html">ブログ</a></li>
+                    <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
+                    <li><a href="terms.html">利用規約</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h5>フォロー</h5>
+                <div class="footer-social">
+                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // URLパラメータから記事IDを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id') || '1';
+
+        // 記事データ（実際には、この部分をサーバーから取得することもできます）
+        const articles = {
+            '1': {
+                title: 'ゲームキャラクターの制作過程 - スケッチから完成まで',
+                date: '2025年2月20日',
+                category: '制作過程',
+                image: 'images/sample1.jpg',
+                content: `
+                    <h2>ゲームキャラクターの制作過程 - スケッチから完成まで</h2>
+                    <p>RPGゲームの主人公キャラクターを制作する過程を詳しく解説します。ラフスケッチから線画、色塗り、最終調整までの全工程をご紹介。</p>
+                    
+                    <h3>ステップ1：コンセプト企画</h3>
+                    <p>まず、キャラクターのコンセプトを決定します。性格、年代、役割などを明確にすることが重要です。</p>
+                    
+                    <h3>ステップ2：ラフスケッチ</h3>
+                    <p>複数のラフを描いて、一番いいデザインを選びます。この段階では細部にはこだわらず、全体のシルエットや雰囲気を大切にします。</p>
+                    
+                    <h3>ステップ3：線画</h3>
+                    <p>決定したラフをベースに、綺麗な線画に整えていきます。</p>
+                    
+                    <h3>ステップ4：色塗り</h3>
+                    <p>色塗りの過程では、キャラクターの個性を引き出すカラーリングを心がけます。</p>
+                    
+                    <h3>ステップ5：最終調整</h3>
+                    <p>細かい調整とチェックを行い、完成させます。</p>
+                `
+            },
+            '2': {
+                title: 'キャラクター配色で魅力を引き出す5つのコツ',
+                date: '2025年2月15日',
+                category: '制作Tips',
+                image: 'images/sample2.jpg',
+                content: `
+                    <h2>キャラクター配色で魅力を引き出す5つのコツ</h2>
+                    <p>キャラクターの色選びは第一印象を左右する重要な要素。色彩心理学を活用した配色テクニックを5つご紹介します。</p>
+                    
+                    <h3>コツ1：主色と補色のバランス</h3>
+                    <p>主色70%、補色30%のバランスが目安です。</p>
+                    
+                    <h3>コツ2：肌色の選択</h3>
+                    <p>肌色はキャラクターの第一印象を決める最も重要な色です。</p>
+                    
+                    <h3>コツ3：背景色との関係</h3>
+                    <p>背景色を考慮した配色にすることで、キャラクターが引き立ちます。</p>
+                    
+                    <h3>コツ4：色のコントラスト</h3>
+                    <p>コントラストを強くすることで、より目立つキャラクターになります。</p>
+                    
+                    <h3>コツ5：色彩の心理効果</h3>
+                    <p>色は心理的な効果を持ちます。例えば、赤は情熱、青は冷静さを表現します。</p>
+                `
+            },
+            '3': {
+                title: 'Photoshop vs Clip Studio Paint - イラストレーター向け比較',
+                date: '2025年2月10日',
+                category: '制作Tips',
+                image: 'images/sample3.jpg',
+                content: `
+                    <h2>Photoshop vs Clip Studio Paint - イラストレーター向け比較</h2>
+                    <p>デジタルイラスト制作で使われる2大ソフトを徹底比較。それぞれの特徴を解説し、選択のポイントをご紹介します。</p>
+                    
+                    <h3>Photoshopの特徴</h3>
+                    <p>Photoshopは画像編集ソフトの最高峰。イラストから写真編集まで、幅広い用途に対応しています。</p>
+                    
+                    <h3>Clip Studio Paintの特徴</h3>
+                    <p>Clip Studio Paintはイラスト制作に特化したソフト。ペンの種類が豊富で、漫画やイラスト制作に最適です。</p>
+                    
+                    <h3>どちらを選ぶべき？</h3>
+                    <p>用途によって選択することをおすすめします。イラスト中心なら Clip Studio Paint、多目的なら Photoshop という選択肢があります。</p>
+                `
+            }
+        };
+
+        // 記事データを挿入
+        if (articles[articleId]) {
+            const article = articles[articleId];
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-subtitle').textContent = article.category;
+            document.getElementById('article-date').textContent = article.date;
+            document.getElementById('article-category').textContent = article.category;
+            document.getElementById('article-image').src = article.image;
+            document.getElementById('article-body').innerHTML = article.content;
+        }
+    </script>
+</body>
+</html>

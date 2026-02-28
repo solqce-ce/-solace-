@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palette Generator Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-dark: #1a1a2e;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html.light {
+            background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+            color: var(--text-dark);
+        }
+
+        html.dark {
+            background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+            color: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            line-height: 1.6;
+            transition: var(--transition);
+            padding: 40px 20px 60px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== ヒーロー ===== */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.15);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.75;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ===== フィーチャー グリッド ===== */
+        .features-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .features-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        html.dark .features-header h2 {
+            color: #f3f4f6;
+        }
+
+        .features-header p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            padding: 32px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        html.dark .feature-card {
+            background: rgba(22, 22, 32, 0.9);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 48px rgba(102, 126, 234, 0.25);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .feature-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            opacity: 0.65;
+            line-height: 1.6;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== CTA セクション ===== */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            backdrop-filter: blur(12px);
+        }
+
+        .cta-section h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-section p {
+            font-size: 1.05rem;
+            opacity: 0.7;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== フッター ===== */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        html.dark footer {
+            border-top-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== レスポンシブ ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 16px 50px;
+            }
+
+            .hero {
+                padding: 40px 24px;
+                margin-bottom: 60px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 24px;
+            }
+
+            .cta-section {
+                padding: 40px 24px;
+            }
+
+            .cta-section h3 {
+                font-size: 1.5rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+            }
+
+            .cta-section h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="mainNav"></nav>
+
+    <div class="container">
+        <!-- ヒーロー -->
+        <section class="hero">
+            <h1>✨ Palette Generator Pro</h1>
+            <p>クリエイティブなアイデアを、テクノロジーの力で実現。絵文字、ポーズ、キャラクター、カラーを自由に生成</p>
+            <div class="hero-cta">
+                <a href="emoji-generator-enterprise.html" class="btn btn-primary">🚀 すぐ始める</a>
+                <a href="random-color.html" class="btn btn-secondary">🎨 カラー生成</a>
+            </div>
+        </section>
+
+        <!-- フィーチャー -->
+        <div class="features-header">
+            <h2>主な機能</h2>
+            <p>あらゆるクリエイティブニーズに対応した強力なツール群</p>
+        </div>
+
+        <div class="features-grid">
+            <a href="emoji-generator-enterprise.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">😊</div>
+                    <h3 class="feature-title">絵文字ジェネレーター</h3>
+                    <p class="feature-desc">カスタム絵文字を自由に作成。プロジェクトに個性を加えましょう。</p>
+                    <div class="feature-badge">Popular</div>
+                </div>
+            </a>
+
+            <a href="random-color.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">🌈</div>
+                    <h3 class="feature-title">ランダムカラー</h3>
+                    <p class="feature-desc">ワンクリックで美しいカラーパレットを生成。デザイン作業が加速します。</p>
+                    <div class="feature-badge">新機能</div>
+                </div>
+            </a>
+
+            <a href="pose-generator-enterprise.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">🧍</div>
+                    <h3 class="feature-title">ポーズジェネレーター</h3>
+                    <p class="feature-desc">キャラクターの自然なポーズを作成。アニメーション制作に最適。</p>
+                </div>
+            </a>
+
+            <a href="chara-generator-enterprise.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">キャラ構成</h3>
+                    <p class="feature-desc">複数キャラクターを組み合わせてシーンを構成。ストーリーテリングに最適。</p>
+                </div>
+            </a>
+
+            <a href="gallery-enterprise.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">ギャラリー</h3>
+                    <p class="feature-desc">作成した全作品を管理・整理。検索とフィルタリング機能完備。</p>
+                </div>
+            </a>
+
+            <a href="#" class="feature-card" style="display:none;">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">👤</div>
+                    <h3 class="feature-title">プロフィール</h3>
+                    <p class="feature-desc">ユーザー情報と作品統計を一元管理。成長を可視化します。</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h3>🚀 今すぐ始めましょう</h3>
+            <p>無限の創造性を、あなたの手で。Palette Generator Proで、次のアイデアを現実に。</p>
+            <a href="emoji-generator-enterprise.html" class="btn btn-primary">✨ 無料で使ってみる</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Palette Generator Pro. All rights reserved.</p>
+    </footer>
+
+    <script src="common.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            buildNav("index");
+        });
+    </script>
+</body>
+</html>

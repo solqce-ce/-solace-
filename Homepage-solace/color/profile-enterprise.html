@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロフィール - Palette Generator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #667eea;
+      --primary-dark: #764ba2;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-dark: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.light {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      color: var(--text-dark);
+    }
+
+    html.dark {
+      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+      color: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 40px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      opacity: 0.7;
+      font-weight: 500;
+    }
+
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+
+    html.dark .profile-card {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    html.dark .profile-header {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    }
+
+    .username {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .bio {
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-box {
+      background: rgba(102, 126, 234, 0.08);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--text-dark);
+      transition: var(--transition);
+    }
+
+    html.dark .form-input,
+    html.dark .form-textarea {
+      background: rgba(22, 22, 32, 0.9);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(102, 126, 234, 0.1);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px 50px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+      }
+
+      .username {
+        font-size: 1.3rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav"></nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>👤 プロフィール</h1>
+      <p>ユーザー情報と作品統計を管理できます</p>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="avatar">👤</div>
+        <h2 class="username" id="displayName">ユーザー</h2>
+        <p class="bio" id="bio">クリエイターになろう</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-number" id="statArtworks">0</div>
+          <div class="stat-label">作品数</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="statEmojis">0</div>
+          <div class="stat-label">絵文字</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="statPoses">0</div>
+          <div class="stat-label">ポーズ</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="statCharas">0</div>
+          <div class="stat-label">キャラ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">プロフィール編集</h2>
+
+      <div class="form-group">
+        <label>ユーザー名</label>
+        <input type="text" class="form-input" id="username" placeholder="ユーザー名を入力">
+      </div>
+
+      <div class="form-group">
+        <label>自己紹介</label>
+        <textarea class="form-textarea" id="bioInput" placeholder="自己紹介を入力"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Webサイト</label>
+        <input type="url" class="form-input" id="website" placeholder="https://example.com">
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+        <div class="form-group">
+          <label>Twitter</label>
+          <input type="text" class="form-input" id="twitter" placeholder="@username">
+        </div>
+
+        <div class="form-group">
+          <label>Instagram</label>
+          <input type="text" class="form-input" id="instagram" placeholder="@username">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 保存</button>
+        <button class="btn btn-secondary" onclick="resetProfile()">🔄 リセット</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+    function loadProfile() {
+      const profile = JSON.parse(localStorage.getItem('profile')) || {
+        displayName: 'ユーザー',
+        bio: 'クリエイターになろう',
+        website: '',
+        twitter: '',
+        instagram: ''
+      };
+
+      const stats = JSON.parse(localStorage.getItem('stats')) || {
+        artworks: 0,
+        emojis: 0,
+        poses: 0,
+        charas: 0
+      };
+
+      document.getElementById('displayName').textContent = profile.displayName;
+      document.getElementById('bio').textContent = profile.bio;
+      document.getElementById('username').value = profile.displayName;
+      document.getElementById('bioInput').value = profile.bio;
+      document.getElementById('website').value = profile.website;
+      document.getElementById('twitter').value = profile.twitter;
+      document.getElementById('instagram').value = profile.instagram;
+
+      document.getElementById('statArtworks').textContent = stats.artworks;
+      document.getElementById('statEmojis').textContent = stats.emojis;
+      document.getElementById('statPoses').textContent = stats.poses;
+      document.getElementById('statCharas').textContent = stats.charas;
+    }
+
+    function saveProfile() {
+      const profile = {
+        displayName: document.getElementById('username').value || 'ユーザー',
+        bio: document.getElementById('bioInput').value || 'クリエイターになろう',
+        website: document.getElementById('website').value,
+        twitter: document.getElementById('twitter').value,
+        instagram: document.getElementById('instagram').value
+      };
+
+      localStorage.setItem('profile', JSON.stringify(profile));
+      document.getElementById('displayName').textContent = profile.displayName;
+      document.getElementById('bio').textContent = profile.bio;
+      showToast('✅ プロフィールを保存しました', 2000, 'success');
+    }
+
+    function resetProfile() {
+      if (confirm('プロフィールをリセットしますか？')) {
+        localStorage.removeItem('profile');
+        loadProfile();
+        showToast('🔄 プロフィールをリセットしました', 2000, 'info');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildNav('profile');
+      loadProfile();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キャラ構成ジェネレーター - Palette Generator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #667eea;
+      --primary-dark: #764ba2;
+      --text-dark: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.light {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      color: var(--text-dark);
+    }
+
+    html.dark {
+      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
+      color: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      transition: var(--transition);
+      padding: 40px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      opacity: 0.7;
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      padding: 32px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    html.dark .card {
+      background: rgba(22, 22, 32, 0.95);
+      border-color: rgba(102, 126, 234, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.25);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+    }
+
+    .card-header {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    html.dark .card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .card-header h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .char-display {
+      text-align: center;
+      padding: 40px;
+      background: rgba(102, 126, 234, 0.08);
+      border-radius: 12px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      margin-bottom: 16px;
+    }
+
+    .char-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .char-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .char-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .char-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .char-item:hover {
+      background: rgba(102, 126, 234, 0.15);
+      border-color: rgba(102, 126, 234, 0.4);
+    }
+
+    .char-item-icon {
+      font-size: 1.5rem;
+    }
+
+    .char-item-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      letter-spacing: 0.3px;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .composition-section {
+      background: rgba(102, 126, 234, 0.05);
+      border: 2px dashed rgba(102, 126, 234, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .composition-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .composition-display {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px 50px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        padding: 24px;
+        border-radius: 14px;
+      }
+
+      .char-display {
+        padding: 32px 20px;
+      }
+
+      .char-icon {
+        font-size: 2.5rem;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .char-display {
+        padding: 24px 16px;
+        border-radius: 10px;
+      }
+
+      .char-icon {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+
+      .char-name {
+        font-size: 0.9rem;
+      }
+
+      .char-item {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav"></nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>キャラ構成ジェネレーター</h1>
+      <p>キャラクターの容姿・設定・世界観をランダムで生成します（テキスト出力）</p>
+    </div>
+    <div class="history-nav" id="historyNav"></div>
+
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap;">
+      <label for="countSelect" style="font-weight:600;">生成人数</label>
+      <select id="countSelect" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        <option value="1">1人</option>
+        <option value="2">2人</option>
+        <option value="3" selected>3人</option>
+        <option value="4">4人</option>
+        <option value="5">5人</option>
+      </select>
+      <label for="variantNum" style="font-weight:600;">複数案</label>
+      <select id="variantNum" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        <option value="1">1帯</option>
+        <option value="3">3帯</option>
+        <option value="5" selected>5帯</option>
+      </select>
+      <button class="btn btn-primary" id="generateBtn" style="width:auto;">🎲 ランダム生成</button>
+    </div>
+
+    <div class="grid" id="charsGrid">
+      <!-- JSがここにテキストカードを生成します -->
+    </div>
+
+    <div class="composition-section">
+      <div class="composition-title">シーン構成プレビュー（要約）</div>
+      <div class="composition-display" id="composition">—</div>
+      <div style="margin-top:12px;text-align:left;">
+        <div class="composition-title">詳細（コピー可）</div>
+        <pre id="detailedList" style="white-space:pre-wrap;background:transparent;border:none;padding:8px;margin-top:8px;">—</pre>
+      </div>
+      <button class="btn btn-primary" onclick="saveComposition()">💾 構成を保存</button>
+    </div>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+    const firstNames = ['アオイ','ユウ','カナ','ショウ','ミナ','リク','サラ','ケイ','ハル','ユキ','タク','ナツ','レン','ミオ','ヒナ','ソウタ','リナ','ユウタ','マコト','ユイ','カオリ','ナオ','コウ','サキ','ヒロ'];
+    const ages = ['乳幼児','幼年','児童','少年','少女','青春期','青年','成人','中年','壮年','高年'];
+    const roles = ['主人公','敵役','脇役','相棒','先生','部下','上司','隣人','旅人','研究者','恋人','親友','師匠','ライバル','裏切り者','子供時代の友人'];
+    const appearances = ['長髪','短髪','巻き髪','ボブ','坊主','ツインテール','ポニーテール','無造作ヘア','白髪','銀髪','金髪','黒髪','色付き髪','癖毛','ストレートヘア','くせ毛','編み込み'];
+    const clothes = ['スーツ','カジュアル','和装','スポーティ','フォーマル','ストリート','ラフ','ドレス','制服','ゴスロリ','パンク','冒険者の装備','ローブ','コート','アーマー'];
+    const personalities = ['冷静','情熱的','おっとり','クール','陽気','陰キャ','面倒見が良い','毒舌','天然','寡黙','お調子者','堅実','大胆','臆病','合理主義'];
+    const specialTraits = ['義手','タトゥー','眼帯','眼鏡','傷跡','ペットを連れている','義足','サイバー義体','魔法の印','不思議な瞳','双子の印','異形のしるし','人工心臓'];
+    const worlds = ['近未来都市','ファンタジー王国','現代日本','荒廃した世界','学園都市','小さな港町','宇宙ステーション','田舎の村','中世風都市','サイバーパンク都市','異世界の森林','砂漠のオアシス'];
+
+    function rand(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateRandomCharacter() {
+      const name = rand(firstNames) + (Math.random() < 0.5 ? '' : (' ' + rand(['A','B','C','X','Z'])));
+      return {
+        name: name,
+        age: rand(ages),
+        role: rand(roles),
+        appearance: rand(appearances),
+        clothes: rand(clothes),
+        personality: rand(personalities),
+        trait: Math.random() < 0.4 ? rand(specialTraits) : '',
+        world: rand(worlds)
+      };
+    }
+
+    function renderCharacters(count) {
+      const grid = document.getElementById('charsGrid');
+      grid.innerHTML = '';
+      const characters = [];
+      for (let i = 0; i < count; i++) {
+        const c = generateRandomCharacter();
+        characters.push(c);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-header"><h3>キャラクター ${sanitizeHTML(String(i+1))} - ${sanitizeHTML(c.role)}</h3></div>
+          <div style="padding:16px;">
+            <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
+            <div style="margin-bottom:6px;">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
+            <div style="margin-bottom:6px;">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
+            <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${sanitizeHTML(c.world)}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+      updateComposition(characters);
+    }
+
+    function updateComposition(characters) {
+      if (!characters || characters.length === 0) {
+        document.getElementById('composition').textContent = '—';
+        document.getElementById('detailedList').textContent = '—';
+        return;
+      }
+      const summary = characters.map((c, i) => `${i+1}:${c.role}(${c.age})`).join(' ／ ');
+      document.getElementById('composition').textContent = summary;
+
+      const details = characters.map((c, i) => {
+        return `キャラクター ${i+1} - ${c.name} (${c.role})\n年齢層: ${c.age}\n容姿: ${c.appearance}\n服装: ${c.clothes}\n性格: ${c.personality}${c.trait ? '\n特徴: '+c.trait : ''}\n世界観: ${c.world}`;
+      }).join('\n\n');
+      document.getElementById('detailedList').textContent = details;
+    }
+
+    function saveComposition() {
+      const text = document.getElementById('detailedList').textContent;
+      if (!text || text === '—') {
+        showToast('⚠️ 生成された構成がありません', 2000, 'warning');
+        return;
+      }
+      navigator.clipboard && navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ 構成をクリップボードにコピーしました', 2000, 'success');
+      }).catch(() => {
+        showToast('✅ 構成を保存しました（コピーに失敗しました）', 2000, 'success');
+      });
+    }
+
+    function renderMultipleVariants(count, variantNum) {
+      const grid = document.getElementById('charsGrid');
+      grid.innerHTML = '';
+      
+      for (let v = 0; v < variantNum; v++) {
+        const characters = [];
+        const variantDiv = document.createElement('div');
+        variantDiv.style.cssText = 'margin-bottom: 32px; padding: 20px; background: rgba(102,126,234,0.05); border-radius: 12px; border-left: 4px solid var(--primary);';
+        
+        const variantTitle = document.createElement('h4');
+        variantTitle.textContent = `案${v+1}群`;
+        variantTitle.style.cssText = 'margin-bottom: 16px; font-family: Syne; color: var(--primary); font-size: 1.1rem;';
+        variantDiv.appendChild(variantTitle);
+        
+        const charGrid = document.createElement('div');
+        charGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;';
+        
+        for (let i = 0; i < count; i++) {
+          const c = generateRandomCharacter();
+          characters.push(c);
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.marginBottom = '0';
+          card.innerHTML = `
+            <div class="card-header"><h3>キャラ ${i+1} - ${c.role}</h3></div>
+            <div style="padding:16px;">
+              <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${c.name}（${c.age}）</div>
+              <div style="margin-bottom:6px;">容姿: ${c.appearance} / 服装: ${c.clothes}</div>
+              <div style="margin-bottom:6px;">性格: ${c.personality}${c.trait ? ' / 特徴: ' + c.trait : ''}</div>
+              <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${c.world}</div>
+            </div>
+          `;
+          charGrid.appendChild(card);
+        }
+        
+        variantDiv.appendChild(charGrid);
+        grid.appendChild(variantDiv);
+      }
+      
+      showToast(`🎲 ${count}人の${variantNum}りバリエーションを生成しました`, 1200, 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildNav('chara');
+      buildHistoryNav('chara-generator-enterprise.html');
+      const countSelect = document.getElementById('countSelect');
+      const generateBtn = document.getElementById('generateBtn');
+      function doGenerate() {
+        const n = parseInt(countSelect.value, 10) || 3;
+        const variantNum = parseInt(document.getElementById('variantNum').value, 10) || 1;
+        if (variantNum === 1) {
+          renderCharacters(n);
+        } else {
+          renderMultipleVariants(n, variantNum);
+        }
+      }
+      generateBtn.addEventListener('click', doGenerate);
+      // 初期表示
+      renderCharacters(parseInt(countSelect.value, 10));
+    });
+  </script>
+</body>
+</html>
