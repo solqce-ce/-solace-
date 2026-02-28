@@ -121,6 +121,27 @@ a:hover {
     gap: var(--spacing-lg);
 }
 
+.nav-cta {
+    margin-left: var(--spacing-lg);
+}
+
+.btn-nav-contact {
+    background: var(--accent);
+    color: var(--bg-white);
+    border: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(230, 126, 34, 0.28);
+}
+
+.btn-nav-contact:hover {
+    background: var(--accent-dark);
+    color: var(--bg-white);
+    transform: translateY(-1px);
+}
+
 .nav-link {
     color: var(--bg-white);
     font-weight: 500;
@@ -202,6 +223,63 @@ a:hover {
     display: flex;
     gap: var(--spacing-lg);
     flex-wrap: wrap;
+}
+
+.quick-access {
+    padding-top: var(--spacing-xl);
+    padding-bottom: var(--spacing-xl);
+    background: var(--bg-white);
+}
+
+.section-header.compact {
+    margin-bottom: var(--spacing-xl);
+}
+
+.quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.quick-access-item {
+    display: block;
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-base);
+    color: var(--text-dark);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.quick-access-item:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.quick-access-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-dark);
+    background: rgba(230, 126, 34, 0.12);
+    border-radius: 999px;
+    padding: 4px 10px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.quick-access-item h4 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+}
+
+.quick-access-item p {
+    color: var(--text-light);
+    font-size: 14px;
+    margin: 0;
 }
 
 .hero-visual {
@@ -1783,6 +1861,10 @@ section:nth-child(even) {
         display: flex;
     }
 
+    .nav-cta {
+        display: none;
+    }
+
     .hamburger {
         display: flex;
     }
@@ -1802,6 +1884,10 @@ section:nth-child(even) {
     .hero-cta {
         justify-content: center;
         flex-direction: column;
+    }
+
+    .quick-access-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .btn {
@@ -1885,6 +1971,11 @@ section:nth-child(even) {
     .hero {
         padding: 90px 12px 40px;
         margin-top: 50px;
+    }
+
+    .quick-access-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
 
     .hero-title {

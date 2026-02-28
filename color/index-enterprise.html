@@ -89,6 +89,75 @@
             flex-wrap: wrap;
         }
 
+        .jump-panel {
+            margin-bottom: 56px;
+            padding: 24px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        html.dark .jump-panel {
+            background: rgba(22, 22, 32, 0.9);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .jump-panel h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .jump-panel p {
+            opacity: 0.72;
+            margin-bottom: 16px;
+        }
+
+        .jump-group {
+            margin-bottom: 12px;
+        }
+
+        .jump-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .jump-group-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .jump-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .jump-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            background: rgba(102, 126, 234, 0.06);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .jump-link:hover {
+            transform: translateY(-1px);
+            border-color: rgba(102, 126, 234, 0.35);
+            background: rgba(102, 126, 234, 0.12);
+        }
+
         .quick-start {
             margin-bottom: 72px;
             padding: 28px;
@@ -400,6 +469,11 @@
                 flex-direction: column;
             }
 
+            .jump-panel {
+                margin-bottom: 40px;
+                padding: 18px;
+            }
+
             .quick-start {
                 margin-bottom: 56px;
                 padding: 20px;
@@ -439,16 +513,41 @@
 
     <div class="container">
         <!-- ヒーロー -->
-        <section class="hero">
+        <section class="hero" id="top">
             <h1>✨ Palette Generator Pro</h1>
-            <p>クリエイティブなアイデアを、テクノロジーの力で実現。絵文字、ポーズ、キャラクター、カラーを自由に生成</p>
+            <p>企業案件でも使いやすい、シンプルな生成ツールセット。必要なページへすぐジャンプできます。</p>
             <div class="hero-cta">
                 <a href="emoji-generator-enterprise.html" class="btn btn-primary">🚀 すぐ始める</a>
                 <a href="random-color.html" class="btn btn-secondary">🎨 カラー生成</a>
             </div>
         </section>
 
-        <section class="quick-start" aria-label="初めての方向けガイド">
+        <section class="jump-panel" aria-label="クイックジャンプ">
+            <h2>クイックジャンプ</h2>
+            <p>目的別にすぐ移動できます。最短で作業を開始してください。</p>
+
+            <div class="jump-group">
+                <div class="jump-group-title">ページ内ジャンプ</div>
+                <div class="jump-grid">
+                    <a href="#flow" class="jump-link"><span>利用フロー</span><span>→</span></a>
+                    <a href="#tools" class="jump-link"><span>ツール一覧</span><span>→</span></a>
+                    <a href="#start" class="jump-link"><span>今すぐ開始</span><span>→</span></a>
+                </div>
+            </div>
+
+            <div class="jump-group">
+                <div class="jump-group-title">主要ツール</div>
+                <div class="jump-grid">
+                    <a href="emoji-generator-enterprise.html" class="jump-link"><span>😊 絵文字</span><span>→</span></a>
+                    <a href="pose-generator-enterprise.html" class="jump-link"><span>🧍 ポーズ</span><span>→</span></a>
+                    <a href="random-color.html" class="jump-link"><span>🌈 カラー</span><span>→</span></a>
+                    <a href="gallery.html" class="jump-link"><span>🎨 ギャラリー</span><span>→</span></a>
+                    <a href="settings-enterprise.html" class="jump-link"><span>⚙️ 設定</span><span>→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-start" id="flow" aria-label="初めての方向けガイド">
             <h2>はじめての3ステップ</h2>
             <p>迷ったらこの順番で使えば、最短で作品づくりを始められます。</p>
             <div class="quick-start-grid">
@@ -474,9 +573,9 @@
         </section>
 
         <!-- フィーチャー -->
-        <div class="features-header">
+        <div class="features-header" id="tools">
             <h2>主な機能</h2>
-            <p>あらゆるクリエイティブニーズに対応した強力なツール群</p>
+            <p>必要な生成機能をすぐ使える、シンプルな構成です。</p>
         </div>
 
         <div class="features-grid">
@@ -522,17 +621,10 @@
                 </div>
             </a>
 
-            <a href="#" class="feature-card" style="display:none;">
-                <div class="feature-card-inner">
-                    <div class="feature-icon">👤</div>
-                    <h3 class="feature-title">プロフィール</h3>
-                    <p class="feature-desc">ユーザー情報と作品統計を一元管理。成長を可視化します。</p>
-                </div>
-            </a>
         </div>
 
         <!-- CTA -->
-        <section class="cta-section">
+        <section class="cta-section" id="start">
             <h3>🚀 今すぐ始めましょう</h3>
             <p>無限の創造性を、あなたの手で。Palette Generator Proで、次のアイデアを現実に。</p>
             <a href="emoji-generator-enterprise.html" class="btn btn-primary">✨ 無料で使ってみる</a>
