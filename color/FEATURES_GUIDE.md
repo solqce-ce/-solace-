@@ -134,7 +134,23 @@ buildHistoryNav(currentPage)
 
 ## 💾 ローカルストレージの構造
 
-### **キー: `favorites`**
+### **名前空間プレフィックス**
+
+すべての保存キーは `pgp.` プレフィックス付きで保存されます。
+
+例:
+- `pgp.favorites`
+- `pgp.visitHistory`
+- `pgp.profile`
+- `pgp.stats`
+- `pgp.gallery`
+- `pgp.randomColorSettings`
+- `pgp.emojiSettings`
+- `pgp.appSettings`
+
+既存の旧キー（`favorites` など）は初回読み込み時に自動移行されます。
+
+### **キー: `pgp.favorites`**
 ```json
 [
   {
@@ -146,7 +162,7 @@ buildHistoryNav(currentPage)
 ]
 ```
 
-### **キー: `visitHistory`**
+### **キー: `pgp.visitHistory`**
 ```json
 [
   {
@@ -183,6 +199,20 @@ addToHistory(window.location.pathname, pageName);
 ```javascript
 showToast('❤️ 作品をお気に入りに追加しました', 2000, 'success');
 ```
+
+### **4. バックアップ対象**
+
+設定画面のエクスポート/インポートでは次のデータを対象にします。
+
+- `profile`
+- `stats`
+- `gallery`
+- `theme`
+- `favorites`
+- `visitHistory`
+- `randomColorSettings`
+- `emojiSettings`
+- `appSettings`
 
 ---
 

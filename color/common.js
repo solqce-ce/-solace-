@@ -21,11 +21,73 @@ function sanitizeURL(url) {
   return '#';
 }
 
+// ========== ストレージ管理 ==========
+
+const STORAGE_PREFIX = 'pgp';
+
+const APP_STORAGE_KEYS = [
+  'theme',
+  'favorites',
+  'visitHistory',
+  'profile',
+  'stats',
+  'gallery',
+  'randomColorSettings',
+  'emojiSettings',
+  'appSettings'
+];
+
+function getScopedKey(key) {
+  return `${STORAGE_PREFIX}.${key}`;
+}
+
+function migrateStorageKeys() {
+  APP_STORAGE_KEYS.forEach((key) => {
+    const scoped = getScopedKey(key);
+    const scopedValue = localStorage.getItem(scoped);
+    const legacyValue = localStorage.getItem(key);
+
+    if (scopedValue === null && legacyValue !== null) {
+      localStorage.setItem(scoped, legacyValue);
+    }
+  });
+}
+
+function getRawData(key, defaultValue = null) {
+  const scoped = localStorage.getItem(getScopedKey(key));
+  if (scoped !== null) return scoped;
+
+  const legacy = localStorage.getItem(key);
+  if (legacy !== null) {
+    localStorage.setItem(getScopedKey(key), legacy);
+    return legacy;
+  }
+
+  return defaultValue;
+}
+
+function setRawData(key, value) {
+  localStorage.setItem(getScopedKey(key), value);
+}
+
+function removeRawData(key) {
+  localStorage.removeItem(getScopedKey(key));
+  localStorage.removeItem(key);
+}
+
+function getThemePreference() {
+  return getRawData('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+}
+
+function setThemePreference(theme) {
+  setRawData('theme', theme);
+}
+
 // ========== テーマ管理 ==========
 
 function applyTheme() {
-  const saved = localStorage.getItem("theme") ||
-    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const saved = getThemePreference();
   document.documentElement.className = saved;
   updateThemeButton();
   return saved;
@@ -35,7 +97,7 @@ function toggleTheme() {
   const isDark = document.documentElement.classList.contains("dark");
   const next = isDark ? "light" : "dark";
   document.documentElement.className = next;
-  localStorage.setItem("theme", next);
+  setThemePreference(next);
   updateThemeButton();
   
   document.documentElement.style.transition = "background 0.3s ease, color 0.3s ease";
@@ -120,13 +182,15 @@ function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '⭐') {
   if (isFav) {
     removeFavorite(itemId);
     button.textContent = '☆';
-    button.style.color = 'inherit';
+    button.classList.remove('is-favorite');
     button.title = 'お気に入りに追加';
+    button.setAttribute('aria-pressed', 'false');
   } else {
     addToFavorites(itemId, itemName, itemEmoji);
     button.textContent = '★';
-    button.style.color = '#ffc107';
+    button.classList.add('is-favorite');
     button.title = 'お気に入りから削除';
+    button.setAttribute('aria-pressed', 'true');
   }
 }
 
@@ -156,8 +220,8 @@ function getHistory() {
 }
 
 function clearHistory() {
-  if (confirm('訪問履歴をすべて削除しますか？')) {
-    localStorage.removeItem('visitHistory');
+  if (confirmAction('訪問履歴をすべて削除しますか？')) {
+    removeRawData('visitHistory');
     buildHistoryNav(window.location.pathname.split('/').pop());
     showToast('🗑️ 履歴を削除しました', 2000, 'info');
   }
@@ -175,25 +239,55 @@ function buildHistoryNav(currentPage) {
   }
   
   historyNav.style.display = 'block';
-  historyNav.innerHTML = `
-    <div style="margin-bottom: 24px; padding: 16px; background: rgba(102, 126, 234, 0.08); border: 1px solid rgba(102, 126, 234, 0.15); border-radius: 12px;">
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-        <span style="font-size: 18px;">📜</span>
-        <span style="font-weight: 600;">最近訪問したページ</span>
-        <button onclick="clearHistory()" style="margin-left: auto; padding: 4px 12px; font-size: 0.8rem; border: none; background: rgba(102, 126, 234, 0.15); border-radius: 6px; cursor: pointer; color: inherit; font-weight: 600;">履歴をクリア</button>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;">
-        ${history.slice(0, 6).map((item, idx) => `
-          <a href="${sanitizeURL(item.url)}" style="padding: 10px 12px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 8px; text-decoration: none; color: inherit; text-align: center; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500;"
-             onmouseover="this.style.background='rgba(102, 126, 234, 0.1)'; this.style.transform='translateY(-2px)';"
-             onmouseout="this.style.background='rgba(255, 255, 255, 0.8)'; this.style.transform='translateY(0)';">
-            <span style="font-size: 20px;">${sanitizeHTML(item.emoji)}</span>
-            <span>${sanitizeHTML(item.name)}</span>
-          </a>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  const card = document.createElement('div');
+  card.className = 'history-card';
+
+  const header = document.createElement('div');
+  header.className = 'history-header';
+
+  const icon = document.createElement('span');
+  icon.className = 'history-icon';
+  icon.textContent = '📜';
+
+  const title = document.createElement('span');
+  title.className = 'history-title';
+  title.textContent = '最近訪問したページ';
+
+  const clearButton = document.createElement('button');
+  clearButton.type = 'button';
+  clearButton.className = 'history-clear';
+  clearButton.textContent = '履歴をクリア';
+  clearButton.addEventListener('click', clearHistory);
+
+  header.appendChild(icon);
+  header.appendChild(title);
+  header.appendChild(clearButton);
+
+  const grid = document.createElement('div');
+  grid.className = 'history-grid';
+
+  history.slice(0, 6).forEach((item) => {
+    const link = document.createElement('a');
+    link.className = 'history-link';
+    link.href = sanitizeURL(item.url);
+    link.setAttribute('aria-label', `${item.name} へ移動`);
+
+    const emoji = document.createElement('span');
+    emoji.className = 'history-link-emoji';
+    emoji.textContent = String(item.emoji ?? '📄');
+
+    const name = document.createElement('span');
+    name.className = 'history-link-name';
+    name.textContent = String(item.name ?? 'ページ');
+
+    link.appendChild(emoji);
+    link.appendChild(name);
+    grid.appendChild(link);
+  });
+
+  card.appendChild(header);
+  card.appendChild(grid);
+  historyNav.replaceChildren(card);
 }
 
 // ========== ナビゲーション ==========
@@ -223,7 +317,7 @@ function buildNav(activePage = "") {
     <div class="nav-menu" id="navMenu">
       <div class="nav-menu-header">
         <h3>ナビゲーション</h3>
-        <button class="nav-close" onclick="closeMenu()" aria-label="メニューを閉じる">✕</button>
+        <button class="nav-close" id="navClose" aria-label="メニューを閉じる">✕</button>
       </div>
       <div class="nav-links">
         ${links.map(l => {
@@ -238,7 +332,7 @@ function buildNav(activePage = "") {
         }).join('')}
       </div>
       <div class="nav-footer">
-        <button class="nav-theme-toggle" onclick="toggleTheme()" title="テーマ切り替え" aria-label="テーマを切り替え">
+        <button class="nav-theme-toggle" id="navThemeToggle" title="テーマ切り替え" aria-label="テーマを切り替え">
           <span class="nav-icon">🌙</span>
         </button>
       </div>
@@ -248,12 +342,22 @@ function buildNav(activePage = "") {
   // イベントリスナー
   const toggle = document.getElementById("navToggle");
   const menu = document.getElementById("navMenu");
+  const close = document.getElementById("navClose");
+  const themeButton = document.getElementById("navThemeToggle");
   
   if (toggle) {
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
       menu.classList.toggle("active");
     });
+  }
+
+  if (close) {
+    close.addEventListener("click", closeMenu);
+  }
+
+  if (themeButton) {
+    themeButton.addEventListener("click", toggleTheme);
   }
 
   document.addEventListener("keydown", (e) => {
@@ -294,8 +398,8 @@ function injectCommonStyles() {
 
     /* ===== CSS変数 ===== */
     :root {
-      --brand-primary: #667eea;
-      --brand-primary-dark: #764ba2;
+      --brand-primary: #334155;
+      --brand-primary-dark: #1e293b;
       --brand-secondary: #f59e0b;
       --brand-success: #10b981;
       --brand-danger: #ef4444;
@@ -307,16 +411,16 @@ function injectCommonStyles() {
       --border-light: rgba(0, 0, 0, 0.08);
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px rgba(102, 126, 234, 0.15);
-      --shadow-xl: 0 20px 25px rgba(102, 126, 234, 0.2);
+      --shadow-lg: 0 10px 15px rgba(51, 65, 85, 0.15);
+      --shadow-xl: 0 20px 25px rgba(51, 65, 85, 0.2);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     html.dark {
-      --text-primary: #f3f4f6;
+      --text-primary: #e2e8f0;
       --text-secondary: #d1d5db;
-      --bg-light: #0f172a;
-      --bg-card: rgba(15, 15, 25, 0.95);
+      --bg-light: #1e293b;
+      --bg-card: rgba(51, 65, 85, 0.95);
       --border-light: rgba(255, 255, 255, 0.08);
     }
 
@@ -332,7 +436,7 @@ function injectCommonStyles() {
       width: 52px;
       height: 52px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
       color: white;
       border: none;
       cursor: pointer;
@@ -340,14 +444,14 @@ function injectCommonStyles() {
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 8px 24px rgba(51, 65, 85, 0.3);
       transition: var(--transition);
       font-weight: 700;
     }
 
     .nav-toggle:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 12px 32px rgba(51, 65, 85, 0.4);
     }
 
     .nav-toggle-icon {
@@ -388,11 +492,17 @@ function injectCommonStyles() {
     .nav-menu-header h3 {
       font-size: 18px;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 0;
+    }
+
+    html.dark .nav-menu-header h3 {
+      background: none;
+      -webkit-text-fill-color: #f8fafc;
+      color: #f8fafc;
     }
 
     .nav-close {
@@ -434,15 +544,26 @@ function injectCommonStyles() {
     }
 
     .nav-link:hover {
-      background: rgba(102, 126, 234, 0.08);
-      color: #667eea;
+      background: rgba(51, 65, 85, 0.08);
+      color: #334155;
+    }
+
+    html.dark .nav-link:hover {
+      background: rgba(148, 163, 184, 0.18);
+      color: #f8fafc;
     }
 
     .nav-link.active {
-      background: rgba(102, 126, 234, 0.12);
-      border-left-color: #667eea;
-      color: #667eea;
+      background: rgba(51, 65, 85, 0.12);
+      border-left-color: #334155;
+      color: #334155;
       font-weight: 600;
+    }
+
+    html.dark .nav-link.active {
+      background: rgba(148, 163, 184, 0.22);
+      border-left-color: #e2e8f0;
+      color: #f8fafc;
     }
 
     .nav-icon {
@@ -463,7 +584,7 @@ function injectCommonStyles() {
       right: 0;
       width: 3px;
       height: 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
       border-radius: 2px;
     }
 
@@ -491,8 +612,89 @@ function injectCommonStyles() {
     }
 
     .nav-theme-toggle:hover {
-      background: rgba(102, 126, 234, 0.1);
-      border-color: #667eea;
+      background: rgba(51, 65, 85, 0.1);
+      border-color: #334155;
+    }
+
+    html.dark .nav-theme-toggle:hover {
+      background: rgba(148, 163, 184, 0.18);
+      border-color: #e2e8f0;
+    }
+
+    /* ===== 履歴ナビ ===== */
+    .history-card {
+      margin-bottom: 24px;
+      padding: 16px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 1px solid rgba(51, 65, 85, 0.15);
+      border-radius: 12px;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .history-icon {
+      font-size: 18px;
+    }
+
+    .history-title {
+      font-weight: 600;
+    }
+
+    .history-clear {
+      margin-left: auto;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      border: none;
+      background: rgba(51, 65, 85, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      color: inherit;
+      font-weight: 600;
+    }
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .history-link {
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    html.dark .history-link {
+      background: rgba(71, 85, 105, 0.85);
+      border-color: rgba(226, 232, 240, 0.35);
+      color: #f8fafc;
+    }
+
+    .history-link:hover,
+    .history-link:focus-visible {
+      background: rgba(51, 65, 85, 0.1);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .history-link-emoji {
+      font-size: 20px;
     }
 
     /* ===== トースト ===== */
@@ -608,7 +810,7 @@ function injectCommonStyles() {
 
 function saveData(key, value) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    setRawData(key, JSON.stringify(value));
     return true;
   } catch (e) {
     console.warn("ローカルストレージへの保存に失敗しました:", e);
@@ -618,7 +820,7 @@ function saveData(key, value) {
 
 function loadData(key, defaultValue = null) {
   try {
-    const item = localStorage.getItem(key);
+    const item = getRawData(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (e) {
     console.warn("ローカルストレージからの読み込みに失敗しました:", e);
@@ -674,6 +876,7 @@ function copyTextToClipboard(text, options = {}) {
 // ========== 初期化 ==========
 
 document.addEventListener("DOMContentLoaded", () => {
+  migrateStorageKeys();
   applyTheme();
   injectCommonStyles();
   

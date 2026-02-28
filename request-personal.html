@@ -8,8 +8,14 @@
     <meta name="theme-color" content="#E67E22">
     <meta property="og:title" content="個人向け依頼フォーム | solace">
     <meta property="og:description" content="個人・小規模向けのイラスト制作。気軽にご相談ください。">
-    <title>個人向け依頼フォーム | solace - Professional Illustration Studio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>個人向け依頼フォーム | solace - Professional Illustration Studio</title>    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-17HK77SMHP');
+    </script>    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -50,7 +56,7 @@
     <section class="contact">
         <div class="section-container">
             <div class="contact-content">
-                <div class="contact-methods" style="margin-bottom: 40px;">
+                <div class="contact-methods mb-2xl">
                     <div class="contact-method">
                         <i class="fas fa-user"></i>
                         <h5>個人・小規模向け</h5>
@@ -115,7 +121,7 @@
 
                     <button type="submit" class="btn btn-primary btn-large">送信する</button>
                     <p class="form-note">※ 送信されたデータは安全に処理されます</p>
-                    <p class="form-success" id="formSuccessPersonal" style="display:none; color: var(--success); text-align: center; margin-top: var(--spacing-lg);">
+                    <p class="form-success text-success text-center mt-lg d-none" id="formSuccessPersonal">
                         ✅ ご送信ありがとうございました！<br>確認メールをお送りしております。
                     </p>
                 </form>
@@ -124,10 +130,10 @@
     </section>
 
     <!-- ===== CTA ===== -->
-    <section style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; padding: var(--spacing-2xl) var(--spacing-lg); text-align: center;">
+    <section class="cta-section text-center">
         <div class="section-container">
-            <h3 style="color: white; margin-bottom: var(--spacing-md);">質問がありますか？</h3>
-            <p style="color: #BDC3C7; margin-bottom: var(--spacing-lg);">SNS DM でもお気軽にお問い合わせください。<br>Instagram / X（旧Twitter）で対応しております。</p>
+            <h3 class="text-white mb-md">質問がありますか？</h3>
+            <p class="mb-lg text-muted">SNS DM でもお気軽にお問い合わせください。<br>Instagram / X（旧Twitter）で対応しております。</p>
         </div>
     </section>
 

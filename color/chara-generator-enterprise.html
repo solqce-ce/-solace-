@@ -4,15 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>キャラ構成ジェネレーター - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -23,46 +31,55 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
@@ -77,7 +94,7 @@
       padding: 32px;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.95);
-      border: 2px solid rgba(102, 126, 234, 0.1);
+      border: 1px solid #e2e8f0;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
@@ -101,20 +118,20 @@
     }
 
     html.dark .card {
-      background: rgba(22, 22, 32, 0.95);
-      border-color: rgba(102, 126, 234, 0.15);
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(51, 65, 85, 0.15);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
     .card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
-      border-color: rgba(102, 126, 234, 0.25);
+      box-shadow: 0 16px 40px rgba(51, 65, 85, 0.2);
+      border-color: rgba(51, 65, 85, 0.25);
     }
 
     .card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.1);
     }
 
     .card-header {
@@ -131,19 +148,25 @@
       font-family: 'Syne', sans-serif;
       font-size: 1.2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #334155;
+    }
+
+    html.dark .card-header h3 {
+      color: #f1f5f9;
     }
 
     .char-display {
       text-align: center;
       padding: 40px;
-      background: rgba(102, 126, 234, 0.08);
-      border-radius: 12px;
-      border: 2px solid rgba(102, 126, 234, 0.2);
+      background: #f8fafc;
+      border-radius: 0;
+      border: 2px solid #e2e8f0;
       margin-bottom: 16px;
+    }
+
+    html.dark .char-display {
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.45);
     }
 
     .char-icon {
@@ -165,8 +188,8 @@
     .char-item {
       padding: 12px 16px;
       border-radius: 8px;
-      background: rgba(102, 126, 234, 0.1);
-      border: 1px solid rgba(102, 126, 234, 0.2);
+      background: rgba(51, 65, 85, 0.1);
+      border: 1px solid rgba(51, 65, 85, 0.2);
       cursor: pointer;
       transition: var(--transition);
       display: flex;
@@ -175,8 +198,8 @@
     }
 
     .char-item:hover {
-      background: rgba(102, 126, 234, 0.15);
-      border-color: rgba(102, 126, 234, 0.4);
+      background: rgba(51, 65, 85, 0.15);
+      border-color: rgba(51, 65, 85, 0.4);
     }
 
     .char-item-icon {
@@ -191,7 +214,7 @@
     .btn {
       padding: 12px 24px;
       border: none;
-      border-radius: 10px;
+      border-radius: 0;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
@@ -202,22 +225,28 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: var(--primary);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
+      background: var(--primary-dark);
     }
 
     .composition-section {
-      background: rgba(102, 126, 234, 0.05);
-      border: 2px dashed rgba(102, 126, 234, 0.2);
-      border-radius: 16px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      border-radius: 0;
       padding: 40px;
       text-align: center;
+    }
+
+    html.dark .composition-section {
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.45);
     }
 
     .composition-title {
@@ -248,7 +277,7 @@
 
       .card {
         padding: 24px;
-        border-radius: 14px;
+        border-radius: 0;
       }
 
       .char-display {
@@ -272,12 +301,12 @@
 
       .card {
         padding: 16px;
-        border-radius: 12px;
+        border-radius: 0;
       }
 
       .char-display {
         padding: 24px 16px;
-        border-radius: 10px;
+        border-radius: 0;
       }
 
       .char-icon {
@@ -310,22 +339,22 @@
     </div>
     <div class="history-nav" id="historyNav"></div>
 
-    <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap;">
-      <label for="countSelect" style="font-weight:600;">生成人数</label>
-      <select id="countSelect" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+    <div class="flex-gap-md-wrap mb-md">
+      <label for="countSelect" class="label-bold">生成人数</label>
+      <select id="countSelect" class="form-select">
         <option value="1">1人</option>
         <option value="2">2人</option>
         <option value="3" selected>3人</option>
         <option value="4">4人</option>
         <option value="5">5人</option>
       </select>
-      <label for="variantNum" style="font-weight:600;">複数案</label>
-      <select id="variantNum" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+      <label for="variantNum" class="label-bold">複数案</label>
+      <select id="variantNum" class="form-select">
         <option value="1">1案</option>
         <option value="3">3案</option>
         <option value="5" selected>5案</option>
       </select>
-      <button class="btn btn-primary" id="generateBtn" style="width:auto;">🎲 ランダム生成</button>
+      <button class="btn btn-primary btn-auto" id="generateBtn">🎲 ランダム生成</button>
     </div>
 
     <div class="grid" id="charsGrid">
@@ -335,11 +364,11 @@
     <div class="composition-section">
       <div class="composition-title">シーン構成プレビュー（要約）</div>
       <div class="composition-display" id="composition">—</div>
-      <div style="margin-top:12px;text-align:left;">
+      <div class="mt-md text-left">
         <div class="composition-title">詳細（コピー可）</div>
-        <pre id="detailedList" style="white-space:pre-wrap;background:transparent;border:none;padding:8px;margin-top:8px;">—</pre>
+        <pre id="detailedList" class="pre-wrap mt-sm">—</pre>
       </div>
-      <button class="btn btn-primary" onclick="saveComposition()">💾 構成を保存</button>
+      <button type="button" id="saveCompositionBtn" class="btn btn-primary">💾 構成を保存</button>
     </div>
   </div>
 
@@ -383,11 +412,11 @@
         card.className = 'card';
         card.innerHTML = `
           <div class="card-header"><h3>キャラクター ${sanitizeHTML(String(i+1))} - ${sanitizeHTML(c.role)}</h3></div>
-          <div style="padding:16px;">
-            <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
-            <div style="margin-bottom:6px;">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
-            <div style="margin-bottom:6px;">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
-            <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${sanitizeHTML(c.world)}</div>
+          <div class="card-content-padding">
+            <div class="card-title">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
+            <div class="card-text-sm">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
+            <div class="card-text-sm">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
+            <div class="opacity-08 font-095em mt-sm">世界観: ${sanitizeHTML(c.world)}</div>
           </div>
         `;
         grid.appendChild(card);
@@ -434,7 +463,7 @@
       for (let v = 0; v < variantNum; v++) {
         const characters = [];
         const variantDiv = document.createElement('div');
-        variantDiv.style.cssText = 'margin-bottom: 32px; padding: 20px; background: rgba(102,126,234,0.05); border-radius: 12px; border-left: 4px solid var(--primary);';
+        variantDiv.style.cssText = 'margin-bottom: 32px; padding: 20px; background: rgba(102,126,234,0.05); border-radius: 0; border-left: 4px solid var(--primary);';
         
         const variantTitle = document.createElement('h4');
         variantTitle.textContent = `案${v+1}群`;
@@ -452,11 +481,11 @@
           card.style.marginBottom = '0';
           card.innerHTML = `
             <div class="card-header"><h3>キャラ ${i+1} - ${sanitizeHTML(c.role)}</h3></div>
-            <div style="padding:16px;">
-              <div style="font-weight:700;font-size:1rem;margin-bottom:8px;">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
-              <div style="margin-bottom:6px;">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
-              <div style="margin-bottom:6px;">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
-              <div style="opacity:0.8;font-size:0.95rem;margin-top:8px;">世界観: ${sanitizeHTML(c.world)}</div>
+            <div class="card-content-padding">
+              <div class="card-title">${sanitizeHTML(c.name)}（${sanitizeHTML(c.age)}）</div>
+              <div class="card-text-sm">容姿: ${sanitizeHTML(c.appearance)} / 服装: ${sanitizeHTML(c.clothes)}</div>
+              <div class="card-text-sm">性格: ${sanitizeHTML(c.personality)}${c.trait ? ' / 特徴: ' + sanitizeHTML(c.trait) : ''}</div>
+              <div class="opacity-08 font-095em mt-sm">世界観: ${sanitizeHTML(c.world)}</div>
             </div>
           `;
           charGrid.appendChild(card);
@@ -474,6 +503,7 @@
       buildHistoryNav('chara-generator-enterprise.html');
       const countSelect = document.getElementById('countSelect');
       const generateBtn = document.getElementById('generateBtn');
+      const saveCompositionBtn = document.getElementById('saveCompositionBtn');
       function doGenerate() {
         const n = parseInt(countSelect.value, 10) || 3;
         const variantNum = parseInt(document.getElementById('variantNum').value, 10) || 1;
@@ -484,6 +514,7 @@
         }
       }
       generateBtn.addEventListener('click', doGenerate);
+      saveCompositionBtn.addEventListener('click', saveComposition);
       // 初期表示
       renderCharacters(parseInt(countSelect.value, 10));
     });

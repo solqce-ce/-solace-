@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ギャラリー - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --success: #10b981;
-      --danger: #ef4444;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -25,56 +33,65 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .controls {
       background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 16px;
+      border: none; border-left: 5px solid #334155;
+      border-radius: 0;
       padding: 24px;
       margin-bottom: 32px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: none;
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
@@ -82,7 +99,7 @@
     }
 
     html.dark .controls {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.08);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
@@ -106,7 +123,7 @@
     .search-input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
     }
 
     .filter-tabs {
@@ -118,7 +135,7 @@
       padding: 8px 16px;
       border: none;
       border-radius: 8px;
-      background: rgba(102, 126, 234, 0.1);
+      background: rgba(51, 65, 85, 0.1);
       color: var(--primary);
       cursor: pointer;
       font-weight: 600;
@@ -128,13 +145,29 @@
     }
 
     .filter-tab:hover {
-      background: rgba(102, 126, 234, 0.2);
+      background: rgba(51, 65, 85, 0.2);
     }
 
     .filter-tab.active {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
+    }
+
+    html.dark .filter-tab {
+      background: rgba(148, 163, 184, 0.2);
+      color: #e2e8f0;
+      border-color: rgba(148, 163, 184, 0.35);
+    }
+
+    html.dark .filter-tab:hover {
+      background: rgba(148, 163, 184, 0.32);
+    }
+
+    html.dark .filter-tab.active {
+      background: #64748b;
+      color: #f8fafc;
+      border-color: #94a3b8;
     }
 
     .gallery-grid {
@@ -146,9 +179,9 @@
 
     .gallery-item {
       padding: 24px 20px;
-      border-radius: 14px;
+      border-radius: 0;
       background: rgba(255, 255, 255, 0.95);
-      border: 2px solid rgba(102, 126, 234, 0.1);
+      border: 1px solid #e2e8f0;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
@@ -174,15 +207,15 @@
     }
 
     html.dark .gallery-item {
-      background: rgba(22, 22, 32, 0.9);
-      border-color: rgba(102, 126, 234, 0.15);
+      background: rgba(71, 85, 105, 0.9);
+      border-color: rgba(51, 65, 85, 0.15);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
     .gallery-item:hover {
       transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
-      border-color: rgba(102, 126, 234, 0.3);
+      box-shadow: 0 16px 40px rgba(51, 65, 85, 0.2);
+      border-color: rgba(51, 65, 85, 0.3);
     }
 
     .gallery-item-header {
@@ -216,26 +249,41 @@
       transform: scale(1.2);
     }
 
+    .favorite-btn.is-favorite {
+      color: #ffc107;
+    }
+
+    .gallery-name-button {
+      background: none;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      padding: 0;
+    }
+
     .gallery-name {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 8px;
       letter-spacing: 0.3px;
     }
 
     .gallery-meta {
-      font-size: 0.75rem;
-      opacity: 0.6;
+      font-size: 0.9rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .empty-state {
       text-align: center;
       padding: 60px 20px;
-      background: rgba(102, 126, 234, 0.08);
-      border: 2px dashed rgba(102, 126, 234, 0.3);
-      border-radius: 16px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 2px dashed rgba(51, 65, 85, 0.3);
+      border-radius: 0;
     }
 
     .empty-state-icon {
@@ -251,7 +299,7 @@
     }
 
     .empty-state p {
-      opacity: 0.6;
+      opacity: 0.9;
       margin-bottom: 20px;
     }
 
@@ -269,12 +317,12 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 6px 16px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
     }
 
     @media (max-width: 768px) {
@@ -331,7 +379,7 @@
 
       .gallery-item {
         padding: 12px 10px;
-        border-radius: 10px;
+        border-radius: 0;
       }
 
       .gallery-icon {
@@ -362,10 +410,10 @@
     <div class="controls">
       <input type="text" class="search-input" id="searchInput" placeholder="作品を検索...">
       <div class="filter-tabs">
-        <button class="filter-tab active" onclick="filterGallery('all', this)">すべて</button>
-        <button class="filter-tab" onclick="filterGallery('favorites', this)">❤️ お気に入り</button>
+        <button type="button" id="filterAllBtn" class="filter-tab active" data-filter="all">すべて</button>
+        <button type="button" id="filterFavoritesBtn" class="filter-tab" data-filter="favorites">❤️ お気に入り</button>
       </div>
-      <button class="btn btn-primary" onclick="addSampleArtwork()">➕ サンプル追加</button>
+      <button type="button" id="addSampleBtn" class="btn btn-primary">➕ サンプル追加</button>
     </div>
 
     <div id="emptyState" class="empty-state">
@@ -374,7 +422,7 @@
       <p>ジェネレーターで作品を作成するか、サンプルを追加してください</p>
     </div>
 
-    <div class="gallery-grid" id="galleryGrid" style="display: none;"></div>
+    <div class="gallery-grid d-none" id="galleryGrid"></div>
   </div>
 
   <script src="common.js"></script>
@@ -390,40 +438,61 @@
 
     let artworks = [];
     let currentFilter = 'all';
+    let currentQuery = '';
+
+    function getDisplayItems() {
+      let displayItems = artworks;
+      if (currentFilter === 'favorites') {
+        displayItems = artworks.filter((art) => isFavorite(art.id));
+      }
+
+      if (!currentQuery) {
+        return displayItems;
+      }
+
+      return displayItems.filter((art) => art.name.toLowerCase().includes(currentQuery));
+    }
+
+    function createCardHtml(art) {
+      const isFav = isFavorite(art.id);
+      return `
+        <div class="gallery-item" data-art-id="${art.id}">
+          <div class="gallery-item-header">
+            <div class="gallery-icon">${art.emoji}</div>
+            <button
+              type="button"
+              class="favorite-btn${isFav ? ' is-favorite' : ''}"
+              data-action="toggle-favorite"
+              data-art-id="${art.id}"
+              title="${isFav ? 'お気に入りから削除' : 'お気に入りに追加'}"
+              aria-label="${art.name}を${isFav ? 'お気に入りから削除' : 'お気に入りに追加'}"
+              aria-pressed="${isFav ? 'true' : 'false'}"
+            >${isFav ? '★' : '☆'}</button>
+          </div>
+          <button type="button" class="gallery-name gallery-name-button" data-action="view-artwork" data-art-id="${art.id}">${art.name}</button>
+          <div class="gallery-meta">${art.date}</div>
+        </div>
+      `;
+    }
 
     function renderGallery() {
       const grid = document.getElementById('galleryGrid');
       const empty = document.getElementById('emptyState');
 
-      let displayItems = artworks;
-      
-      if (currentFilter === 'favorites') {
-        displayItems = artworks.filter(art => isFavorite(art.id));
-      }
+      const displayItems = getDisplayItems();
 
       if (displayItems.length === 0) {
         grid.style.display = 'none';
         empty.style.display = 'block';
         empty.querySelector('h2').textContent = currentFilter === 'favorites' ? 'お気に入りがありません' : '作品がありません';
+        empty.querySelector('p').textContent = currentQuery ? '検索条件に一致する作品がありません' : 'ジェネレーターで作品を作成するか、サンプルを追加してください';
         return;
       }
 
       grid.style.display = 'grid';
       empty.style.display = 'none';
 
-      grid.innerHTML = displayItems.map(art => {
-        const isFav = isFavorite(art.id);
-        return `
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <div class="gallery-icon">${art.emoji}</div>
-              <button class="favorite-btn" onclick="toggleFavoriteButton(this, ${art.id}, '${art.name}', '${art.emoji}')" title="${isFav ? 'お気に入りから削除' : 'お気に入りに追加'}">${isFav ? '★' : '☆'}</button>
-            </div>
-            <div class="gallery-name" onclick="viewArtwork(${art.id})">${art.name}</div>
-            <div class="gallery-meta">${art.date}</div>
-          </div>
-        `;
-      }).join('');
+      grid.innerHTML = displayItems.map(createCardHtml).join('');
     }
 
     function addSampleArtwork() {
@@ -443,51 +512,51 @@
       }
     }
 
-    function filterGallery(filter, buttonElement) {
+    function filterGallery(filter) {
       currentFilter = filter;
       document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
-      if (buttonElement) {
-        buttonElement.classList.add('active');
-      }
+      const activeButton = document.querySelector(`.filter-tab[data-filter="${filter}"]`);
+      if (activeButton) activeButton.classList.add('active');
       renderGallery();
     }
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const grid = document.getElementById('galleryGrid');
-      
-      let displayItems = artworks;
-      if (currentFilter === 'favorites') {
-        displayItems = artworks.filter(art => isFavorite(art.id));
-      }
-
-      const filtered = displayItems.filter(art => 
-        art.name.toLowerCase().includes(query)
-      );
-      
-      if (filtered.length === 0) {
-        grid.style.display = 'none';
-      } else {
-        grid.style.display = 'grid';
-        grid.innerHTML = filtered.map(art => {
-          const isFav = isFavorite(art.id);
-          return `
-            <div class="gallery-item">
-              <div class="gallery-item-header">
-                <div class="gallery-icon">${art.emoji}</div>
-                <button class="favorite-btn" onclick="toggleFavoriteButton(this, ${art.id}, '${art.name}', '${art.emoji}')" title="${isFav ? 'お気に入りから削除' : 'お気に入りに追加'}">${isFav ? '★' : '☆'}</button>
-              </div>
-              <div class="gallery-name" onclick="viewArtwork(${art.id})">${art.name}</div>
-              <div class="gallery-meta">${art.date}</div>
-            </div>
-          `;
-        }).join('');
-      }
-    });
 
     document.addEventListener('DOMContentLoaded', () => {
       buildNav('gallery');
       buildHistoryNav('gallery.html');
+
+      document.getElementById('addSampleBtn').addEventListener('click', addSampleArtwork);
+      document.querySelectorAll('.filter-tab').forEach((button) => {
+        button.addEventListener('click', () => {
+          filterGallery(button.dataset.filter);
+        });
+      });
+
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        currentQuery = e.target.value.toLowerCase().trim();
+        renderGallery();
+      });
+
+      document.getElementById('galleryGrid').addEventListener('click', (event) => {
+        const actionEl = event.target.closest('[data-action]');
+        if (!actionEl) return;
+
+        const artId = Number(actionEl.dataset.artId);
+        const art = artworks.find((item) => item.id === artId);
+        if (!art) return;
+
+        if (actionEl.dataset.action === 'toggle-favorite') {
+          toggleFavoriteButton(actionEl, art.id, art.name, art.emoji);
+          if (currentFilter === 'favorites') {
+            renderGallery();
+          }
+          return;
+        }
+
+        if (actionEl.dataset.action === 'view-artwork') {
+          viewArtwork(art.id);
+        }
+      });
+
       renderGallery();
     });
   </script>

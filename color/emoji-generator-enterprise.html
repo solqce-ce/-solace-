@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>絵文字ジェネレーター - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --success: #10b981;
-      --danger: #ef4444;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -25,56 +33,65 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .controls {
       background: rgba(255, 255, 255, 0.95);
-      border: 1.5px solid rgba(102, 126, 234, 0.15);
-      border-radius: 16px;
+      border: none; border-left: 5px solid #334155;
+      border-radius: 0;
       padding: 32px;
       margin-bottom: 40px;
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.1);
+      box-shadow: none;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 24px;
@@ -83,9 +100,9 @@
     }
 
     html.dark .controls {
-      background: rgba(22, 22, 32, 0.95);
-      border-color: rgba(102, 126, 234, 0.2);
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.08);
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(51, 65, 85, 0.2);
+      box-shadow: 0 8px 24px rgba(51, 65, 85, 0.08);
     }
 
     .form-group {
@@ -96,7 +113,7 @@
 
     label {
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-dark);
@@ -169,15 +186,15 @@
 
     html.dark input,
     html.dark select {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.08);
-      color: #f3f4f6;
+      color: #e2e8f0;
     }
 
     input:focus, select:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
     }
 
     .btn {
@@ -195,12 +212,12 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 6px 16px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
     }
 
     .btn-secondary {
@@ -229,9 +246,9 @@
 
     .emoji-item {
       padding: 24px 16px;
-      border-radius: 16px;
+      border-radius: 0;
       background: rgba(255, 255, 255, 0.95);
-      border: 2px solid rgba(102, 126, 234, 0.1);
+      border: 1px solid #e2e8f0;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       text-align: center;
       cursor: pointer;
@@ -256,20 +273,20 @@
     }
 
     html.dark .emoji-item {
-      background: rgba(22, 22, 32, 0.9);
-      border-color: rgba(102, 126, 234, 0.15);
+      background: rgba(71, 85, 105, 0.9);
+      border-color: rgba(51, 65, 85, 0.15);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
     .emoji-item:hover {
       transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.25);
-      border-color: rgba(102, 126, 234, 0.4);
+      box-shadow: 0 16px 40px rgba(51, 65, 85, 0.25);
+      border-color: rgba(51, 65, 85, 0.4);
       background: rgba(255, 255, 255, 0.98);
     }
 
     html.dark .emoji-item:hover {
-      background: rgba(22, 22, 32, 0.95);
+      background: rgba(51, 65, 85, 0.9);
     }
 
     .emoji-large {
@@ -278,17 +295,17 @@
     }
 
     .emoji-name {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      opacity: 0.7;
+      opacity: 0.9;
     }
 
     .empty-state {
       text-align: center;
       padding: 60px 20px;
-      background: rgba(102, 126, 234, 0.08);
-      border: 2px dashed rgba(102, 126, 234, 0.3);
-      border-radius: 16px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 2px dashed rgba(51, 65, 85, 0.3);
+      border-radius: 0;
       margin-bottom: 40px;
     }
 
@@ -305,7 +322,7 @@
     }
 
     .empty-state p {
-      opacity: 0.6;
+      opacity: 0.9;
       margin-bottom: 20px;
     }
 
@@ -351,7 +368,7 @@
 
       .emoji-item {
         padding: 16px 12px;
-        border-radius: 12px;
+        border-radius: 0;
       }
 
       .emoji-large {
@@ -377,7 +394,7 @@
 
       .emoji-item {
         padding: 12px 8px;
-        border-radius: 10px;
+        border-radius: 0;
       }
 
       .emoji-large {
@@ -429,8 +446,8 @@
         </select>
       </div>
 
-      <button class="btn btn-primary" onclick="generateEmojis()">🎲 ジェネレート</button>
-      <button class="btn btn-secondary" onclick="clearEmojis()">🗑️ クリア</button>
+      <button type="button" id="generateEmojisBtn" class="btn btn-primary">🎲 ジェネレート</button>
+      <button type="button" id="clearEmojisBtn" class="btn btn-secondary">🗑️ クリア</button>
       <button id="copyAllBtn" class="btn btn-secondary">📋 全部コピー</button>
       <button id="saveImgBtn" class="btn btn-secondary">🖼️ 画像保存</button>
     </div>
@@ -441,7 +458,7 @@
       <p>「ジェネレート」ボタンをクリックして、絵文字を作成してください</p>
     </div>
 
-    <div class="emoji-grid" id="emojiGrid" style="display: none;"></div>
+    <div class="emoji-grid d-none" id="emojiGrid"></div>
   </div>
 
   <script src="common.js"></script>
@@ -458,7 +475,7 @@
     let countSelectRef = null;
 
     function loadEmojiSettings() {
-      const s = JSON.parse(localStorage.getItem('emojiSettings') || '{}');
+      const s = loadData('emojiSettings', {});
       if (s.categories) {
         selectedCategories = s.categories;
       }
@@ -470,7 +487,7 @@
     function saveEmojiSettings() {
       if (!countSelectRef) return;
       const s = { categories: selectedCategories, count: countSelectRef.value };
-      localStorage.setItem('emojiSettings', JSON.stringify(s));
+      saveData('emojiSettings', s);
     }
 
     function getEmojisForCategories(categories) {
@@ -530,11 +547,11 @@
           <div class="emoji-name">Copy</div>
         `;
         item.style.cursor = 'pointer';
-        item.onclick = () => {
+        item.addEventListener('click', () => {
           copyTextToClipboard(emoji, {
             successMessage: '📋 コピーしました！'
           });
-        };
+        });
         grid.appendChild(item);
       });
 
@@ -556,6 +573,8 @@
       buildHistoryNav('emoji-generator-enterprise.html');
       const categoryButtons = document.getElementById('categoryButtons');
       const countSelect = document.getElementById('countSelect');
+      const generateBtn = document.getElementById('generateEmojisBtn');
+      const clearBtn = document.getElementById('clearEmojisBtn');
       const copyAllBtn = document.getElementById('copyAllBtn');
       const saveImgBtn = document.getElementById('saveImgBtn');
       countSelectRef = countSelect;
@@ -594,6 +613,8 @@
       });
 
       countSelect.addEventListener('change', saveEmojiSettings);
+      generateBtn.addEventListener('click', generateEmojis);
+      clearBtn.addEventListener('click', clearEmojis);
       copyAllBtn.addEventListener('click', copyAllEmojis);
       saveImgBtn.addEventListener('click', saveEmojisAsImage);
 

@@ -4,15 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ポーズジェネレーター - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -23,68 +31,77 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .card {
       padding: 28px;
-      border-radius: 16px;
+      border-radius: 0;
       background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border: none; border-left: 5px solid #334155;
+      box-shadow: none;
       transition: var(--transition);
       margin-bottom: 24px;
     }
 
     html.dark .card {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.08);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.1);
     }
 
     .card-header {
@@ -104,10 +121,11 @@
       font-family: 'Syne', sans-serif;
       font-size: 1.3rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #334155;
+    }
+
+    html.dark .card-header h2 {
+      color: #f1f5f9;
     }
 
     .poses-grid {
@@ -118,9 +136,9 @@
 
     .pose-item {
       padding: 28px 20px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
-      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 0;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -145,14 +163,14 @@
     }
 
     html.dark .pose-item {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.08) 100%);
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.12) 0%, rgba(51, 65, 85, 0.08) 100%);
     }
 
     .pose-item:hover {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.15) 0%, rgba(51, 65, 85, 0.1) 100%);
       transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
-      border-color: rgba(102, 126, 234, 0.4);
+      box-shadow: 0 16px 40px rgba(51, 65, 85, 0.2);
+      border-color: rgba(51, 65, 85, 0.4);
     }
 
     .pose-icon {
@@ -163,13 +181,17 @@
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: 0.4px;
-      color: var(--text-primary);
+      color: var(--text-dark);
+    }
+
+    html.dark .pose-name {
+      color: #e2e8f0;
     }
 
     .btn {
       padding: 12px 24px;
       border: none;
-      border-radius: 10px;
+      border-radius: 0;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
@@ -179,31 +201,41 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: var(--primary);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
+      background: var(--primary-dark);
     }
 
     .preview-section {
       text-align: center;
       padding: 36px 28px;
-      background: rgba(102, 126, 234, 0.05);
-      border-radius: 16px;
-      border: 2px dashed rgba(102, 126, 234, 0.18);
+      background: #f8fafc;
+      border-radius: 0;
+      border: 2px dashed #e2e8f0;
+    }
+
+    html.dark .preview-section {
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.45);
     }
 
     .preview-text-large {
       font-size: 1.1rem;
       font-weight: 700;
       opacity: 0.95;
-      color: var(--text-primary);
+      color: var(--text-dark);
       line-height: 1.6;
       white-space: pre-wrap;
+    }
+
+    html.dark .preview-text-large {
+      color: #f1f5f9;
     }
 
     @media (max-width: 768px) {
@@ -222,7 +254,7 @@
 
       .pose-item {
         padding: 20px 16px;
-        border-radius: 12px;
+        border-radius: 0;
       }
 
       .pose-icon {
@@ -239,7 +271,7 @@
 
       .pose-item {
         padding: 16px 12px;
-        border-radius: 10px;
+        border-radius: 0;
       }
 
       .pose-icon {
@@ -268,30 +300,30 @@
         <h2>ポーズを選択</h2>
       </div>
       <div class="poses-grid">
-        <div class="pose-item" onclick="selectPose('スタンディング')">
+        <button type="button" class="pose-item" data-pose-name="スタンディング">
           <div class="pose-name">スタンディング</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('ジャンプ')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="ジャンプ">
           <div class="pose-name">ジャンプ</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('座位')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="座位">
           <div class="pose-name">座位</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('スロー')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="スロー">
           <div class="pose-name">スロー</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('ラン')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="ラン">
           <div class="pose-name">ラン</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('ウォーク')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="ウォーク">
           <div class="pose-name">ウォーク</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('プレゼン')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="プレゼン">
           <div class="pose-name">プレゼン</div>
-        </div>
-        <div class="pose-item" onclick="selectPose('コラボ')">
+        </button>
+        <button type="button" class="pose-item" data-pose-name="コラボ">
           <div class="pose-name">コラボ</div>
-        </div>
+        </button>
       </div>
     </div>
 
@@ -299,23 +331,23 @@
       <div class="card-header">
         <h2>プレビュー</h2>
       </div>
-      <div id="variantsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:16px;">
+      <div id="variantsContainer" class="grid-auto-350">
         <div class="preview-section">
           <div class="preview-text-large" id="poseText">スタンディング</div>
         </div>
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 32px;">
-      <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:16px;">
-        <label for="variantCount" style="font-weight:600;">案数</label>
-        <select id="variantCount" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+    <div class="text-center mt-2xl">
+      <div class="flex-gap-md-wrap flex-center mb-md">
+        <label for="variantCount" class="label-bold">案数</label>
+        <select id="variantCount" class="form-select">
           <option value="1">1案</option>
           <option value="3">3案</option>
           <option value="6" selected>6案</option>
         </select>
-        <button class="btn btn-primary" onclick="generateMultiplePoses()" style="width:auto;">🎲 ランダム生成</button>
-        <button class="btn btn-primary" onclick="savePose()" style="width:auto;">💾 ポーズを保存</button>
+        <button type="button" id="generatePoseBtn" class="btn btn-primary btn-auto">🎲 ランダム生成</button>
+        <button type="button" id="savePoseBtn" class="btn btn-primary btn-auto">💾 ポーズを保存</button>
       </div>
     </div>
   </div>
@@ -324,9 +356,8 @@
   <script>
     let currentPose = { emoji: '🧍', name: 'スタンディング' };
 
-    function selectPose(emoji, name) {
-      currentPose = { emoji, name };
-      document.getElementById('posePreview').textContent = emoji;
+    function selectPose(name) {
+      currentPose = { emoji: '🧍', name };
       document.getElementById('poseText').textContent = name;
       showToast(`✅ ${name} を選択しました`, 2000, 'success');
     }
@@ -393,6 +424,15 @@
     document.addEventListener('DOMContentLoaded', () => {
       buildNav('pose');
       buildHistoryNav('pose-generator-enterprise.html');
+
+      document.querySelectorAll('.pose-item[data-pose-name]').forEach((button) => {
+        button.addEventListener('click', () => {
+          selectPose(button.dataset.poseName);
+        });
+      });
+
+      document.getElementById('generatePoseBtn').addEventListener('click', generateMultiplePoses);
+      document.getElementById('savePoseBtn').addEventListener('click', savePose);
     });
   </script>
 </body>

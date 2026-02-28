@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>プロフィール - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --success: #10b981;
-      --danger: #ef4444;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -25,68 +33,77 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
       max-width: 1000px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .profile-card {
       background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 16px;
+      border: none; border-left: 5px solid #334155;
+      border-radius: 0;
       padding: 32px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: none;
       margin-bottom: 24px;
       transition: var(--transition);
     }
 
     html.dark .profile-card {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.08);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .profile-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.1);
     }
 
     .profile-header {
@@ -104,13 +121,13 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 48px;
       margin: 0 auto 16px;
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+      box-shadow: var(--shadow);
     }
 
     .username {
@@ -121,8 +138,8 @@
     }
 
     .bio {
-      font-size: 0.95rem;
-      opacity: 0.7;
+      font-size: 1rem;
+      opacity: 0.9;
     }
 
     .stats-grid {
@@ -133,26 +150,32 @@
     }
 
     .stat-box {
-      background: rgba(102, 126, 234, 0.08);
-      border: 1px solid rgba(102, 126, 234, 0.2);
-      border-radius: 12px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 1px solid #e2e8f0;
+      border-radius: 0;
       padding: 16px;
       text-align: center;
+    }
+
+    html.dark .stat-box {
+      background: rgba(148, 163, 184, 0.18);
+      border-color: rgba(148, 163, 184, 0.35);
     }
 
     .stat-number {
       font-family: 'Syne', sans-serif;
       font-size: 1.8rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #334155;
+    }
+
+    html.dark .stat-number {
+      color: #f1f5f9;
     }
 
     .stat-label {
-      font-size: 0.85rem;
-      opacity: 0.7;
+      font-size: 0.95rem;
+      opacity: 0.9;
       margin-top: 4px;
     }
 
@@ -164,7 +187,7 @@
       display: block;
       font-weight: 600;
       margin-bottom: 6px;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .form-input,
@@ -174,7 +197,7 @@
       border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 8px;
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      font-size: 0.9rem;
+      font-size: 1rem;
       background: rgba(255, 255, 255, 0.95);
       color: var(--text-dark);
       transition: var(--transition);
@@ -182,16 +205,16 @@
 
     html.dark .form-input,
     html.dark .form-textarea {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.1);
-      color: #f3f4f6;
+      color: #e2e8f0;
     }
 
     .form-input:focus,
     .form-textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
     }
 
     .form-textarea {
@@ -204,7 +227,7 @@
       border: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
@@ -214,18 +237,24 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 6px 16px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
     }
 
     .btn-secondary {
-      background: rgba(102, 126, 234, 0.1);
+      background: rgba(51, 65, 85, 0.1);
       color: var(--primary);
       border: 2px solid var(--primary);
+    }
+
+    html.dark .btn-secondary {
+      background: rgba(148, 163, 184, 0.2);
+      color: #e2e8f0;
+      border-color: #94a3b8;
     }
 
     .btn-secondary:hover {
@@ -306,7 +335,7 @@
     </div>
 
     <div class="profile-card">
-      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">プロフィール編集</h2>
+      <h2 class="gradient-text-purple">プロフィール編集</h2>
 
       <div class="form-group">
         <label>ユーザー名</label>
@@ -323,7 +352,7 @@
         <input type="url" class="form-input" id="website" placeholder="https://example.com">
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+      <div class="grid-auto-200">
         <div class="form-group">
           <label>Twitter</label>
           <input type="text" class="form-input" id="twitter" placeholder="@username">
@@ -335,9 +364,9 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <button class="btn btn-primary" onclick="saveProfile()">💾 保存</button>
-        <button class="btn btn-secondary" onclick="resetProfile()">🔄 リセット</button>
+      <div class="flex-gap-sm mt-lg">
+        <button type="button" id="saveProfileBtn" class="btn btn-primary">💾 保存</button>
+        <button type="button" id="resetProfileBtn" class="btn btn-secondary">🔄 リセット</button>
       </div>
     </div>
   </div>
@@ -345,20 +374,20 @@
   <script src="common.js"></script>
   <script>
     function loadProfile() {
-      const profile = JSON.parse(localStorage.getItem('profile')) || {
+      const profile = loadData('profile', {
         displayName: 'ユーザー',
         bio: 'クリエイターになろう',
         website: '',
         twitter: '',
         instagram: ''
-      };
+      });
 
-      const stats = JSON.parse(localStorage.getItem('stats')) || {
+      const stats = loadData('stats', {
         artworks: 0,
         emojis: 0,
         poses: 0,
         charas: 0
-      };
+      });
 
       document.getElementById('displayName').textContent = profile.displayName;
       document.getElementById('bio').textContent = profile.bio;
@@ -383,15 +412,15 @@
         instagram: document.getElementById('instagram').value
       };
 
-      localStorage.setItem('profile', JSON.stringify(profile));
+      saveData('profile', profile);
       document.getElementById('displayName').textContent = profile.displayName;
       document.getElementById('bio').textContent = profile.bio;
       showToast('✅ プロフィールを保存しました', 2000, 'success');
     }
 
     function resetProfile() {
-      if (confirm('プロフィールをリセットしますか？')) {
-        localStorage.removeItem('profile');
+      if (confirmAction('プロフィールをリセットしますか？')) {
+        removeRawData('profile');
         loadProfile();
         showToast('🔄 プロフィールをリセットしました', 2000, 'info');
       }
@@ -399,6 +428,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       buildNav('profile');
+      document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+      document.getElementById('resetProfileBtn').addEventListener('click', resetProfile);
       loadProfile();
     });
   </script>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="solaceの制作支援ツール紹介ページ。カラージェネレーターなどの補助ツールをまとめています。">
+    <title>制作支援ツール | solace</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-17HK77SMHP');
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo-section">
+                <h1 class="logo">solace</h1>
+                <p class="logo-subtitle">Illustration Studio</p>
+            </div>
+
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="index.html#portfolio" class="nav-link">ポートフォリオ</a></li>
+                <li><a href="index.html#pricing" class="nav-link">料金</a></li>
+                <li><a href="index.html#contact" class="nav-link">お問い合わせ</a></li>
+                <li><a href="tools.html" class="nav-link">制作ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="section-container">
+            <h1>制作支援ツール</h1>
+            <p>ホームページ本体とは分けて、補助ツールをこちらにまとめています。</p>
+        </div>
+    </section>
+
+    <section class="target-selection">
+        <div class="section-container">
+            <div class="section-header">
+                <h3 class="section-title">ツール一覧</h3>
+                <p class="section-subtitle">必要に応じてご利用ください</p>
+            </div>
+
+            <div class="tools-guide" aria-label="使い方ガイド">
+                <button type="button" class="tools-guide-toggle" id="guideToggle">
+                    <span>はじめての方へ（3ステップ）</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <ol class="guide-steps d-none" id="guideSteps">
+                    <li><strong>使うツールを探す：</strong>検索・絞り込みで目的のツールを選択</li>
+                    <li><strong>結果を登録する：</strong>タイトル・画像URL・投稿文を保存</li>
+                    <li><strong>比較/保存/共有：</strong>お気に入り・比較表示・画像保存・コピーを活用</li>
+                </ol>
+            </div>
+
+            <div class="tools-controls" aria-label="ツール検索">
+                <label for="toolSearch" class="tools-control-label">検索</label>
+                <input id="toolSearch" type="search" class="tools-search-input" placeholder="例: カラー、ポートフォリオ">
+                <div class="tools-filter-group" role="group" aria-label="カテゴリ絞り込み">
+                    <button type="button" class="tools-filter-btn active" data-filter="all">すべて</button>
+                    <button type="button" class="tools-filter-btn" data-filter="color">カラー系</button>
+                    <button type="button" class="tools-filter-btn" data-filter="main">メイン導線</button>
+                </div>
+            </div>
+
+            <div class="target-cards-grid">
+                <div class="target-card" data-tool-card data-category="color" data-keywords="カラー 生成 配色 ギャラリー">
+                    <div class="target-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4>カラージェネレーター</h4>
+                    <p>配色検討・アイデア整理に使えるサブツールです。</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 色の組み合わせ検討</li>
+                        <li><i class="fas fa-check"></i> 生成系ツールへジャンプ</li>
+                        <li><i class="fas fa-check"></i> ギャラリー連携</li>
+                    </ul>
+                    <a href="color/index-enterprise.html" class="btn btn-primary">ツールを開く</a>
+                </div>
+
+                <div class="target-card" data-tool-card data-category="main" data-keywords="ポートフォリオ 料金 依頼">
+                    <div class="target-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h4>メインサービスへの戻り先</h4>
+                    <p>本サイトの主軸はイラスト販売・ポートフォリオです。</p>
+                    <ul class="target-features">
+                        <li><i class="fas fa-check"></i> 作品一覧の確認</li>
+                        <li><i class="fas fa-check"></i> 料金の確認</li>
+                        <li><i class="fas fa-check"></i> 依頼フォームへ移動</li>
+                    </ul>
+                    <a href="index.html#portfolio" class="btn btn-secondary">ポートフォリオへ戻る</a>
+                </div>
+            </div>
+
+            <div class="tools-empty-state" id="toolsEmptyState" hidden>該当するツールが見つかりませんでした。</div>
+
+            <div class="result-manager">
+                <h4>結果の保存・比較・共有</h4>
+                <p class="result-manager-desc">結果を登録すると、ローカルに保存され、後で見返し・比較・共有できます。</p>
+
+                <form id="resultForm" class="result-form">
+                    <div class="result-form-grid">
+                        <div class="form-group">
+                            <label for="resultTitle">結果タイトル</label>
+                            <input id="resultTitle" name="title" type="text" required placeholder="例: 春向け暖色パレット">
+                        </div>
+                        <div class="form-group">
+                            <label for="resultCategory">カテゴリ</label>
+                            <select id="resultCategory" name="category" required>
+                                <option value="color">カラー系</option>
+                                <option value="main">メイン導線</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="beforeImage">Before画像URL（任意）</label>
+                            <input id="beforeImage" name="beforeImage" type="url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="afterImage">After画像URL（任意）</label>
+                            <input id="afterImage" name="afterImage" type="url" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="shareText">コピー用テキスト</label>
+                        <textarea id="shareText" name="shareText" rows="3" required placeholder="SNS投稿用の本文を入力"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">結果を保存</button>
+                </form>
+
+                <div class="compare-panel" id="comparePanel">
+                    <div class="compare-panel-header">
+                        <h5>比較表示（最大2件）</h5>
+                        <button type="button" id="clearCompare" class="btn btn-secondary">比較をクリア</button>
+                    </div>
+                    <div id="compareGrid" class="compare-grid"></div>
+                </div>
+
+                <div class="saved-section">
+                    <h5>お気に入り</h5>
+                    <div id="favoritesList" class="saved-grid"></div>
+                </div>
+
+                <div class="saved-section">
+                    <h5>保存した結果</h5>
+                    <div class="saved-controls" aria-label="保存結果の操作">
+                        <div class="saved-sort">
+                            <label for="resultSort">並び替え</label>
+                            <select id="resultSort">
+                                <option value="newest">新着順</option>
+                                <option value="favorite">お気に入り優先</option>
+                            </select>
+                        </div>
+                        <div class="saved-backup-actions">
+                            <label for="importMode" class="import-mode-label">復元方法</label>
+                            <select id="importMode" class="import-mode-select">
+                                <option value="append">追記</option>
+                                <option value="replace">上書き</option>
+                            </select>
+                            <button type="button" id="exportBackup" class="btn btn-secondary">JSONバックアップ</button>
+                            <button type="button" id="importBackupButton" class="btn btn-secondary">JSON復元</button>
+                            <button type="button" id="resetToolState" class="btn btn-secondary">表示条件をリセット</button>
+                            <input type="file" id="importBackupFile" accept="application/json,.json" hidden>
+                        </div>
+                        <p class="saved-controls-note">対象: 検索・絞り込み・並び替え・比較状態<br>非対象: 保存結果・お気に入り（保持）</p>
+                    </div>
+                    <div id="resultsList" class="saved-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="editResultModal" class="edit-modal" hidden aria-hidden="true">
+        <div class="edit-modal-backdrop" data-close-edit-modal></div>
+        <div class="edit-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="editResultTitle">
+            <div class="edit-modal-header">
+                <h4 id="editResultTitle">保存結果を編集</h4>
+                <button type="button" id="closeEditModal" class="edit-modal-close" aria-label="編集モーダルを閉じる">×</button>
+            </div>
+            <form id="editResultForm" class="edit-result-form">
+                <input type="hidden" id="editResultId" name="id">
+                <div class="result-form-grid">
+                    <div class="form-group">
+                        <label for="editResultTitleInput">結果タイトル</label>
+                        <input id="editResultTitleInput" name="title" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editResultCategory">カテゴリ</label>
+                        <select id="editResultCategory" name="category" required>
+                            <option value="color">カラー系</option>
+                            <option value="main">メイン導線</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBeforeImage">Before画像URL（任意）</label>
+                        <input id="editBeforeImage" name="beforeImage" type="url" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="editAfterImage">After画像URL（任意）</label>
+                        <input id="editAfterImage" name="afterImage" type="url" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editShareText">コピー用テキスト</label>
+                    <textarea id="editShareText" name="shareText" rows="4" required></textarea>
+                </div>
+                <div class="edit-modal-actions">
+                    <button type="button" id="cancelEditModal" class="btn btn-secondary">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">更新する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2026 solace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

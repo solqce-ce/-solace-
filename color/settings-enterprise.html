@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>設定 - Palette Generator Pro</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #667eea;
-      --primary-dark: #764ba2;
-      --success: #10b981;
-      --danger: #ef4444;
-      --text-dark: #1a1a2e;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 15px rgba(102, 126, 234, 0.15);
+      --primary: #334155;
+      --primary-dark: #1e293b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -25,46 +33,55 @@
     }
 
     html.light {
-      background: linear-gradient(135deg, #f8fafb 0%, #f0f4ff 100%);
+      background: #ffffff;
       color: var(--text-dark);
     }
 
     html.dark {
-      background: linear-gradient(180deg, #0a0a15 0%, #141420 100%);
-      color: #f3f4f6;
+      background: #1e293b;
+      color: #e2e8f0;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       line-height: 1.6;
       transition: var(--transition);
-      padding: 40px 20px 60px;
+      padding: 0;
       min-height: 100vh;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
+      padding: 80px 40px;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 3px solid #334155;
+    }
+
+    html.dark .page-header {
+      border-bottom-color: #64748b;
     }
 
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    html.dark .page-header h1 {
+      color: #f1f5f9;
     }
 
     .page-header p {
-      font-size: 1.05rem;
-      opacity: 0.7;
+      font-size: 1.15rem;
+      opacity: 0.9;
       font-weight: 500;
     }
 
@@ -75,22 +92,22 @@
 
     .settings-card {
       background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 16px;
+      border: none; border-left: 5px solid #334155;
+      border-radius: 0;
       padding: 28px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: none;
       transition: var(--transition);
     }
 
     html.dark .settings-card {
-      background: rgba(22, 22, 32, 0.9);
+      background: rgba(71, 85, 105, 0.9);
       border-color: rgba(255, 255, 255, 0.08);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .settings-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.1);
     }
 
     .settings-card-header {
@@ -107,17 +124,18 @@
       font-family: 'Syne', sans-serif;
       font-size: 1.2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-dark);
+    }
+
+    html.dark .settings-card h3 {
+      color: #f1f5f9;
     }
 
     .settings-card p {
-      opacity: 0.7;
+      opacity: 0.9;
       margin-bottom: 16px;
       line-height: 1.6;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .btn {
@@ -125,7 +143,7 @@
       border: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
@@ -143,17 +161,23 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 6px 16px rgba(51, 65, 85, 0.3);
     }
 
     .btn-primary:hover {
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(51, 65, 85, 0.4);
     }
 
     .btn-secondary {
-      background: rgba(102, 126, 234, 0.1);
+      background: rgba(51, 65, 85, 0.1);
       color: var(--primary);
       border: 2px solid var(--primary);
+    }
+
+    html.dark .btn-secondary {
+      background: rgba(148, 163, 184, 0.2);
+      color: #e2e8f0;
+      border-color: #94a3b8;
     }
 
     .btn-secondary:hover {
@@ -187,6 +211,10 @@
       background: rgba(239, 68, 68, 0.05);
     }
 
+    html.dark .danger-zone {
+      background: rgba(127, 29, 29, 0.45);
+    }
+
     .setting-item {
       display: flex;
       align-items: center;
@@ -205,12 +233,12 @@
 
     .setting-label {
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .setting-description {
-      font-size: 0.85rem;
-      opacity: 0.6;
+      font-size: 0.95rem;
+      opacity: 0.85;
       margin-top: 2px;
     }
 
@@ -218,7 +246,7 @@
       width: 44px;
       height: 24px;
       background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
+      border-radius: 0;
       cursor: pointer;
       position: relative;
       transition: var(--transition);
@@ -242,6 +270,15 @@
 
     .toggle-switch.on::after {
       left: 22px;
+    }
+
+    .toggle-switch-btn {
+      border: none;
+      padding: 0;
+    }
+
+    .muted-meta {
+      opacity: 0.9;
     }
 
     @media (max-width: 768px) {
@@ -275,7 +312,7 @@
 
       .settings-card {
         padding: 16px;
-        border-radius: 12px;
+        border-radius: 0;
       }
 
       .settings-card-header h3 {
@@ -316,7 +353,7 @@
           <h3>🌙 外観設定</h3>
         </div>
         <p>ダーク/ライトモードを切り替えて、快適な環境を作りましょう。</p>
-        <button class="btn btn-secondary" onclick="toggleTheme(); setTimeout(() => location.reload(), 300);">💡 テーマを切り替え</button>
+        <button type="button" id="toggleThemeBtn" class="btn btn-secondary">💡 テーマを切り替え</button>
       </div>
 
       <!-- データ管理 -->
@@ -325,8 +362,8 @@
           <h3>📦 データ管理</h3>
         </div>
         <p>ローカルに保存されたすべてのデータ（作品、カラーパレット、プロフィール）をバックアップまたはリセットできます。</p>
-        <button class="btn btn-success" onclick="exportAllData()">📥 データをエクスポート</button>
-        <button class="btn btn-secondary" onclick="importData()">📤 データをインポート</button>
+        <button type="button" id="exportDataBtn" class="btn btn-success">📥 データをエクスポート</button>
+        <button type="button" id="importDataBtn" class="btn btn-secondary">📤 データをインポート</button>
       </div>
 
       <!-- 通知設定 -->
@@ -339,14 +376,14 @@
             <div class="setting-label">保存通知</div>
             <div class="setting-description">作品保存時に通知を表示</div>
           </div>
-          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+          <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="saveNotice" aria-label="保存通知" aria-pressed="true"></button>
         </div>
         <div class="setting-item">
           <div>
             <div class="setting-label">削除確認</div>
             <div class="setting-description">削除前に確認ダイアログを表示</div>
           </div>
-          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+          <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="deleteConfirm" aria-label="削除確認" aria-pressed="true"></button>
         </div>
       </div>
 
@@ -360,14 +397,14 @@
             <div class="setting-label">自動保存</div>
             <div class="setting-description">定期的に作品を自動保存</div>
           </div>
-          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+          <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="autoSave" aria-label="自動保存" aria-pressed="true"></button>
         </div>
         <div class="setting-item">
           <div>
             <div class="setting-label">アニメーション</div>
             <div class="setting-description">スムーズなアニメーション効果を有効</div>
           </div>
-          <div class="toggle-switch on" onclick="toggleNotification(this)"></div>
+          <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="animation" aria-label="アニメーション" aria-pressed="true"></button>
         </div>
       </div>
 
@@ -377,7 +414,7 @@
           <h3>⚠️ 危険ゾーン</h3>
         </div>
         <p>⚡ 注意：この操作は取り消せません。すべてのデータが削除されます。</p>
-        <button class="btn btn-danger" onclick="resetAllData()">🗑️ すべてのデータを削除</button>
+        <button type="button" id="resetAllDataBtn" class="btn btn-danger">🗑️ すべてのデータを削除</button>
       </div>
 
       <!-- バージョン情報 -->
@@ -390,50 +427,88 @@
             <div class="setting-label">アプリケーション</div>
             <div class="setting-description">Palette Generator Pro</div>
           </div>
-          <span style="opacity: 0.7;">v1.0</span>
+          <span class="muted-meta">v1.0</span>
         </div>
         <div class="setting-item">
           <div>
             <div class="setting-label">最終更新</div>
             <div class="setting-description">2024年2月27日</div>
           </div>
-          <span style="opacity: 0.7;">Latest</span>
+          <span class="muted-meta">Latest</span>
         </div>
       </div>
     </div>
   </div>
 
-  <input type="file" id="importFile" style="display:none;" accept=".json">
+  <input type="file" id="importFile" class="d-none" accept=".json">
 
   <script>
     (function(){
-      const t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      const t = localStorage.getItem('pgp.theme') || localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
       document.documentElement.className = t;
     })();
   </script>
 
   <script src="common.js"></script>
   <script>
-    function toggleNotification(el) {
-      el.classList.toggle('on');
+    function resetAllData() {
+      if (!confirmAction('⚠️ 本当にすべてのデータを削除しますか？')) {
+        return;
+      }
+
+      if (!confirmAction('🚨 この操作は取り消せません。削除しますか？')) {
+        return;
+      }
+
+      const keys = [
+        'profile',
+        'stats',
+        'gallery',
+        'theme',
+        'favorites',
+        'visitHistory',
+        'randomColorSettings',
+        'emojiSettings',
+        'appSettings'
+      ];
+
+      keys.forEach((key) => removeRawData(key));
+      showToast('✅ すべてのデータを削除しました。ページをリロードします...', 2000, 'success');
+      setTimeout(() => location.reload(), 1500);
     }
 
-    function resetAllData() {
-      if (confirm("⚠️ 本当にすべてのデータを削除しますか？")) {
-        if (confirm("🚨 この操作は取り消せません。削除しますか？")) {
-          localStorage.clear();
-          showToast('✅ すべてのデータを削除しました。ページをリロードします...', 2000, 'success');
-          setTimeout(() => location.reload(), 1500);
-        }
-      }
+    function getSettingsState() {
+      const defaults = {
+        saveNotice: true,
+        deleteConfirm: true,
+        autoSave: true,
+        animation: true
+      };
+
+      const saved = loadData('appSettings', defaults);
+      return { ...defaults, ...(saved || {}) };
+    }
+
+    function persistSettingsState(nextState) {
+      saveData('appSettings', nextState);
+    }
+
+    function applyToggleButtonState(button, enabled) {
+      button.classList.toggle('on', enabled);
+      button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
     }
 
     function exportAllData() {
       const allData = {
-        profile: localStorage.getItem('profile'),
-        stats: localStorage.getItem('stats'),
-        gallery: localStorage.getItem('gallery'),
-        theme: localStorage.getItem('theme'),
+        profile: loadData('profile', null),
+        stats: loadData('stats', null),
+        gallery: loadData('gallery', null),
+        theme: getThemePreference(),
+        favorites: loadData('favorites', []),
+        visitHistory: loadData('visitHistory', []),
+        randomColorSettings: loadData('randomColorSettings', null),
+        emojiSettings: loadData('emojiSettings', null),
+        appSettings: loadData('appSettings', null),
         exportDate: new Date().toISOString()
       };
       const dataStr = JSON.stringify(allData, null, 2);
@@ -447,6 +522,23 @@
       showToast('📥 データをエクスポートしました', 2000, 'success');
     }
 
+    function parseMaybeJSONString(value) {
+      if (typeof value !== 'string') {
+        return value;
+      }
+
+      const trimmed = value.trim();
+      if (!trimmed) {
+        return value;
+      }
+
+      try {
+        return JSON.parse(trimmed);
+      } catch (_) {
+        return value;
+      }
+    }
+
     function importData() {
       document.getElementById('importFile').click();
     }
@@ -458,10 +550,23 @@
       reader.onload = (ev) => {
         try {
           const data = JSON.parse(ev.target.result);
-          if (data.profile) localStorage.setItem('profile', data.profile);
-          if (data.stats) localStorage.setItem('stats', data.stats);
-          if (data.gallery) localStorage.setItem('gallery', data.gallery);
-          if (data.theme) localStorage.setItem('theme', data.theme);
+
+          if (data.profile !== undefined) saveData('profile', parseMaybeJSONString(data.profile));
+          if (data.stats !== undefined) saveData('stats', parseMaybeJSONString(data.stats));
+          if (data.gallery !== undefined) saveData('gallery', parseMaybeJSONString(data.gallery));
+          if (data.theme) setThemePreference(String(data.theme));
+          if (Array.isArray(data.favorites)) saveData('favorites', data.favorites);
+          if (Array.isArray(data.visitHistory)) saveData('visitHistory', data.visitHistory);
+          if (data.randomColorSettings && typeof data.randomColorSettings === 'object') {
+            saveData('randomColorSettings', data.randomColorSettings);
+          }
+          if (data.emojiSettings && typeof data.emojiSettings === 'object') {
+            saveData('emojiSettings', data.emojiSettings);
+          }
+          if (data.appSettings && typeof data.appSettings === 'object') {
+            saveData('appSettings', data.appSettings);
+          }
+
           showToast('✅ データをインポートしました', 2000, 'success');
           setTimeout(() => location.reload(), 1000);
         } catch(err) {
@@ -474,6 +579,32 @@
     document.addEventListener('DOMContentLoaded', () => {
       buildNav('settings');
       buildHistoryNav('settings-enterprise.html');
+
+      const toggleButtons = Array.from(document.querySelectorAll('.toggle-switch-btn'));
+      const state = getSettingsState();
+
+      toggleButtons.forEach((button) => {
+        const key = button.dataset.toggleKey;
+        applyToggleButtonState(button, Boolean(state[key]));
+
+        button.addEventListener('click', () => {
+          const current = button.getAttribute('aria-pressed') === 'true';
+          const next = !current;
+          applyToggleButtonState(button, next);
+          state[key] = next;
+          persistSettingsState(state);
+          showToast(`⚙️ ${key} を${next ? '有効' : '無効'}にしました`, 1200, 'info');
+        });
+      });
+
+      document.getElementById('toggleThemeBtn').addEventListener('click', () => {
+        toggleTheme();
+        setTimeout(() => location.reload(), 300);
+      });
+
+      document.getElementById('exportDataBtn').addEventListener('click', exportAllData);
+      document.getElementById('importDataBtn').addEventListener('click', importData);
+      document.getElementById('resetAllDataBtn').addEventListener('click', resetAllData);
     });
   </script>
 </body>
