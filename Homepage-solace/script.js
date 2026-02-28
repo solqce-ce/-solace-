@@ -6,6 +6,9 @@ const navLinks = document.querySelectorAll('.nav-link');
 hamburger.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     hamburger.classList.toggle('active');
+    const isExpanded = hamburger.classList.contains('active');
+    hamburger.setAttribute('aria-expanded', isExpanded);
+    hamburger.setAttribute('aria-label', isExpanded ? 'メニューを閉じる' : 'メニューを開く');
 });
 
 // ナビゲーションリンクをクリックしたときメニューを閉じる
@@ -13,6 +16,8 @@ navLinks.forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'メニューを開く');
     });
 });
 
@@ -21,6 +26,8 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.navbar') && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'メニューを開く');
     }
 });
 
