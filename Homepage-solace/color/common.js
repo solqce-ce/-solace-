@@ -203,14 +203,14 @@ function buildNav(activePage = "") {
   }
 
   const links = [
-    { href: "index.html", icon: "🏠", label: "ホーム", key: "index" },
-    { href: "emoji-generator.html", icon: "😊", label: "絵文字", key: "emoji" },
-    { href: "pose-generator.html", icon: "🧍", label: "ポーズ", key: "pose" },
-    { href: "chara-generator.html", icon: "👥", label: "キャラ", key: "chara" },
+    { href: "index-enterprise.html", icon: "🏠", label: "ホーム", key: "index" },
+    { href: "emoji-generator-enterprise.html", icon: "😊", label: "絵文字", key: "emoji" },
+    { href: "pose-generator-enterprise.html", icon: "🧍", label: "ポーズ", key: "pose" },
+    { href: "chara-generator-enterprise.html", icon: "👥", label: "キャラ", key: "chara" },
     { href: "random-color.html", icon: "🌈", label: "カラー", key: "random" },
     { href: "gallery.html", icon: "🎨", label: "ギャラリー", key: "gallery" },
-    { href: "profile.html", icon: "👤", label: "プロフ", key: "profile" },
-    { href: "settings.html", icon: "⚙️", label: "設定", key: "settings" }
+    { href: "profile-enterprise.html", icon: "👤", label: "プロフ", key: "profile" },
+    { href: "settings-enterprise.html", icon: "⚙️", label: "設定", key: "settings" }
   ];
 
   nav.innerHTML = `
