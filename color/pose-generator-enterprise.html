@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
   <title>ポーズジェネレーター - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -81,6 +92,29 @@
       font-size: 1.15rem;
       opacity: 0.9;
       font-weight: 500;
+    }
+
+    .quick-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .step-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    html.dark .step-chip {
+      background: rgba(148, 163, 184, 0.15);
+      border-color: rgba(226, 232, 240, 0.3);
+      color: #e2e8f0;
     }
 
     .card {
@@ -164,6 +198,7 @@
 
     html.dark .pose-item {
       background: linear-gradient(135deg, rgba(51, 65, 85, 0.12) 0%, rgba(51, 65, 85, 0.08) 100%);
+      border-color: rgba(226, 232, 240, 0.26);
     }
 
     .pose-item:hover {
@@ -234,6 +269,46 @@
       white-space: pre-wrap;
     }
 
+    .action-panel {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      background: rgba(51, 65, 85, 0.04);
+      display: grid;
+      gap: 10px;
+    }
+
+    html.dark .action-panel {
+      background: rgba(148, 163, 184, 0.12);
+      border-color: rgba(226, 232, 240, 0.28);
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-light);
+      min-width: 80px;
+      text-align: right;
+    }
+
+    html.dark .action-label {
+      color: #dbeafe;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     html.dark .preview-text-large {
       color: #f1f5f9;
     }
@@ -284,6 +359,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
@@ -292,6 +368,11 @@
     <div class="page-header">
       <h1>🧍 ポーズジェネレーター</h1>
       <p>キャラクターの自然なポーズを作成・編集できます</p>
+      <div class="quick-steps" aria-label="操作ステップ">
+        <span class="step-chip">1. ポーズを選ぶ</span>
+        <span class="step-chip">2. 案数を選ぶ</span>
+        <span class="step-chip">3. 生成して保存</span>
+      </div>
     </div>
     <div class="history-nav" id="historyNav"></div>
 
@@ -338,21 +419,26 @@
       </div>
     </div>
 
-    <div class="text-center mt-2xl">
-      <div class="flex-gap-md-wrap flex-center mb-md">
-        <label for="variantCount" class="label-bold">案数</label>
-        <select id="variantCount" class="form-select">
+    <div class="action-panel" aria-label="主要操作">
+      <div class="action-row">
+        <span class="action-label">案数</span>
+        <select id="variantCount" class="form-select btn-auto">
           <option value="1">1案</option>
           <option value="3">3案</option>
           <option value="6" selected>6案</option>
         </select>
-        <button type="button" id="generatePoseBtn" class="btn btn-primary btn-auto">🎲 ランダム生成</button>
-        <button type="button" id="savePoseBtn" class="btn btn-primary btn-auto">💾 ポーズを保存</button>
+      </div>
+      <div class="action-row">
+        <span class="action-label">操作</span>
+        <div class="action-buttons">
+          <button type="button" id="generatePoseBtn" class="btn btn-primary btn-auto">🎲 ポーズ案を生成</button>
+          <button type="button" id="savePoseBtn" class="btn btn-primary btn-auto">💾 結果を保存</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     let currentPose = { emoji: '🧍', name: 'スタンディング' };
 

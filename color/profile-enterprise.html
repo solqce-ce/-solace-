@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
   <title>プロフィール - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -297,6 +308,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
@@ -371,7 +383,7 @@
     </div>
   </div>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     function loadProfile() {
       const profile = loadData('profile', {
@@ -427,6 +439,12 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('open')) {
+        window.location.replace('gallery.html?from=hidden-profile');
+        return;
+      }
+
       buildNav('profile');
       document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
       document.getElementById('resetProfileBtn').addEventListener('click', resetProfile);

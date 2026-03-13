@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
   <title>設定 - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -281,6 +292,75 @@
       opacity: 0.9;
     }
 
+    .inline-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .inline-row input,
+    .inline-row textarea,
+    .inline-row select {
+      flex: 1;
+      min-width: 160px;
+      padding: 8px 10px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: inherit;
+      font: inherit;
+    }
+
+    html.dark .inline-row input,
+    html.dark .inline-row textarea,
+    html.dark .inline-row select {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(15, 23, 42, 0.45);
+      color: #e2e8f0;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-item {
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      display: grid;
+      gap: 6px;
+    }
+
+    html.dark .mini-item {
+      border-color: rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .report-box {
+      white-space: pre-wrap;
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.86rem;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    html.dark .report-box {
+      border-color: rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.45);
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 30px 16px 50px;
@@ -337,6 +417,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
@@ -406,6 +487,62 @@
           </div>
           <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="animation" aria-label="アニメーション" aria-pressed="true"></button>
         </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">軽量モード</div>
+            <div class="setting-description">低スペック端末向けに演出を軽くする</div>
+          </div>
+          <button type="button" class="toggle-switch toggle-switch-btn" data-toggle-key="lightweightMode" aria-label="軽量モード" aria-pressed="false"></button>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">オフライン保全</div>
+            <div class="setting-description">終了時に復旧用バックアップを保存</div>
+          </div>
+          <button type="button" class="toggle-switch toggle-switch-btn on" data-toggle-key="offlineBackup" aria-label="オフライン保全" aria-pressed="true"></button>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>👥 チームワークスペース</h3>
+        </div>
+        <p>共有パレットのレビューと承認フローをローカルで管理します。</p>
+        <div class="inline-row">
+          <input type="text" id="memberInput" placeholder="メンバー名を追加 (例: Design Lead)">
+          <button type="button" id="addMemberBtn" class="btn btn-secondary">追加</button>
+          <button type="button" id="submitReviewBtn" class="btn btn-primary">最新パレットをレビュー申請</button>
+        </div>
+        <div class="mini-list" id="teamMembersList"></div>
+        <div class="mini-list" id="reviewList"></div>
+      </div>
+
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>📏 ブランドガイドライン</h3>
+        </div>
+        <p>禁止色と最小コントラストを設定し、逸脱を自動検知します。</p>
+        <div class="inline-row">
+          <input type="text" id="forbiddenColorsInput" placeholder="#FF0000,#00FF00 のように入力">
+        </div>
+        <div class="inline-row">
+          <input type="number" id="minContrastInput" min="3" max="10" step="0.1" value="4.5">
+          <button type="button" id="saveGuidelineBtn" class="btn btn-secondary">ガイドライン保存</button>
+          <button type="button" id="scanGuidelineBtn" class="btn btn-primary">既存パレットを監査</button>
+        </div>
+        <div class="report-box" id="guidelineResult">未実行</div>
+      </div>
+
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <h3>📊 監査レポート</h3>
+        </div>
+        <p>WCAG適合率と改善履歴をレポート出力します。</p>
+        <div class="inline-row">
+          <button type="button" id="generateAuditBtn" class="btn btn-primary">監査レポート生成</button>
+          <button type="button" id="exportAuditBtn" class="btn btn-secondary">レポートJSON出力</button>
+        </div>
+        <div class="report-box" id="auditResult">未生成</div>
       </div>
 
       <!-- 危険ゾーン -->
@@ -449,7 +586,7 @@
     })();
   </script>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     function resetAllData() {
       if (!confirmAction('⚠️ 本当にすべてのデータを削除しますか？')) {
@@ -469,7 +606,11 @@
         'visitHistory',
         'randomColorSettings',
         'emojiSettings',
-        'appSettings'
+        'appSettings',
+        'teamWorkspace',
+        'brandGuidelines',
+        'auditReports',
+        'appOfflineBackup'
       ];
 
       keys.forEach((key) => removeRawData(key));
@@ -482,7 +623,9 @@
         saveNotice: true,
         deleteConfirm: true,
         autoSave: true,
-        animation: true
+        animation: true,
+        lightweightMode: false,
+        offlineBackup: true
       };
 
       const saved = loadData('appSettings', defaults);
@@ -509,17 +652,62 @@
         randomColorSettings: loadData('randomColorSettings', null),
         emojiSettings: loadData('emojiSettings', null),
         appSettings: loadData('appSettings', null),
+        teamWorkspace: loadData('teamWorkspace', null),
+        brandGuidelines: loadData('brandGuidelines', null),
+        auditReports: loadData('auditReports', []),
         exportDate: new Date().toISOString()
       };
+
+      const dateLabel = new Date().toISOString().split('T')[0];
+
+      function downloadBlob(filename, blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function getLatestPaletteColors() {
+        const history = loadData('paletteHistory', []);
+        if (Array.isArray(history) && history[0] && Array.isArray(history[0].colors) && history[0].colors.length > 0) {
+          return history[0].colors;
+        }
+        return ['#1E3A8A', '#2563EB', '#14B8A6', '#F59E0B', '#0F172A'];
+      }
+
+      function buildCssVars(colors) {
+        const body = colors.map((hex, index) => `  --palette-${String(index + 1).padStart(2, '0')}: ${hex};`).join('\n');
+        return `:root {\n${body}\n}\n`;
+      }
+
+      function exportPalettePng(colors) {
+        const size = 180;
+        const height = 64;
+        const canvas = document.createElement('canvas');
+        canvas.width = colors.length * size;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        colors.forEach((hex, index) => {
+          ctx.fillStyle = hex;
+          ctx.fillRect(index * size, 0, size, height);
+        });
+        const link = document.createElement('a');
+        link.download = `palette-preview-${dateLabel}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+
+      const colors = getLatestPaletteColors();
       const dataStr = JSON.stringify(allData, null, 2);
-      const blob = new Blob([dataStr], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `palette-backup-${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('📥 データをエクスポートしました', 2000, 'success');
+      const cssVars = buildCssVars(colors);
+
+      downloadBlob(`palette-backup-${dateLabel}.json`, new Blob([dataStr], { type: 'application/json' }));
+      downloadBlob(`palette-vars-${dateLabel}.css`, new Blob([cssVars], { type: 'text/css' }));
+      exportPalettePng(colors);
+
+      showToast('📦 JSON + PNG + CSS変数をエクスポートしました', 2200, 'success');
     }
 
     function parseMaybeJSONString(value) {
@@ -566,6 +754,15 @@
           if (data.appSettings && typeof data.appSettings === 'object') {
             saveData('appSettings', data.appSettings);
           }
+          if (data.teamWorkspace && typeof data.teamWorkspace === 'object') {
+            saveData('teamWorkspace', data.teamWorkspace);
+          }
+          if (data.brandGuidelines && typeof data.brandGuidelines === 'object') {
+            saveData('brandGuidelines', data.brandGuidelines);
+          }
+          if (Array.isArray(data.auditReports)) {
+            saveData('auditReports', data.auditReports);
+          }
 
           showToast('✅ データをインポートしました', 2000, 'success');
           setTimeout(() => location.reload(), 1000);
@@ -577,11 +774,174 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('open')) {
+        window.location.replace('gallery.html?from=hidden-settings');
+        return;
+      }
+
       buildNav('settings');
       buildHistoryNav('settings-enterprise.html');
 
       const toggleButtons = Array.from(document.querySelectorAll('.toggle-switch-btn'));
       const state = getSettingsState();
+
+      const defaultTeam = { members: ['Design', 'Product'], reviews: [] };
+      const defaultGuideline = { forbiddenColors: [], minContrast: 4.5 };
+      let teamWorkspace = { ...defaultTeam, ...(loadData('teamWorkspace', defaultTeam) || {}) };
+      let brandGuidelines = { ...defaultGuideline, ...(loadData('brandGuidelines', defaultGuideline) || {}) };
+      let currentAudit = null;
+
+      function hexToRgb(hex) {
+        return {
+          r: parseInt(hex.slice(1, 3), 16),
+          g: parseInt(hex.slice(3, 5), 16),
+          b: parseInt(hex.slice(5, 7), 16)
+        };
+      }
+
+      function luminance(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        const toLinear = (c) => {
+          const v = c / 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        };
+        return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+      }
+
+      function contrastRatio(hex1, hex2) {
+        const l1 = luminance(hex1);
+        const l2 = luminance(hex2);
+        const lighter = Math.max(l1, l2);
+        const darker = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      function normalizeHex(value) {
+        const v = String(value || '').trim().toUpperCase();
+        return /^#[0-9A-F]{6}$/.test(v) ? v : null;
+      }
+
+      function getPaletteHistory() {
+        const history = loadData('paletteHistory', []);
+        return Array.isArray(history) ? history : [];
+      }
+
+      function saveTeamWorkspace() {
+        saveData('teamWorkspace', teamWorkspace);
+      }
+
+      function renderTeamWorkspace() {
+        const membersList = document.getElementById('teamMembersList');
+        const reviewList = document.getElementById('reviewList');
+        if (!membersList || !reviewList) return;
+
+        membersList.innerHTML = teamWorkspace.members.map((member) => `<div class="mini-item">👤 ${sanitizeHTML(member)}</div>`).join('') || '<div class="mini-item">メンバー未登録</div>';
+
+        if (!Array.isArray(teamWorkspace.reviews) || teamWorkspace.reviews.length === 0) {
+          reviewList.innerHTML = '<div class="mini-item">レビュー申請がありません</div>';
+          return;
+        }
+
+        reviewList.innerHTML = teamWorkspace.reviews.slice(0, 12).map((item) => {
+          const created = new Date(item.createdAt).toLocaleString('ja-JP');
+          const statusLabel = item.status === 'approved' ? '承認済み' : item.status === 'rejected' ? '差戻し' : 'レビュー待ち';
+          const paletteText = (item.colors || []).slice(0, 6).join(' ');
+          return `<div class="mini-item">
+            <div><strong>${sanitizeHTML(item.title || 'Palette Review')}</strong> - ${statusLabel}</div>
+            <div>${sanitizeHTML(paletteText)}</div>
+            <div class="muted-meta">${created}</div>
+            ${item.status === 'pending' ? `<div class="mini-actions"><button type="button" class="btn btn-success" data-review-action="approve" data-review-id="${item.id}">承認</button><button type="button" class="btn btn-danger" data-review-action="reject" data-review-id="${item.id}">差戻し</button></div>` : ''}
+          </div>`;
+        }).join('');
+      }
+
+      function saveBrandGuidelines() {
+        saveData('brandGuidelines', brandGuidelines);
+      }
+
+      function runGuidelineAudit() {
+        const history = getPaletteHistory();
+        const latest = history[0];
+        const resultEl = document.getElementById('guidelineResult');
+        if (!resultEl) return;
+
+        if (!latest || !Array.isArray(latest.colors) || latest.colors.length === 0) {
+          resultEl.textContent = '対象パレットがありません。Random Colorで保存してください。';
+          return;
+        }
+
+        const forbiddenHits = latest.colors.filter((hex) => brandGuidelines.forbiddenColors.includes(String(hex).toUpperCase()));
+        const minContrast = Number(brandGuidelines.minContrast) || 4.5;
+        const contrastFails = latest.colors.filter((hex) => {
+          const c = String(hex).toUpperCase();
+          const onWhite = contrastRatio(c, '#FFFFFF');
+          const onDark = contrastRatio(c, '#0F172A');
+          return Math.max(onWhite, onDark) < minContrast;
+        });
+
+        const lines = [
+          `対象パレット: ${latest.colors.join(' ')}`,
+          `禁止色ヒット: ${forbiddenHits.length ? forbiddenHits.join(', ') : 'なし'}`,
+          `最小コントラスト(${minContrast.toFixed(1)})未達: ${contrastFails.length ? contrastFails.join(', ') : 'なし'}`
+        ];
+
+        resultEl.textContent = lines.join('\n');
+      }
+
+      function generateAuditReport() {
+        const history = getPaletteHistory();
+        const reports = loadData('auditReports', []);
+        const now = new Date().toISOString();
+
+        if (history.length === 0) {
+          currentAudit = {
+            createdAt: now,
+            paletteCount: 0,
+            wcagPassRate: 0,
+            note: '対象データなし'
+          };
+        } else {
+          let passCount = 0;
+          let totalCount = 0;
+          history.slice(0, 50).forEach((item) => {
+            const colors = Array.isArray(item.colors) ? item.colors : [];
+            colors.forEach((hex) => {
+              const c = String(hex).toUpperCase();
+              const best = Math.max(contrastRatio(c, '#FFFFFF'), contrastRatio(c, '#0F172A'));
+              totalCount += 1;
+              if (best >= 4.5) passCount += 1;
+            });
+          });
+
+          currentAudit = {
+            createdAt: now,
+            paletteCount: history.length,
+            sampleColors: totalCount,
+            wcagPassRate: totalCount > 0 ? Number(((passCount / totalCount) * 100).toFixed(1)) : 0,
+            latestPaletteCreatedAt: history[0]?.createdAt || null,
+            guideline: brandGuidelines
+          };
+        }
+
+        const nextReports = [currentAudit, ...(Array.isArray(reports) ? reports : [])].slice(0, 30);
+        saveData('auditReports', nextReports);
+
+        const auditEl = document.getElementById('auditResult');
+        if (auditEl) {
+          auditEl.textContent = JSON.stringify(currentAudit, null, 2);
+        }
+      }
+
+      function exportAuditReport() {
+        if (!currentAudit) {
+          showToast('先に監査レポートを生成してください', 2000, 'warning');
+          return;
+        }
+        const filename = `audit-report-${new Date().toISOString().slice(0, 10)}.json`;
+        downloadJSON(filename, currentAudit);
+        showToast('監査レポートを出力しました', 1800, 'success');
+      }
 
       toggleButtons.forEach((button) => {
         const key = button.dataset.toggleKey;
@@ -597,6 +957,76 @@
         });
       });
 
+      document.getElementById('memberInput')?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          document.getElementById('addMemberBtn')?.click();
+        }
+      });
+
+      document.getElementById('addMemberBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('memberInput');
+        const name = String(input?.value || '').trim();
+        if (!name) return;
+        if (!teamWorkspace.members.includes(name)) {
+          teamWorkspace.members.push(name);
+          saveTeamWorkspace();
+          renderTeamWorkspace();
+          showToast('メンバーを追加しました', 1400, 'success');
+        }
+        input.value = '';
+      });
+
+      document.getElementById('submitReviewBtn')?.addEventListener('click', () => {
+        const latest = getPaletteHistory()[0];
+        if (!latest || !Array.isArray(latest.colors) || latest.colors.length === 0) {
+          showToast('レビュー対象のパレットがありません', 2000, 'warning');
+          return;
+        }
+        const review = {
+          id: `review_${Date.now()}`,
+          title: `Palette ${new Date().toLocaleDateString('ja-JP')}`,
+          colors: latest.colors,
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        };
+        teamWorkspace.reviews = [review, ...(teamWorkspace.reviews || [])].slice(0, 20);
+        saveTeamWorkspace();
+        renderTeamWorkspace();
+        showToast('レビュー申請を作成しました', 1400, 'success');
+      });
+
+      document.getElementById('reviewList')?.addEventListener('click', (event) => {
+        const btn = event.target.closest('[data-review-action]');
+        if (!btn) return;
+        const id = String(btn.dataset.reviewId || '');
+        const action = String(btn.dataset.reviewAction || '');
+        const item = (teamWorkspace.reviews || []).find((review) => review.id === id);
+        if (!item) return;
+        item.status = action === 'approve' ? 'approved' : 'rejected';
+        item.updatedAt = new Date().toISOString();
+        saveTeamWorkspace();
+        renderTeamWorkspace();
+      });
+
+      document.getElementById('forbiddenColorsInput').value = (brandGuidelines.forbiddenColors || []).join(',');
+      document.getElementById('minContrastInput').value = String(brandGuidelines.minContrast || 4.5);
+
+      document.getElementById('saveGuidelineBtn')?.addEventListener('click', () => {
+        const forbiddenRaw = String(document.getElementById('forbiddenColorsInput').value || '');
+        const minContrast = Math.max(3, Math.min(10, Number(document.getElementById('minContrastInput').value) || 4.5));
+        brandGuidelines = {
+          forbiddenColors: forbiddenRaw.split(',').map((v) => normalizeHex(v)).filter(Boolean),
+          minContrast
+        };
+        saveBrandGuidelines();
+        showToast('ガイドラインを保存しました', 1400, 'success');
+      });
+
+      document.getElementById('scanGuidelineBtn')?.addEventListener('click', runGuidelineAudit);
+      document.getElementById('generateAuditBtn')?.addEventListener('click', generateAuditReport);
+      document.getElementById('exportAuditBtn')?.addEventListener('click', exportAuditReport);
+
       document.getElementById('toggleThemeBtn').addEventListener('click', () => {
         toggleTheme();
         setTimeout(() => location.reload(), 300);
@@ -605,6 +1035,9 @@
       document.getElementById('exportDataBtn').addEventListener('click', exportAllData);
       document.getElementById('importDataBtn').addEventListener('click', importData);
       document.getElementById('resetAllDataBtn').addEventListener('click', resetAllData);
+
+      renderTeamWorkspace();
+      runGuidelineAudit();
     });
   </script>
 </body>

@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
+  <title>Gradient Generator - Palette Generator Pro</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: #fafafa; color: #1a1a1a;
+      transition: background 0.3s, color 0.3s;
+    }
+    html.dark body { background: #111113; color: #e4e4e7; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 64px 32px 96px; }
+
+    .page-header { margin-bottom: 48px; }
+    .page-header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 8px; }
+    html.dark .page-header h1 { color: #fafafa; }
+    .page-header .subtitle { font-size: 0.875rem; color: #71717a; margin: 0; }
+    html.dark .page-header .subtitle { color: #a1a1aa; }
+
+    /* Preview */
+    .gradient-preview {
+      width: 100%; height: 240px; border-radius: 16px;
+      border: 1px solid #e4e4e7; margin-bottom: 24px;
+      transition: background 0.3s;
+    }
+    html.dark .gradient-preview { border-color: #27272a; }
+
+    /* Controls */
+    .controls-panel {
+      background: #fff; border: 1px solid #e4e4e7; border-radius: 12px;
+      padding: 24px; margin-bottom: 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    html.dark .controls-panel { background: #18181b; border-color: #27272a; }
+
+    .control-row {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .control-row label {
+      font-size: 0.8125rem; font-weight: 500; color: #71717a;
+      min-width: 60px;
+    }
+    html.dark .control-row label { color: #a1a1aa; }
+
+    .type-tabs {
+      display: flex; gap: 4px;
+    }
+    .type-tab {
+      padding: 7px 14px; font-size: 0.75rem; border-radius: 8px;
+      border: 1px solid #e4e4e7; background: transparent; color: #52525b;
+      cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.15s;
+    }
+    html.dark .type-tab { border-color: #3f3f46; color: #a1a1aa; }
+    .type-tab:hover { background: #f4f4f5; }
+    html.dark .type-tab:hover { background: #27272a; }
+    .type-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    html.dark .type-tab.active { background: #fafafa; color: #18181b; border-color: #fafafa; }
+
+    .angle-slider {
+      flex: 1; max-width: 200px; height: 4px;
+      -webkit-appearance: none; appearance: none;
+      background: #e4e4e7; border-radius: 2px; outline: none;
+    }
+    html.dark .angle-slider { background: #3f3f46; }
+    .angle-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: #1a1a1a; cursor: pointer;
+    }
+    html.dark .angle-slider::-webkit-slider-thumb { background: #fafafa; }
+    .angle-value {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8125rem; font-weight: 600; min-width: 40px;
+    }
+
+    /* Color Stops */
+    .stops-section h3 {
+      font-size: 0.8125rem; font-weight: 600; color: #52525b; margin: 0 0 12px;
+    }
+    html.dark .stops-section h3 { color: #a1a1aa; }
+
+    .stops-list {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .stop-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; background: #fafafa;
+      border: 1px solid #e4e4e7; border-radius: 10px;
+    }
+    html.dark .stop-row { background: #111113; border-color: #27272a; }
+    .stop-row input[type="color"] {
+      width: 36px; height: 36px; border: 1px solid #e4e4e7; border-radius: 8px;
+      cursor: pointer; background: none; padding: 2px; flex-shrink: 0;
+    }
+    html.dark .stop-row input[type="color"] { border-color: #3f3f46; }
+    .stop-row input[type="text"] {
+      width: 80px; padding: 8px 10px; font-size: 0.8125rem; border-radius: 8px;
+      border: 1px solid #e4e4e7; background: #fff; color: #1a1a1a;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    html.dark .stop-row input[type="text"] {
+      background: #18181b; border-color: #3f3f46; color: #e4e4e7;
+    }
+    .stop-row input[type="range"] {
+      flex: 1; height: 4px; -webkit-appearance: none; appearance: none;
+      background: #e4e4e7; border-radius: 2px;
+    }
+    html.dark .stop-row input[type="range"] { background: #3f3f46; }
+    .stop-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: #1a1a1a; cursor: pointer;
+    }
+    html.dark .stop-row input[type="range"]::-webkit-slider-thumb { background: #fafafa; }
+    .stop-pos {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem; font-weight: 600; min-width: 32px; text-align: right;
+    }
+    .stop-remove {
+      background: none; border: none; color: #a1a1aa; cursor: pointer;
+      font-size: 1rem; padding: 4px; border-radius: 4px; transition: all 0.15s;
+    }
+    .stop-remove:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
+
+    .add-stop-btn {
+      padding: 10px; font-size: 0.8125rem; border-radius: 10px;
+      border: 1px dashed #d4d4d8; background: transparent; color: #71717a;
+      cursor: pointer; font-weight: 500; font-family: inherit;
+      transition: all 0.15s; text-align: center;
+    }
+    html.dark .add-stop-btn { border-color: #3f3f46; color: #a1a1aa; }
+    .add-stop-btn:hover { border-color: #a1a1aa; color: #52525b; background: #f4f4f5; }
+    html.dark .add-stop-btn:hover { background: #27272a; color: #e4e4e7; }
+
+    /* CSS Output */
+    .css-output {
+      background: #fff; border: 1px solid #e4e4e7; border-radius: 12px;
+      overflow: hidden; margin-bottom: 24px;
+    }
+    html.dark .css-output { background: #18181b; border-color: #27272a; }
+    .css-output-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid #e4e4e7;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    html.dark .css-output-header { border-bottom-color: #27272a; }
+    .css-output-header span {
+      font-size: 0.75rem; font-weight: 600; color: #71717a;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    html.dark .css-output-header span { color: #a1a1aa; }
+    .copy-css-btn {
+      padding: 5px 12px; font-size: 0.6875rem; border-radius: 6px;
+      border: 1px solid #e4e4e7; background: transparent; color: #52525b;
+      cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.15s;
+    }
+    html.dark .copy-css-btn { border-color: #3f3f46; color: #a1a1aa; }
+    .copy-css-btn:hover { background: #f4f4f5; }
+    html.dark .copy-css-btn:hover { background: #27272a; }
+    .output-select {
+      padding: 5px 10px;
+      font-size: 0.6875rem;
+      border-radius: 6px;
+      border: 1px solid #e4e4e7;
+      background: #fff;
+      color: #52525b;
+      font-family: inherit;
+    }
+    html.dark .output-select {
+      border-color: #3f3f46;
+      background: #18181b;
+      color: #a1a1aa;
+    }
+    .workspace-select {
+      padding: 5px 8px;
+      font-size: 0.6875rem;
+      border-radius: 6px;
+      border: 1px solid #e4e4e7;
+      background: #fff;
+      color: #52525b;
+      font-family: inherit;
+      min-width: 120px;
+    }
+    html.dark .workspace-select {
+      border-color: #3f3f46;
+      background: #18181b;
+      color: #a1a1aa;
+    }
+    .css-code {
+      padding: 16px; font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8125rem; line-height: 1.6; white-space: pre-wrap;
+      word-break: break-all; color: #1a1a1a;
+    }
+    html.dark .css-code { color: #e4e4e7; }
+
+    /* Presets */
+    .presets-section h3 {
+      font-size: 0.8125rem; font-weight: 600; color: #52525b; margin: 0 0 12px;
+    }
+    html.dark .presets-section h3 { color: #a1a1aa; }
+    .presets-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px;
+    }
+    .preset-item {
+      height: 56px; border-radius: 10px; cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.06); transition: transform 0.15s, box-shadow 0.15s;
+    }
+    html.dark .preset-item { border-color: rgba(255,255,255,0.06); }
+    .preset-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    @media (max-width: 640px) {
+      .container { padding: 40px 16px 64px; }
+      .page-header h1 { font-size: 1.375rem; }
+      .gradient-preview { height: 160px; border-radius: 12px; }
+      .control-row { gap: 10px; }
+      .type-tab { padding: 6px 10px; font-size: 0.6875rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
+</head>
+<body>
+  <nav id="mainNav"></nav>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Gradient Generator</h1>
+      <p class="subtitle">グラデーションを作成してCSSコードを取得</p>
+    </div>
+    <div class="history-nav" id="historyNav"></div>
+
+    <div class="gradient-preview" id="gradientPreview"></div>
+
+    <div class="controls-panel">
+      <div class="control-row">
+        <label>タイプ</label>
+        <div class="type-tabs" id="typeTabs">
+          <button class="type-tab active" data-type="linear">Linear</button>
+          <button class="type-tab" data-type="radial">Radial</button>
+          <button class="type-tab" data-type="conic">Conic</button>
+        </div>
+      </div>
+      <div class="control-row" id="angleRow">
+        <label>角度</label>
+        <input type="range" class="angle-slider" id="angleSlider" min="0" max="360" value="135">
+        <span class="angle-value" id="angleValue">135°</span>
+      </div>
+      <div class="control-row" id="noiseRow">
+        <label>ノイズ</label>
+        <input type="range" class="angle-slider" id="noiseSlider" min="0" max="40" value="0">
+        <span class="angle-value" id="noiseValue">0%</span>
+        <select id="noiseMode" class="output-select" style="max-width:140px;">
+          <option value="noise" selected>Noise</option>
+          <option value="grain">Grain</option>
+        </select>
+      </div>
+      <div class="stops-section">
+        <h3>カラーストップ</h3>
+        <div class="stops-list" id="stopsList"></div>
+        <button class="add-stop-btn" id="addStopBtn">+ カラーを追加</button>
+      </div>
+    </div>
+
+    <div class="css-output">
+      <div class="css-output-header">
+        <span>CSS コード</span>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <select id="outputFormat" class="output-select">
+            <option value="css">CSS</option>
+            <option value="vars">CSS Variables</option>
+            <option value="tailwind">Tailwind</option>
+            <option value="json">JSON</option>
+          </select>
+          <select id="workspaceSelect" class="workspace-select"></select>
+          <button class="copy-css-btn" id="copyCssBtn">コピー</button>
+          <button class="copy-css-btn" id="shareBtn">共有URL</button>
+          <button class="copy-css-btn" id="svgBtn">SVG保存</button>
+          <button class="copy-css-btn" id="workspaceSaveBtn">WS保存</button>
+          <button class="copy-css-btn" id="workspaceLoadBtn">WS読込</button>
+          <button class="copy-css-btn" id="workspaceNewBtn">WS新規</button>
+        </div>
+      </div>
+      <div class="css-code" id="cssCode"></div>
+    </div>
+
+    <div class="presets-section">
+      <h3>プリセット</h3>
+      <div class="presets-grid" id="presetsGrid"></div>
+    </div>
+  </div>
+
+  <script src="common.js?v=20260303-navlayout4"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      buildNav('gradient');
+      buildHistoryNav('gradient-generator.html');
+      applyTheme();
+      injectCommonStyles();
+
+      const preview = document.getElementById('gradientPreview');
+      const typeTabs = document.getElementById('typeTabs');
+      const angleSlider = document.getElementById('angleSlider');
+      const angleValue = document.getElementById('angleValue');
+      const angleRow = document.getElementById('angleRow');
+      const noiseSlider = document.getElementById('noiseSlider');
+      const noiseValue = document.getElementById('noiseValue');
+      const noiseModeEl = document.getElementById('noiseMode');
+      const stopsList = document.getElementById('stopsList');
+      const addStopBtn = document.getElementById('addStopBtn');
+      const cssCode = document.getElementById('cssCode');
+      const copyCssBtn = document.getElementById('copyCssBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      const svgBtn = document.getElementById('svgBtn');
+      const outputFormat = document.getElementById('outputFormat');
+      const workspaceSelect = document.getElementById('workspaceSelect');
+      const workspaceSaveBtn = document.getElementById('workspaceSaveBtn');
+      const workspaceLoadBtn = document.getElementById('workspaceLoadBtn');
+      const workspaceNewBtn = document.getElementById('workspaceNewBtn');
+      const presetsGrid = document.getElementById('presetsGrid');
+
+      let gradientType = 'linear';
+      let angle = 135;
+      let noiseStrength = 0;
+      let noiseMode = 'noise';
+      let stops = [
+        { color: '#667eea', position: 0 },
+        { color: '#764ba2', position: 100 }
+      ];
+
+      const presets = [
+        { stops: [{ color: '#667eea', position: 0 }, { color: '#764ba2', position: 100 }], angle: 135 },
+        { stops: [{ color: '#f093fb', position: 0 }, { color: '#f5576c', position: 100 }], angle: 135 },
+        { stops: [{ color: '#4facfe', position: 0 }, { color: '#00f2fe', position: 100 }], angle: 135 },
+        { stops: [{ color: '#43e97b', position: 0 }, { color: '#38f9d7', position: 100 }], angle: 135 },
+        { stops: [{ color: '#fa709a', position: 0 }, { color: '#fee140', position: 100 }], angle: 135 },
+        { stops: [{ color: '#a18cd1', position: 0 }, { color: '#fbc2eb', position: 100 }], angle: 135 },
+        { stops: [{ color: '#fccb90', position: 0 }, { color: '#d57eeb', position: 100 }], angle: 135 },
+        { stops: [{ color: '#e0c3fc', position: 0 }, { color: '#8ec5fc', position: 100 }], angle: 135 },
+        { stops: [{ color: '#f5f7fa', position: 0 }, { color: '#c3cfe2', position: 100 }], angle: 135 },
+        { stops: [{ color: '#0c3483', position: 0 }, { color: '#a2b6df', position: 50 }, { color: '#6b8cce', position: 100 }], angle: 135 },
+        { stops: [{ color: '#ff9a9e', position: 0 }, { color: '#fecfef', position: 50 }, { color: '#fdfcfb', position: 100 }], angle: 0 },
+        { stops: [{ color: '#1a1a2e', position: 0 }, { color: '#16213e', position: 50 }, { color: '#0f3460', position: 100 }], angle: 135 },
+      ];
+
+      function buildGradientCSS() {
+        const stopsStr = stops.map(s => `${s.color} ${s.position}%`).join(', ');
+        switch (gradientType) {
+          case 'linear': return `linear-gradient(${angle}deg, ${stopsStr})`;
+          case 'radial': return `radial-gradient(circle, ${stopsStr})`;
+          case 'conic':  return `conic-gradient(from ${angle}deg, ${stopsStr})`;
+        }
+      }
+
+      function buildOutputText() {
+        const css = buildGradientCSS();
+        const fmt = outputFormat.value;
+        if (fmt === 'css') {
+          const noisePart = noiseStrength > 0 ? `\nbackground-image: url(<${noiseMode}-texture>), ${css};\nbackground-blend-mode: overlay;` : '';
+          return `background: ${css};${noisePart}`;
+        }
+        if (fmt === 'vars') {
+          const vars = stops.map((stop, index) => `  --gradient-stop-${index + 1}: ${stop.color};`).join('\n');
+          return `:root {\n${vars}\n  --gradient-value: ${css};\n  --gradient-noise: ${noiseStrength}%;\n}`;
+        }
+        if (fmt === 'tailwind') {
+          const stopsOnly = stops.map(s => s.color.toUpperCase());
+          return `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      backgroundImage: {\n        'custom-gradient': '${css.replace(/'/g, "\\'")}'\n      },\n      colors: ${JSON.stringify(stopsOnly)}\n    }\n  }\n};`;
+        }
+        return JSON.stringify({
+          type: gradientType,
+          angle,
+          noiseStrength,
+            noiseMode,
+          stops,
+          css
+        }, null, 2);
+      }
+
+      function serializeWorkspaceState() {
+        return {
+          type: gradientType,
+          angle,
+          noiseStrength,
+          noiseMode,
+          stops,
+          outputFormat: outputFormat.value
+        };
+      }
+
+      function applyWorkspaceState(state) {
+        if (!state) return;
+        const validTypes = ['linear', 'radial', 'conic'];
+        if (validTypes.includes(state.type)) gradientType = state.type;
+        if (Number.isFinite(state.angle)) angle = Math.max(0, Math.min(360, Number(state.angle)));
+        if (Number.isFinite(state.noiseStrength)) noiseStrength = Math.max(0, Math.min(40, Number(state.noiseStrength)));
+        if (state.noiseMode === 'noise' || state.noiseMode === 'grain') noiseMode = state.noiseMode;
+        if (Array.isArray(state.stops) && state.stops.length >= 2) {
+          stops = state.stops
+            .map((stop) => ({
+              color: /^#[0-9A-Fa-f]{6}$/.test(stop.color) ? stop.color : '#888888',
+              position: Math.max(0, Math.min(100, Number(stop.position) || 0))
+            }))
+            .slice(0, 8);
+        }
+        if (['css', 'vars', 'tailwind', 'json'].includes(state.outputFormat)) {
+          outputFormat.value = state.outputFormat;
+        }
+      }
+
+      function populateWorkspaceProfiles() {
+        const profiles = getWorkspaceProfiles();
+        const active = getActiveWorkspaceProfile();
+        workspaceSelect.innerHTML = '';
+        profiles.forEach((profile) => {
+          const option = document.createElement('option');
+          option.value = profile.id;
+          option.textContent = profile.name;
+          workspaceSelect.appendChild(option);
+        });
+        workspaceSelect.value = active;
+      }
+
+      function saveCurrentWorkspaceState() {
+        const id = workspaceSelect.value || getActiveWorkspaceProfile();
+        saveWorkspaceState('gradient', serializeWorkspaceState(), id);
+        showToast('ワークスペースに保存しました');
+      }
+
+      function loadCurrentWorkspaceState() {
+        const id = workspaceSelect.value || getActiveWorkspaceProfile();
+        const state = loadWorkspaceState('gradient', id);
+        if (!state) {
+          showToast('保存された状態がありません', 2200, 'warning');
+          return;
+        }
+        applyWorkspaceState(state);
+        renderStops();
+        update();
+        showToast('ワークスペース状態を読み込みました');
+      }
+
+      function createNewWorkspaceProfileForPage() {
+        const name = prompt('新しいワークスペース名を入力してください');
+        if (!name) return;
+        const id = createWorkspaceProfile(name);
+        if (!id) return;
+        setActiveWorkspaceProfile(id);
+        populateWorkspaceProfiles();
+        workspaceSelect.value = id;
+        showToast('ワークスペースを作成しました');
+      }
+
+      function generateNoiseDataURL(opacityPercent, mode) {
+        if (opacityPercent <= 0) return '';
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        const image = ctx.createImageData(canvas.width, canvas.height);
+        const alpha = Math.round((opacityPercent / 100) * (mode === 'grain' ? 64 : 90));
+        for (let i = 0; i < image.data.length; i += 4) {
+          const random = Math.random();
+          const value = mode === 'grain'
+            ? Math.round(120 + random * 80)
+            : (random > 0.5 ? 255 : 0);
+          image.data[i] = value;
+          image.data[i + 1] = value;
+          image.data[i + 2] = value;
+          image.data[i + 3] = alpha;
+        }
+        ctx.putImageData(image, 0, 0);
+        return canvas.toDataURL('image/png');
+      }
+
+      function downloadSvg() {
+        if (gradientType === 'conic') {
+          showToast('ConicのSVG出力は未対応です。Linear/Radialを選択してください', 2600, 'warning');
+          return;
+        }
+
+        const ordered = [...stops].sort((a, b) => a.position - b.position);
+        const gradientId = 'grad1';
+        const defs = gradientType === 'linear'
+          ? `<linearGradient id="${gradientId}" gradientTransform="rotate(${angle} .5 .5)">${ordered.map((s) => `<stop offset="${s.position}%" stop-color="${s.color}"/>`).join('')}</linearGradient>`
+          : `<radialGradient id="${gradientId}" cx="50%" cy="50%" r="70%">${ordered.map((s) => `<stop offset="${s.position}%" stop-color="${s.color}"/>`).join('')}</radialGradient>`;
+
+        const noiseFilter = noiseStrength > 0
+          ? `<filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>`
+          : '';
+        const noiseRect = noiseStrength > 0
+          ? `<rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="${Math.min(0.4, noiseStrength / 100)}"/>`
+          : '';
+
+        const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>${defs}${noiseFilter}</defs>
+  <rect width="100%" height="100%" fill="url(#${gradientId})"/>
+  ${noiseRect}
+</svg>`;
+
+        const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'gradient.svg';
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function syncUrlState() {
+        const state = {
+          type: gradientType,
+          angle,
+          noiseStrength,
+          stops
+        };
+        const encoded = btoa(encodeURIComponent(JSON.stringify(state)));
+        const params = new URLSearchParams(window.location.search);
+        params.set('state', encoded);
+        history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+      }
+
+      function applyStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const encoded = params.get('state');
+        if (!encoded) return;
+        try {
+          const state = JSON.parse(decodeURIComponent(atob(encoded)));
+          const validTypes = ['linear', 'radial', 'conic'];
+          if (validTypes.includes(state.type)) gradientType = state.type;
+          if (Number.isFinite(state.angle)) angle = Math.max(0, Math.min(360, Number(state.angle)));
+          if (Number.isFinite(state.noiseStrength)) noiseStrength = Math.max(0, Math.min(40, Number(state.noiseStrength)));
+          if (state.noiseMode === 'noise' || state.noiseMode === 'grain') noiseMode = state.noiseMode;
+          if (Array.isArray(state.stops) && state.stops.length >= 2) {
+            stops = state.stops
+              .map((s) => ({
+                color: /^#[0-9A-Fa-f]{6}$/.test(s.color) ? s.color : '#888888',
+                position: Math.max(0, Math.min(100, Number(s.position) || 0))
+              }))
+              .slice(0, 8);
+          }
+        } catch (error) {
+          console.warn('Invalid shared gradient state', error);
+        }
+      }
+
+      function update() {
+        const css = buildGradientCSS();
+        if (noiseStrength > 0) {
+          const noiseUrl = generateNoiseDataURL(noiseStrength, noiseMode);
+          preview.style.backgroundImage = `url(${noiseUrl}), ${css}`;
+          preview.style.backgroundBlendMode = noiseMode === 'grain' ? 'soft-light, normal' : 'overlay, normal';
+          preview.style.backgroundSize = '128px 128px, cover';
+        } else {
+          preview.style.backgroundImage = css;
+          preview.style.backgroundBlendMode = 'normal';
+          preview.style.backgroundSize = 'cover';
+        }
+        cssCode.textContent = buildOutputText();
+        angleRow.style.display = (gradientType === 'radial') ? 'none' : 'flex';
+        typeTabs.querySelectorAll('.type-tab').forEach((tab) => {
+          tab.classList.toggle('active', tab.dataset.type === gradientType);
+        });
+        angleSlider.value = angle;
+        angleValue.textContent = angle + '°';
+        noiseSlider.value = noiseStrength;
+        noiseValue.textContent = noiseStrength + '%';
+        noiseModeEl.value = noiseMode;
+        syncUrlState();
+      }
+
+      function renderStops() {
+        stopsList.innerHTML = '';
+        stops.forEach((stop, i) => {
+          const row = document.createElement('div');
+          row.className = 'stop-row';
+
+          const colorInput = document.createElement('input');
+          colorInput.type = 'color';
+          colorInput.value = stop.color;
+          colorInput.addEventListener('input', () => {
+            stop.color = colorInput.value;
+            hexInput.value = colorInput.value.toUpperCase();
+            update();
+          });
+
+          const hexInput = document.createElement('input');
+          hexInput.type = 'text';
+          hexInput.value = stop.color.toUpperCase();
+          hexInput.maxLength = 7;
+          hexInput.spellcheck = false;
+          hexInput.addEventListener('input', () => {
+            let val = hexInput.value.trim();
+            if (!val.startsWith('#')) val = '#' + val;
+            if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+              stop.color = val;
+              colorInput.value = val;
+              update();
+            }
+          });
+
+          const posSlider = document.createElement('input');
+          posSlider.type = 'range';
+          posSlider.min = 0;
+          posSlider.max = 100;
+          posSlider.value = stop.position;
+
+          const posLabel = document.createElement('span');
+          posLabel.className = 'stop-pos';
+          posLabel.textContent = stop.position + '%';
+
+          posSlider.addEventListener('input', () => {
+            stop.position = parseInt(posSlider.value);
+            posLabel.textContent = stop.position + '%';
+            update();
+          });
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'stop-remove';
+          removeBtn.textContent = '✕';
+          removeBtn.addEventListener('click', () => {
+            if (stops.length <= 2) {
+              showToast('最低2色必要です');
+              return;
+            }
+            stops.splice(i, 1);
+            renderStops();
+            update();
+          });
+
+          row.appendChild(colorInput);
+          row.appendChild(hexInput);
+          row.appendChild(posSlider);
+          row.appendChild(posLabel);
+          row.appendChild(removeBtn);
+          stopsList.appendChild(row);
+        });
+      }
+
+      function renderPresets() {
+        presetsGrid.innerHTML = '';
+        presets.forEach((preset) => {
+          const item = document.createElement('div');
+          item.className = 'preset-item';
+          const stopsStr = preset.stops.map(s => `${s.color} ${s.position}%`).join(', ');
+          item.style.background = `linear-gradient(${preset.angle}deg, ${stopsStr})`;
+          item.addEventListener('click', () => {
+            stops = preset.stops.map(s => ({ ...s }));
+            angle = preset.angle;
+            noiseStrength = 0;
+            angleSlider.value = angle;
+            angleValue.textContent = angle + '°';
+            renderStops();
+            update();
+          });
+          presetsGrid.appendChild(item);
+        });
+      }
+
+      // Events
+      typeTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.type-tab');
+        if (!tab) return;
+        typeTabs.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        gradientType = tab.dataset.type;
+        update();
+      });
+
+      angleSlider.addEventListener('input', () => {
+        angle = parseInt(angleSlider.value);
+        angleValue.textContent = angle + '°';
+        update();
+      });
+
+      noiseSlider.addEventListener('input', () => {
+        noiseStrength = parseInt(noiseSlider.value, 10);
+        noiseValue.textContent = noiseStrength + '%';
+        update();
+      });
+
+      noiseModeEl.addEventListener('change', () => {
+        noiseMode = noiseModeEl.value === 'grain' ? 'grain' : 'noise';
+        update();
+      });
+
+      addStopBtn.addEventListener('click', () => {
+        if (stops.length >= 8) {
+          showToast('最大8色までです');
+          return;
+        }
+        const lastColor = stops[stops.length - 1]?.color || '#888888';
+        stops.push({ color: lastColor, position: 100 });
+        // Redistribute positions evenly
+        stops.forEach((s, i) => { s.position = Math.round(i / (stops.length - 1) * 100); });
+        renderStops();
+        update();
+      });
+
+      copyCssBtn.addEventListener('click', () => {
+        copyTextToClipboard(cssCode.textContent, {
+          successMessage: 'CSSをコピーしました',
+          emptyMessage: '', fallbackMessage: 'コピーできませんでした'
+        });
+      });
+
+      outputFormat.addEventListener('change', update);
+
+      workspaceSaveBtn.addEventListener('click', saveCurrentWorkspaceState);
+      workspaceLoadBtn.addEventListener('click', loadCurrentWorkspaceState);
+      workspaceNewBtn.addEventListener('click', createNewWorkspaceProfileForPage);
+      workspaceSelect.addEventListener('change', () => setActiveWorkspaceProfile(workspaceSelect.value));
+
+      shareBtn.addEventListener('click', () => {
+        syncUrlState();
+        const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+        copyTextToClipboard(url, {
+          successMessage: '共有URLをコピーしました',
+          emptyMessage: '', fallbackMessage: 'コピーできませんでした'
+        });
+      });
+
+      svgBtn.addEventListener('click', downloadSvg);
+
+      document.addEventListener('keydown', (event) => {
+        const tag = String(event.target?.tagName || '').toLowerCase();
+        const editable = tag === 'input' || tag === 'textarea' || event.target?.isContentEditable;
+        if (editable) return;
+        const key = event.key.toLowerCase();
+        if (key === 'a') {
+          event.preventDefault();
+          addStopBtn.click();
+        }
+        if (key === 'c') {
+          event.preventDefault();
+          copyCssBtn.click();
+        }
+        if (key === 's') {
+          event.preventDefault();
+          shareBtn.click();
+        }
+        if (key === 'e') {
+          event.preventDefault();
+          svgBtn.click();
+        }
+      });
+
+      applyStateFromUrl();
+      populateWorkspaceProfiles();
+      renderStops();
+      renderPresets();
+      update();
+    });
+  </script>
+</body>
+</html>

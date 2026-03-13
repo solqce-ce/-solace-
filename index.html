@@ -10,6 +10,16 @@
     <meta property="og:title" content="solace - Professional Illustration & Character Design">
     <meta property="og:description" content="感情に届くイラスト制作。ゲーム、アニメーション、商用プロジェクト対応。">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://solace-illustration.com/">
+    <meta property="og:site_name" content="solace">
+    <meta property="og:image" content="https://solace-illustration.com/images/og-default.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="solace - Professional Illustration & Character Design">
+    <meta name="twitter:description" content="感情に届くイラスト制作。ゲーム、アニメーション、商用プロジェクト対応。">
+    <meta name="twitter:image" content="https://solace-illustration.com/images/og-default.png">
     <meta name="theme-color" content="#E67E22">
     <title>solace | Professional Illustration & Character Design Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +66,7 @@
                 <p class="logo-subtitle">Illustration Studio</p>
             </div>
             
-            <button class="hamburger" id="hamburger">
+            <button class="hamburger" id="hamburger" aria-label="メニューを開閉" aria-controls="navMenu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -64,16 +74,15 @@
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link">ホーム</a></li>
-                <li><a href="#about" class="nav-link">プロフィール</a></li>
                 <li><a href="#services" class="nav-link">サービス</a></li>
                 <li><a href="#portfolio" class="nav-link">ポートフォリオ</a></li>
                 <li><a href="#pricing" class="nav-link">料金</a></li>
-                <li><a href="#contact" class="nav-link">お問い合わせ</a></li>
                 <li><a href="tools.html" class="nav-link">制作ツール</a></li>
+                <li><a href="#contact" class="nav-link">相談</a></li>
             </ul>
 
             <div class="nav-cta">
-                <a href="#contact" class="btn btn-nav-contact">お問い合わせ</a>
+                <a href="#target-selection" class="btn btn-nav-contact">依頼する</a>
             </div>
         </nav>
     </header>
@@ -85,7 +94,8 @@
             <p class="hero-subtitle">ゲーム業界からエンターテインメント業界まで、<br>プロフェッショナルなイラストレーション制作サービス</p>
             <div class="hero-cta">
                 <a href="#target-selection" class="btn btn-primary">依頼する</a>
-                <a href="#portfolio" class="btn btn-secondary">作品を見る</a>
+                <a href="request.html" class="hero-inline-link">フォームを選ぶ</a>
+                <a href="#portfolio" class="hero-inline-link">まず作品を見る</a>
             </div>
         </div>
         <div class="hero-visual">
@@ -98,29 +108,34 @@
     <section class="quick-access" aria-label="クイック導線">
         <div class="section-container">
             <div class="section-header compact">
-                <h3 class="section-title">クイック導線</h3>
-                <p class="section-subtitle">目的別にすぐ移動できます</p>
+                <h2 class="section-title">クイック導線</h2>
+                <p class="section-subtitle">目的からすぐ進めます</p>
             </div>
             <div class="quick-access-grid">
                 <a href="request-corporate.html" class="quick-access-item">
                     <div class="quick-access-label">企業向け</div>
-                    <h4>案件相談を始める</h4>
-                    <p>法人・チーム向けの依頼フォームへ</p>
+                    <h4>案件相談へ</h4>
+                    <p>法人・チームのご相談はこちら</p>
                 </a>
                 <a href="request-personal.html" class="quick-access-item">
                     <div class="quick-access-label">個人向け</div>
-                    <h4>個人依頼を相談する</h4>
-                    <p>個人制作・同人向けの相談フォームへ</p>
+                    <h4>個人相談へ</h4>
+                    <p>個人制作・同人のご相談はこちら</p>
+                </a>
+                <a href="before-after.html" class="quick-access-item">
+                    <div class="quick-access-label">比較</div>
+                    <h4>ビフォーアフター</h4>
+                    <p>改善前後の比較事例を見る</p>
                 </a>
                 <a href="#pricing" class="quick-access-item">
                     <div class="quick-access-label">料金</div>
-                    <h4>料金表を見る</h4>
-                    <p>プラン別の価格目安を確認</p>
+                    <h4>料金を確認</h4>
+                    <p>プラン別の目安をチェック</p>
                 </a>
                 <a href="tools.html" class="quick-access-item">
                     <div class="quick-access-label">ツール</div>
-                    <h4>制作支援ツールを見る</h4>
-                    <p>ジェネレーター機能をまとめた紹介ページへ</p>
+                    <h4>制作ツールへ</h4>
+                    <p>支援ツールをまとめて見る</p>
                 </a>
             </div>
         </div>
@@ -130,7 +145,7 @@
     <section class="target-selection" id="target-selection">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">ご依頼について</h3>
+                <h2 class="section-title">ご依頼について</h2>
                 <p class="section-subtitle">目的に応じた最適なプランをご案内します</p>
             </div>
 
@@ -172,7 +187,7 @@
     <section class="about" id="about">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">プロフィール</h3>
+                <h2 class="section-title">プロフィール</h2>
                 <p class="section-subtitle">solaceについて</p>
             </div>
 
@@ -241,7 +256,7 @@
     <section class="services" id="services">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">サービス</h3>
+                <h2 class="section-title">サービス</h2>
                 <p class="section-subtitle">提供しているサービス内容</p>
             </div>
 
@@ -331,7 +346,7 @@
     <section class="portfolio" id="portfolio">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">ポートフォリオ</h3>
+                <h2 class="section-title">ポートフォリオ</h2>
                 <p class="section-subtitle">過去の作品と実績</p>
             </div>
 
@@ -420,9 +435,13 @@
             <div class="portfolio-cta">
                 <p>その他の作品はSNSをチェック</p>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/solqc_e/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://x.com/solqc_e" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
-                    <a href="https://www.pixiv.net/users/87167514" target="_blank" title="Pixiv"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
+                    <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
+                    <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
                 </div>
             </div>
         </div>
@@ -432,7 +451,7 @@
     <section class="pricing" id="pricing">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">料金表</h3>
+                <h2 class="section-title">料金表</h2>
                 <p class="section-subtitle">サービス別の料金参考値</p>
             </div>
 
@@ -498,56 +517,14 @@
     <section class="testimonials">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">クライアントの声</h3>
-                <p class="section-subtitle">実際のお客様からのご意見</p>
+                <h2 class="section-title">クライアントの声</h2>
+                <p class="section-subtitle">現在、クライアントの声をお待ちしております。</p>
             </div>
 
             <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
+                <div class="testimonial-card empty-state">
                     <p class="testimonial-text">
-                        「当社のゲーム開発プロジェクトでキャラクターデザインを依頼しました。細かい要望にも丁寧に対応していただき、納期も守っていただけました。品質も高く、非常に満足しています。」
-                    </p>
-                    <p class="testimonial-author">
-                        <strong>ゲーム開発企業 A様</strong>
-                    </p>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">
-                        「修正対応が素晴らしく、こちらの意図をしっかり理解してくれました。コミュニケーションも円滑で、今後も継続的にお願いしたいと考えています。」
-                    </p>
-                    <p class="testimonial-author">
-                        <strong>アニメーション制作会社 B様</strong>
-                    </p>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">
-                        「SNSで見かけたsolaceさんの作品に惹かれて依頼しました。期待以上のクオリティでした！本当にありがとうございます。」
-                    </p>
-                    <p class="testimonial-author">
-                        <strong>個人ゲーム開発者 C様</strong>
+                        クライアントの声は現在準備中です。ご感想をお待ちしております。
                     </p>
                 </div>
             </div>
@@ -558,9 +535,11 @@
     <section class="faq">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">よくある質問</h3>
+                <h2 class="section-title">よくある質問</h2>
                 <p class="section-subtitle">よくいただくご質問と回答</p>
             </div>
+
+            <p class="faq-contact-note">詳細な質問は右下チャットで確認できます。見つからない場合は、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> へご連絡ください。</p>
 
             <div class="faq-list">
                 <details class="faq-item">
@@ -579,18 +558,18 @@
                 </details>
 
                 <details class="faq-item">
-                    <summary>ラフから完成まで、どのような流れですか？</summary>
-                    <p>1) ご依頼内容のヒアリング、2) ラフスケッチの制作・確認、3) 線画・色塗りの進行、4) 最終調整・納品、という流れで進めます。各段階でご確認いただけます。</p>
-                </details>
-
-                <details class="faq-item">
-                    <summary>返金対応はありますか？</summary>
-                    <p>納品物に対する満足が得られない場合、契約内容に応じて対応いたします。詳細はご依頼時にご相談ください。</p>
+                    <summary>料金の目安はどのくらいですか？</summary>
+                    <p>料金は作品の複雑さや納期によって変動します。内容を伺ったうえで、用途に合わせたお見積もりをご案内します。</p>
                 </details>
 
                 <details class="faq-item">
                     <summary>著作権はどうなりますか？</summary>
                     <p>基本的に著作権はsolaceに帰属します。ただし、商用利用される場合は著作権譲渡も可能です。ご依頼時にご相談ください。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>FAQにない内容を相談したいです</summary>
+                    <p>右下チャットで質問すると詳細FAQに回答します。見つからない場合は、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。</p>
                 </details>
             </div>
         </div>
@@ -600,7 +579,7 @@
     <section class="contact" id="contact">
         <div class="section-container">
             <div class="section-header">
-                <h3 class="section-title">お問い合わせ</h3>
+                <h2 class="section-title">お問い合わせ</h2>
                 <p class="section-subtitle">ご依頼・ご相談をお受けします</p>
             </div>
 
@@ -634,14 +613,23 @@
                 </div>
             </div>
 
+            <p class="text-center text-light font-sm mt-lg">
+                ご依頼前に <a href="privacy-policy.html">プライバシーポリシー</a> ・ <a href="terms.html">利用規約</a> ・ <a href="tokutei-shotorihiki.html">特商法表記</a> ・ <a href="cancellation-policy.html">返金・キャンセルポリシー</a> をご確認ください。
+            </p>
+
             <div class="text-center mt-xl pt-xl border-top-subtle">
                 <h5 class="mb-md">または</h5>
                 <p class="text-light mb-lg">
                     SNS DM でもお気軽にお問い合わせください
                 </p>
                 <div class="social-links">
-                    <a href="https://instagram.com/solqc_e" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://x.com/solqc_e" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
+                    <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
+                    <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
                 </div>
             </div>
         </div>
@@ -658,20 +646,29 @@
             <div class="footer-section">
                 <h5>リンク</h5>
                 <ul>
-                    <li><a href="#about">プロフィール</a></li>
+                    <li><a href="#home">ホーム</a></li>
                     <li><a href="#services">サービス</a></li>
                     <li><a href="#portfolio">ポートフォリオ</a></li>
-                    <li><a href="#contact">お問い合わせ</a></li>
+                    <li><a href="#contact">相談</a></li>
+                    <li><a href="before-after.html">ビフォーアフター</a></li>
+                    <li><a href="request.html">依頼フォーム選択</a></li>
+                    <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
+                    <li><a href="terms.html">利用規約</a></li>
+                    <li><a href="tokutei-shotorihiki.html">特商法表記</a></li>
+                    <li><a href="cancellation-policy.html">返金・キャンセル</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h5>フォロー</h5>
                 <div class="footer-social">
-                    <a href="https://instagram.com/solqc_e" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://x.com/solqc_e" target="_blank"><i class="fab fa-x-twitter"></i></a>
-                    <a href="https://www.pixiv.net/users/87167514" target="_blank"><i class="fab fa-pixiv"></i></a>
-                    <a href="https://youtube.com/@solqc_e" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
+                    <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
+                    <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
                 </div>
             </div>
         </div>
@@ -681,6 +678,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260302-chatfix" defer></script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="solace - Illustration Studio">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1F2937" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E67E22" />
+      <stop offset="100%" stop-color="#F39C12" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="980" cy="120" r="190" fill="#FFFFFF" opacity="0.05" />
+  <circle cx="140" cy="560" r="220" fill="#FFFFFF" opacity="0.04" />
+
+  <rect x="90" y="90" width="10" height="450" fill="url(#accent)" />
+
+  <text x="130" y="235" fill="#FFFFFF" font-family="'Noto Sans JP', 'Segoe UI', sans-serif" font-size="92" font-weight="700" letter-spacing="1">solace</text>
+  <text x="132" y="300" fill="#CBD5E1" font-family="'Noto Sans JP', 'Segoe UI', sans-serif" font-size="38" font-weight="500">Illustration Studio</text>
+
+  <text x="130" y="390" fill="#F3F4F6" font-family="'Noto Sans JP', 'Segoe UI', sans-serif" font-size="40" font-weight="600">感情に届くイラスト制作</text>
+  <text x="130" y="445" fill="#D1D5DB" font-family="'Noto Sans JP', 'Segoe UI', sans-serif" font-size="30" font-weight="400">Character Design / Visual Production</text>
+
+  <text x="130" y="530" fill="#9CA3AF" font-family="'Noto Sans JP', 'Segoe UI', sans-serif" font-size="24" font-weight="400">https://solace-illustration.com/</text>
+</svg>

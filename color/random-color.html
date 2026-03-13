@@ -3,7 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ランダムカラー - Palette Generator Pro</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <style>
+    /* ===== 生成エリアのラベル（ダークモード対応） ===== */
+    html.dark .generate-row label {
+      color: #c7d2fe !important;
+      text-shadow: 0 1px 2px #23264a99;
+    }
+    html.dark .generate-row .field-hint {
+      color: #a5b4fc !important;
+    }
+  </style>
+  
+  <script>
+    (function() {
+      const normalizeTheme = (value) => (value === 'dark' || value === 'light') ? value : null;
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = normalizeTheme(saved) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      // 生成エリアのダークモード適応
+      function applyGenRowDarkMode() {
+        var isDark = document.documentElement.classList.contains('dark');
+        var genRow = document.querySelector('.generate-row');
+        if (!genRow) return;
+        if (isDark) {
+          genRow.style.background = genRow.getAttribute('data-dark-bg') || 'linear-gradient(90deg,#23264a 60%,#181a2b 100%)';
+          genRow.style.borderColor = genRow.getAttribute('data-dark-border') || '#818cf8';
+          genRow.style.boxShadow = genRow.getAttribute('data-dark-shadow') || '0 2px 12px #6366f133';
+        } else {
+          genRow.style.background = 'linear-gradient(90deg,#f1f5ff 60%,#e0e7ff 100%)';
+          genRow.style.borderColor = '#6366f1';
+          genRow.style.boxShadow = '0 2px 12px rgba(99,102,241,0.08)';
+        }
+      }
+      window.applyGenRowDarkMode = applyGenRowDarkMode;
+      window.addEventListener('DOMContentLoaded', applyGenRowDarkMode);
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyGenRowDarkMode);
+      // もしテーマ切替UIがあれば、そちらからも window.applyGenRowDarkMode() を呼ぶこと
+    })();
+  </script>
+  <title>Random Color - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
   <script>
@@ -12,337 +56,2616 @@
     gtag('js', new Date());
     gtag('config', 'G-17HK77SMHP');
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
-      font-family:'Plus Jakarta Sans',-apple-system,sans-serif;
-      margin:0;
-      padding:0;
-      background:#ffffff;
-      color:#0f172a;
-      transition:all 0.4s;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fafafa;
+      color: #1a1a1a;
+      transition: background 0.3s, color 0.3s;
     }
     html.dark body {
-      background: #1e293b;
-      color: #e2e8f0;
+      background: #111113;
+      color: #e4e4e7;
     }
+
     .container {
-      max-width:1400px;
-      margin:0 auto;
-      padding:80px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
     }
-    h1 {
-      font-family:'Syne',sans-serif;
-      font-size:3rem;
-      margin:0 0 60px;
-      font-weight:800;
-        letter-spacing:-1px;
-      color:#0f172a;
+
+    /* ===== Header ===== */
+    .page-header {
+      margin-bottom: 48px;
     }
-    html.dark h1 {
-      color: #f1f5f9;
+    .page-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #1a1a1a;
+      margin: 0 0 8px;
     }
-    .controls {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:30px;
-      padding:50px 40px;
-      background:#ffffff;
-      border:none;
-      border-left: 5px solid #334155;
-      border-radius:0;
-      margin-bottom:60px;
-      box-shadow:none;
-      transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    html.dark .page-header h1 {
+      color: #fafafa;
     }
-    html.dark .controls {
-      background: #334155;
-      border-left-color: #64748b;
-      box-shadow: none;
+    .page-header .subtitle {
+      font-size: 0.875rem;
+      color: #71717a;
+      font-weight: 400;
+      margin: 0;
     }
-    .controls label {
-      font-size:0.95rem;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:0.5px;
+    html.dark .page-header .subtitle {
+      color: #a1a1aa;
     }
-    .controls select {
-      padding:12px 14px;
-      font-size:1rem;
-      border-radius:8px;
-      border:2px solid #e2e8f0;
-      background:#ffffff;
-      cursor:pointer;
-      transition:all 0.2s;
-      font-family:'Plus Jakarta Sans',sans-serif;
+
+    /* ===== Toolbar (Controls) ===== */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      margin-bottom: 10px;
     }
-    html.dark .controls select {
-      background: #475569;
-      border-color: #64748b;
-      color: #f1f5f9;
+    html.dark .toolbar {
+      background: #18181b;
+      border-color: #27272a;
     }
-    .controls select:hover {
-      border-color:#334155;
-      box-shadow:0 0 0 3px rgba(51, 65, 85, 0.08);
+
+    .toolbar .field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
     }
-    .controls select:focus {
-      outline:none;
-      border-color:#334155;
-      box-shadow:0 0 0 4px rgba(51, 65, 85, 0.12);
+    .toolbar .field.tone-field {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
     }
-    .controls button {
-      padding:16px 28px;
-      font-size:1rem;
-      border-radius:0;
-      border:none;
-      background:#334155;
-      color:#fff;
-      cursor:pointer;
-      transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-      font-weight:700;
-      font-family:'Plus Jakarta Sans',sans-serif;
-      box-shadow:none;
-      text-transform:uppercase;
-      letter-spacing:0.5px;
+    .toolbar .field label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #71717a;
+      white-space: nowrap;
     }
-    .controls button:hover {
-      transform:none;
-      box-shadow:none;
-      background:#1e293b;
-      letter-spacing:1px;
+    html.dark .toolbar .field label {
+      color: #a1a1aa;
     }
+    .field-hint {
+      font-size: 0.72rem;
+      color: #71717a;
+      line-height: 1.35;
+    }
+    html.dark .field-hint {
+      color: #cbd5e1;
+    }
+    .toolbar select {
+      padding: 8px 12px;
+      font-size: 0.8125rem;
+      border-radius: 8px;
+      border: 1px solid #e4e4e7;
+      background: #fafafa;
+      color: #1a1a1a;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 5 3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+    html.dark .toolbar select {
+      background-color: #27272a;
+      border-color: #3f3f46;
+      color: #e4e4e7;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 5 3 3 3-3'/%3E%3C/svg%3E");
+    }
+    .toolbar select:focus {
+      outline: none;
+      border-color: #1a1a1a;
+      box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.08);
+    }
+    html.dark .toolbar select:focus {
+      border-color: #71717a;
+      box-shadow: 0 0 0 2px rgba(113, 113, 122, 0.15);
+    }
+    .toolbar .generate-area {
+      margin-left: 0;
+    }
+    .toolbar .separator {
+      display: none;
+    }
+
+    /* ===== Tool Cards Grid ===== */
+    .tool-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .tool-card {
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #ffffff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    html.dark .tool-card {
+      border-color: #27272a;
+      background: #18181b;
+    }
+    .tool-card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #71717a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.02em;
+    }
+    html.dark .tool-card-title {
+      color: #d4d4d8;
+    }
+    .tool-card-body {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .tool-card-body .btn {
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+    }
+    /* .tool-card.span-2 { grid-column: span 2; } ← 不要なので削除 */
+    .copy-option {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.6875rem;
+      color: #71717a;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    html.dark .copy-option {
+      color: #a1a1aa;
+    }
+    .copy-option input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: #6366f1;
+    }
+    .group-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .extract-preview {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      min-height: 30px;
+    }
+    .extract-chip {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    html.dark .extract-chip {
+      border-color: rgba(255,255,255,0.12);
+    }
+    .extract-chip:hover {
+      transform: translateY(-1px);
+    }
+    .extract-help {
+      font-size: 0.75rem;
+      color: #71717a;
+    }
+    html.dark .extract-help {
+      color: #a1a1aa;
+    }
+    .workspace-select {
+      flex: 1;
+      min-width: 120px;
+      padding: 7px 28px 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #e4e4e7;
+      background: #fafafa;
+      color: #1a1a1a;
+      font-size: 0.75rem;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+      cursor: pointer;
+    }
+    html.dark .workspace-select {
+      background-color: #27272a;
+      border-color: #3f3f46;
+      color: #e4e4e7;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+    }
+    .ws-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .ws-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.68rem;
+      color: #a1a1aa;
+      min-height: 20px;
+      flex-wrap: wrap;
+    }
+    html.dark .ws-meta {
+      color: #71717a;
+    }
+    .ws-meta .ws-saved-at {
+      opacity: 0.85;
+    }
+    .ws-autosave-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      color: #71717a;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    html.dark .ws-autosave-label {
+      color: #a1a1aa;
+    }
+    .ws-autosave-label input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: #6366f1;
+    }
+    .ws-btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 6px;
+      border: 1px solid #e4e4e7;
+      background: transparent;
+      color: #71717a;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.15s;
+    }
+    .ws-btn-icon:hover {
+      background: #f4f4f5;
+      color: #3f3f46;
+      border-color: #d4d4d8;
+    }
+    .ws-btn-icon.danger:hover {
+      background: #fef2f2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+    html.dark .ws-btn-icon {
+      border-color: #3f3f46;
+      color: #a1a1aa;
+    }
+    html.dark .ws-btn-icon:hover {
+      background: #27272a;
+      color: #e4e4e7;
+      border-color: #52525b;
+    }
+    html.dark .ws-btn-icon.danger:hover {
+      background: #2a1515;
+      color: #f87171;
+      border-color: #7f1d1d;
+    }
+
+    /* ===== Help Tooltip ===== */
+    .help-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      min-height: 18px;
+      max-height: 18px;
+      min-width: 18px;
+      max-width: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #a1a1aa;
+      background: transparent;
+      color: #a1a1aa;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: system-ui, -apple-system, sans-serif;
+      cursor: pointer;
+      padding: 0 0 1px 0;
+      line-height: 1;
+      text-align: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+      flex-grow: 0;
+      align-self: center;
+      vertical-align: middle;
+      margin-left: 4px;
+      box-sizing: border-box;
+    }
+    .help-toggle:hover {
+      border-color: #6366f1;
+      color: #6366f1;
+      background: rgba(99, 102, 241, 0.08);
+    }
+    html.dark .help-toggle {
+      border-color: #71717a;
+      color: #71717a;
+    }
+    html.dark .help-toggle:hover {
+      border-color: #818cf8;
+      color: #818cf8;
+      background: rgba(129, 140, 248, 0.1);
+    }
+    .help-toggle[aria-expanded="true"] {
+      border-color: #6366f1;
+      color: #fff;
+      background: #6366f1;
+    }
+    html.dark .help-toggle[aria-expanded="true"] {
+      border-color: #818cf8;
+      color: #fff;
+      background: #818cf8;
+    }
+    .help-popup {
+      display: none;
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 100%;
+      margin-top: 4px;
+      padding: 10px 12px;
+      background: #f4f4f5;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      line-height: 1.55;
+      color: #3f3f46;
+      animation: helpFadeIn 0.15s ease;
+      z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    html.dark .help-popup {
+      background: #27272a;
+      border-color: #3f3f46;
+      color: #d4d4d8;
+    }
+    .help-popup.open {
+      display: block;
+    }
+    @keyframes helpFadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      padding: 8px 18px;
+      font-size: 0.8125rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #333333;
+    }
+    html.dark .btn-primary {
+      background: #fafafa;
+      color: #18181b;
+    }
+    html.dark .btn-primary:hover {
+      background: #e4e4e7;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #52525b;
+      border: 1px solid #e4e4e7;
+    }
+    .btn-secondary:hover {
+      background: #f4f4f5;
+      border-color: #d4d4d8;
+    }
+    html.dark .btn-secondary {
+      color: #a1a1aa;
+      border-color: #3f3f46;
+    }
+    html.dark .btn-secondary:hover {
+      background: #27272a;
+      border-color: #52525b;
+    }
+
+    /* ===== Palette Grid ===== */
     .palette {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-      gap:0;
-      padding:0;
-    }
-    .swatch {
-      position:relative;
-      height:180px;
-      border-radius:0;
-      cursor:pointer;
-      overflow:hidden;
-      box-shadow:none;
-      transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-      border:1px solid #e2e8f0;
-    }
-    .swatch::before {
-      content:'';
-      position:absolute;
-      top:0;
-      left:-100%;
-      width:100%;
-      height:100%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-      transition:left 0.5s;
-      pointer-events:none;
-    }
-    .swatch:hover::before {
-      left: 100%;
-    }
-    .swatch:hover {
-      transform:scale(1.05);
-      box-shadow:0 8px 20px rgba(15, 23, 42, 0.15);
-      z-index:10;
-    }
-    @media (max-width: 768px) {
-      .controls {
-        grid-template-columns: 1fr;
-        padding: 24px 20px;
-        gap: 16px;
-      }
-
-      .form-group {
-        margin-right: 0;
-      }
-
-      .palette {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 12px;
-      }
-
-      .swatch {
-        height: 110px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .controls {
-        grid-template-columns: 1fr;
-        padding: 16px;
-        gap: 12px;
-      }
-
-      .controls label {
-        font-size: 0.85rem;
-      }
-
-      .palette {
-        grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-        gap: 8px;
-      }
-
-      .swatch {
-        height: 85px;
-        border-radius: 10px;
-      }
-
-      .swatch .code {
-        font-size: 0.8rem;
-        padding: 4px 6px;
-      }
-
-      .swatch .lock {
-        font-size: 1rem;
-        top: 4px;
-        right: 4px;
-      }
-    }
-    .swatch .code {
-      position:absolute;
-      bottom:8px;
-      left:8px;
-      background:rgba(0,0,0,0.7);
-      color:#fff;
-      padding:6px 10px;
-      font-size:0.85rem;
-      border-radius:6px;
-      font-weight:700;
-      letter-spacing:0.5px;
-      backdrop-filter:blur(4px);
+      display: grid;
+      gap: 16px;
+      width: 100%;
+      min-height: 160px;
+      align-items: unset;
+      justify-content: start;
+      /* grid-template-columns はJSで個数に応じて動的に設定 */
     }
     .swatch .lock {
-      position:absolute;
-      top:8px;
-      right:8px;
-      font-size:1.3rem;
-      color:rgba(255,255,255,0.9);
-      text-shadow:0 0 4px rgba(0,0,0,0.6);
-      cursor:pointer;
-      filter:drop-shadow(0 0 2px rgba(0,0,0,0.3));
-      transition:all 0.2s;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, background 0.2s, box-shadow 0.2s, border-color 0.2s;
+      opacity: 0.85;
+      background: linear-gradient(135deg, #e5e7eb 60%, #a3a3a3 100%);
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px #23232a22;
+      border: 2.5px solid #d1d5db;
+      z-index: 20;
+      overflow: hidden;
+    }
+    .swatch:hover {
+      transform: translateY(-3px) scale(1.025);
+      box-shadow: 0 6px 24px 0 rgba(99,102,241,0.13), 0 1.5px 12px 0 rgba(120,130,180,0.10) inset;
+      background: linear-gradient(120deg, rgba(255,255,255,0.22) 0%, rgba(236,240,255,0.13) 100%);
+      backdrop-filter: blur(6px) saturate(1.12);
+      -webkit-backdrop-filter: blur(6px) saturate(1.12);
+      border: 1.5px solid #c7d2fe88;
+      outline: none;
+        .swatch:focus-within {
+          transform: translateY(-3px) scale(1.025);
+          box-shadow: 0 6px 24px 0 rgba(99,102,241,0.13), 0 1.5px 12px 0 rgba(120,130,180,0.10) inset;
+          background: linear-gradient(120deg, rgba(255,255,255,0.22) 0%, rgba(236,240,255,0.13) 100%);
+          backdrop-filter: blur(6px) saturate(1.12);
+          -webkit-backdrop-filter: blur(6px) saturate(1.12);
+          border: 1.5px solid #c7d2fecc;
+          outline: none;
+    }
+
+    .swatch .code {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.60);
+      color: #fff;
+      padding: 6px 12px;
+      font-size: clamp(0.75rem, 2vw, 1.05rem);
+      border-radius: 8px;
+      font-weight: 600;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.2s;
+      max-width: 100%;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-all;
+      text-align: center;
+      box-sizing: border-box;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .swatch:hover .code {
+      opacity: 1;
+      max-width: 100vw;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-all;
+      text-align: center;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .swatch .lock {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, background 0.2s, box-shadow 0.2s, border-color 0.2s;
+      opacity: 0.85;
+      background: linear-gradient(135deg, #e5e7eb 60%, #a3a3a3 100%);
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px #23232a22;
+      border: 2px solid #d1d5db;
+      z-index: 20;
+      overflow: hidden;
+      color: #6366f1;
+    }
+    .swatch .lock svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: #6366f1;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+      transition: stroke 0.22s, filter 0.22s, transform 0.22s;
     }
     .swatch .lock:hover {
-      transform:scale(1.15);
+      opacity: 1;
+      background: linear-gradient(135deg, rgba(30,30,40,0.13) 0%, rgba(60,60,80,0.10) 100%);
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 16px #cbd5e144, 0 0 8px 2px #c7d2fe33;
+      filter: brightness(1.10) saturate(1.14);
+      border-radius: 8px !important;
+      background: linear-gradient(135deg, rgba(30,30,40,0.13) 0%, rgba(60,60,80,0.10) 100%);
+      border-radius: 8px !important;
     }
     .swatch.locked .lock {
-      color:#ffeb3b;
-      text-shadow:0 0 6px rgba(255,235,59,0.6);
+      background: linear-gradient(135deg, #23272f 60%, #0e172a 100%);
+      border-color: #818cf8;
+      box-shadow: 0 4px 18px #6366f199, 0 0 16px 3px #818cf8cc;
+      opacity: 1;
+      border-radius: 8px !important;
+    }
+    .swatch.locked .lock svg {
+      stroke: #818cf8;
+      stroke-width: 2.1;
+      filter: drop-shadow(0 1.5px 4px #818cf8cc);
+      transform: scale(1.12) rotate(-8deg);
+    }
+    /* --- 不要な重複・誤ったロックアイコン定義を削除 --- */
+
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 16px 64px;
+      }
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .toolbar .field {
+        justify-content: space-between;
+      }
+      .toolbar .field.tone-field {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar .field select {
+        flex: 1;
+        max-width: 180px;
+      }
+      .toolbar .field.tone-field select {
+        max-width: 100%;
+      }
+      .toolbar .generate-area {
+        margin-left: 0;
+      }
+      .toolbar .generate-area .btn {
+        width: 100%;
+      }
+      .tool-cards {
+        grid-template-columns: 1fr;
+      }
+      .tool-card.span-2 {
+        grid-column: span 1;
+      }
+      .tool-card-body .btn {
+        min-width: 0;
+      }
+      .palette {
+        gap: 8px;
+      }
+    }
+    @media (max-width: 480px) {
+      .page-header h1 {
+        font-size: 1.375rem;
+      }
+      .palette {
+        gap: 4px;
+      }
+      .swatch {
+          height: auto;
+        border-radius: 8px;
+      }
+      .swatch .code {
+        font-size: 0.625rem;
+        padding: 3px 5px;
+        bottom: 6px;
+        left: 6px;
+        opacity: 1;
+      }
+      /* .swatch-detailはスマホ幅でもhover時以外はopacity:0を維持 */
+      .swatch-detail {
+        opacity: 0 !important;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .swatch:hover .swatch-detail,
+      .swatch:focus-within .swatch-detail,
+      .swatch-detail:hover {
+        opacity: 1 !important;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      .swatch .lock {
+        opacity: 0.7;
+        width: 28px;
+        height: 28px;
+        top: 4px;
+        right: 50%;
+        transform: translateX(50%);
+        border-radius: 8px !important;
+        z-index: 20;
+      }
+      .swatch .lock svg {
+        width: 14px;
+        height: 14px;
+      }
+      .swatch.locked .lock {
+        opacity: 1;
+      }
+    }
+    /* ===== Swatch Detail Panel ===== */
+    .swatch-detail {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 38px 10px 10px 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .swatch:hover .swatch-detail {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .swatch-detail .color-name {
+      font-size: 0.6875rem;
+      color: rgba(255,255,255,0.65);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .swatch-detail .color-values {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .swatch-detail .color-value {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+    }
+    .swatch-detail .color-value span {
+      flex: 1 1 0;
+      text-align: left;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .swatch-detail .color-value .copy-btn {
+      min-width: 44px;
+      margin-left: auto;
+      text-align: center;
+      display: inline-block;
+    }
+    .swatch-detail .color-value span {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.6875rem;
+      color: #fff;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .swatch-detail .copy-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.625rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .swatch-detail .copy-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    /* ===== Palette History ===== */
+    .history-section {
+      margin-top: 48px;
+      border-top: 1px solid #e4e4e7;
+      padding-top: 32px;
+    }
+    html.dark .history-section {
+      border-top-color: #27272a;
+    }
+    .history-section h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 16px;
+      color: #52525b;
+    }
+    html.dark .history-section h2 {
+      color: #a1a1aa;
+    }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid #e4e4e7;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    html.dark .history-item {
+      background: #18181b;
+      border-color: #27272a;
+    }
+    .history-item:hover {
+      background: #f4f4f5;
+      border-color: #d4d4d8;
+    }
+    html.dark .history-item:hover {
+      background: #27272a;
+      border-color: #3f3f46;
+    }
+    .history-colors {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .history-colors .mini-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    html.dark .history-colors .mini-swatch {
+      border-color: rgba(255,255,255,0.08);
+    }
+    .history-meta {
+      font-size: 0.75rem;
+      color: #71717a;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    html.dark .history-meta {
+      color: #52525b;
+    }
+    .history-delete {
+      background: none;
+      border: none;
+      color: #a1a1aa;
+      cursor: pointer;
+      font-size: 0.875rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .history-delete:hover {
+      color: #ef4444;
+      background: rgba(239,68,68,0.08);
+    }
+    .history-empty {
+      font-size: 0.8125rem;
+      color: #a1a1aa;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .ban-warning {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid #f59e0b;
+      background: rgba(245, 158, 11, 0.08);
+      border-radius: 10px;
+      color: #92400e;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    html.dark .ban-warning {
+      border-color: #fbbf24;
+      background: rgba(251, 191, 36, 0.14);
+      color: #fde68a;
+    }
+    .ban-warning ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .ui-preview {
+      margin-top: 24px;
+      border: 1px solid #e4e4e7;
+      border-radius: 14px;
+      overflow: visible;
+      background: #ffffff;
+      position: relative;
+    }
+    html.dark .ui-preview {
+      border-color: #334155;
+      background: #0f172a;
+    }
+    .ui-preview-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e4e4e7;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    html.dark .ui-preview-header {
+      border-bottom-color: #334155;
+      color: #e2e8f0;
+    }
+    .ui-preview-body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .ui-preview-chip-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      gap: 8px;
+    }
+    .ui-chip {
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.08);
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.02em;
+      color: #0f172a;
+      text-transform: uppercase;
+    }
+    .ui-preview-card {
+      border: 1px solid #e4e4e7;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
+      color: #0f172a;
+    }
+    html.dark .ui-preview-card {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .ui-preview-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ui-preview-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: default;
+    }
+    .ui-preview-input {
+      width: auto;
+      border: 1px solid #d4d4d8;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      background: #fff;
+      color: #111827;
+    }
+
+    .compare-panel,
+    .suggest-panel {
+      margin-top: 18px;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.82);
+      position: relative;
+    }
+    html.dark .compare-panel,
+    html.dark .suggest-panel {
+      border-color: #334155;
+      background: rgba(15,23,42,0.55);
+    }
+    .compare-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .compare-output,
+    .suggest-output {
+      white-space: pre-wrap;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      border: 1px dashed rgba(51,65,85,0.3);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 60px;
+    }
+    .suggest-input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    /* ===== Responsive detail ===== */
+    @media (max-width: 480px) {
+      .swatch-detail .color-name {
+        font-size: 0.5625rem;
+      }
+      .swatch-detail .color-value span {
+        font-size: 0.5625rem;
+      }
+      .swatch-detail .copy-btn {
+        font-size: 0.5rem;
+        padding: 1px 4px;
+      }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
   <div id="toast" class="toast"></div>
 
   <div class="container">
-    <h1>🎨 ランダムカラー</h1>
+    <div class="page-header">
+      <h1>Random Color</h1>
+      <p class="subtitle">クリックで個別に再生成 / ロックで色を固定</p>
+    </div>
     <div class="history-nav" id="historyNav"></div>
 
-    <div class="controls">
-      <label>個数:
-        <select id="countSelect">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10" selected>10</option>
-        </select>
-      </label>
-      <div class="form-group max-w-200">
-        <label for="familySelect">系統</label>
-        <select id="familySelect">
-          <option value="all" selected>全系統</option>
-          <option value="red">赤系</option>
-          <option value="orange">橙系</option>
-          <option value="yellow">黄系</option>
-          <option value="green">緑系</option>
-          <option value="blue">青系</option>
-          <option value="purple">紫系</option>
-        </select>
+    <!-- Tool Cards -->
+    <div class="tool-cards" style="gap: 32px;">
+      <!-- 生成エリア -->
+      <div class="tool-card" style="margin-bottom: 0;">
+        <div class="tool-card-body" style="gap: 0; padding-bottom: 0;">
+          <div class="generate-row" style="display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:linear-gradient(90deg,#f1f5ff 60%,#e0e7ff 100%); border:2px solid #6366f1; border-radius:14px; box-shadow:0 2px 12px rgba(99,102,241,0.08); padding:14px 14px 14px 14px; margin-bottom:0;"
+            data-dark-bg="linear-gradient(90deg,#23264a 60%,#181a2b 100%)" data-dark-border="#818cf8" data-dark-shadow="0 2px 12px #6366f133">
+            <div class="field" style="display:flex; align-items:center; min-width:110px; gap:6px;">
+              <label for="countSelect" class="gen-label">個数</label>
+              <select id="countSelect" style="font-size:1.05em; font-weight:600;">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10" selected>10</option>
+              </select>
+            </div>
+            <div class="field tone-field" style="display:flex; align-items:center; min-width:140px; gap:6px;">
+              <label for="familySelect" class="gen-label">系統 <button type="button" class="help-toggle" aria-expanded="false" data-help="help-family">?</button></label>
+              <select id="familySelect" style="font-size:1.05em; font-weight:600;">
+                <option value="all" selected>すべて</option>
+                <option value="red">赤系</option>
+                <option value="pink">ピンク系</option>
+                <option value="orange">橙系</option>
+                <option value="yellow">黄系</option>
+                <option value="gold">ゴールド系</option>
+                <option value="lime">黄緑系</option>
+                <option value="green">緑系</option>
+                <option value="cyan">シアン系</option>
+                <option value="blue">青系</option>
+                <option value="purple">紫系</option>
+                <option value="brown">茶系</option>
+                <option value="mono">モノクロ</option>
+              </select>
+              <span id="familyHint" class="field-hint">全色相からランダム生成</span>
+              <div id="help-family" class="help-popup">生成する色の系統（色相の範囲）を指定します。「すべて」ならランダム、特定の系統を選ぶとその色相付近だけ生成されます。</div>
+            </div>
+            <div class="field tone-field" style="display:flex; align-items:center; min-width:140px; gap:6px;">
+              <label for="moodSelect" class="gen-label">トーン <button type="button" class="help-toggle" aria-expanded="false" data-help="help-tone">?</button></label>
+              <select id="moodSelect" style="font-size:1.05em; font-weight:600;">
+                <option value="normal" selected>バランス</option>
+                <option value="warm">暖色</option>
+                <option value="cool">寒色</option>
+                <option value="pastel">淡い</option>
+                <option value="vivid">鮮やか</option>
+                <option value="muted">くすみ</option>
+                <option value="deep">重厚</option>
+                <option value="neon">ネオン強め</option>
+                <option value="retro">レトロ</option>
+                <option value="candy">キャンディ</option>
+                <option value="autumn">秋</option>
+                <option value="ocean">海</option>
+                <option value="sunset">夕焼け</option>
+                <option value="luxury">高級</option>
+              </select>
+              <span id="moodHint" class="field-hint">バランス型（迷ったらこれ）</span>
+              <div id="help-tone" class="help-popup">色の雰囲気を選びます。暖色/寒色で色相を制限、パステルやネオンで明るさ・彩度を調整します。トーンごとに最適なパレットが生成されます。</div>
+            </div>
+            <div class="generate-area" style="display:flex; align-items:center; min-width:130px;">
+              <button id="genBtn" class="btn btn-primary" style="width:100%; min-width:110px; font-size:1.15em; font-weight:700; padding:14px 0; box-shadow:0 2px 8px #6366f133; border-radius:10px; letter-spacing:0.04em; background:#6366f1; color:#fff;" onclick="if(window.__pgpMainGenerate){window.__pgpMainGenerate();}else if(window.__pgpFallbackGenerate){window.__pgpFallbackGenerate();}return false;">🎨 生成</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group max-w-200">
-        <label for="moodSelect">雰囲気</label>
-        <select id="moodSelect">
-          <option value="normal" selected>標準</option>
-          <option value="warm">暖色</option>
-          <option value="cool">寒色</option>
-          <option value="pastel">パステル</option>
-          <option value="vivid">ビビッド</option>
-        </select>
+      <!-- パレット -->
+      <div class="tool-card" style="margin-top: 0; margin-bottom: 0; box-shadow: 0 2px 12px rgba(99,102,241,0.04);">
+        <p class="tool-card-title">パレット</p>
+        <div class="tool-card-body" style="padding-top: 8px;">
+          <div class="palette" id="palette"></div>
+        </div>
       </div>
-      <button id="genBtn" class="btn btn-primary">生成</button>
-      <button id="copyBtn" class="btn btn-secondary">📋 まとめてコピー</button>
-      <button id="saveBtn" class="btn btn-secondary">🖼️ 画像保存</button>
+
+      <!-- 出力 -->
+      <div class="tool-card">
+        <p class="tool-card-title">出力 <button type="button" class="help-toggle" aria-expanded="false" data-help="help-basic">?</button></p>
+        <div class="tool-card-body" style="display: flex; flex-direction: row; align-items: center; gap: 24px; flex-wrap: nowrap; justify-content: center;">
+          <div style="display: flex; flex-direction: row; align-items: center; gap: 14px; justify-content: center; width: 100%; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+              <label for="copyFormat" style="font-size:0.82em; color:#6366f1; font-weight:600; margin-bottom:2px;">形式</label>
+              <select id="copyFormat" style="width: 90px; font-size: 0.95em; padding: 5px 8px; border-radius: 6px;">
+                <option value="hex">HEX</option>
+                <option value="rgb">RGB</option>
+                <option value="hsl">HSL</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+              <label for="stripHashToggle" style="font-size:0.82em; color:#6366f1; font-weight:600; margin-bottom:2px;">オプション</label>
+              <label class="copy-option" title="コピー時に # を除去" style="margin-bottom: 0;">
+                <input type="checkbox" id="stripHashToggle">#なし
+              </label>
+            </div>
+            <button id="copyBtn" class="btn btn-secondary" style="width: 120px; height: 40px; font-size:1.08em; font-weight:700;">コピー</button>
+          </div>
+          <div style="display: flex; flex-direction: row; align-items: center; gap: 12px;">
+            <button id="saveBtn" class="btn btn-secondary" style="min-width: 110px;">画像保存</button>
+            <button id="histSaveBtn" class="btn btn-secondary" style="min-width: 110px;">履歴に保存</button>
+          </div>
+        </div>
+        <div id="help-basic" class="help-popup">「コピー」で全色のHEXコードをコピー。「画像保存」でPNG画像としてダウンロード。「履歴に保存」で履歴リストに追加。各色スウォッチはクリックで個別再生成、鍵アイコンで色をロックできます。</div>
+      </div>
+
+      <!-- 生成拡張 -->
+      <div class="tool-card">
+        <p class="tool-card-title">生成拡張</p>
+        <div class="tool-card-body">
+          <button id="pairBtn" class="btn btn-secondary">Light/Dark対</button>
+          <button id="tokenBtn" class="btn btn-secondary">Tokens</button>
+          <button id="shareBtn" class="btn btn-secondary">共有URL</button>
+        </div>
+      </div>
+
+      <!-- 履歴操作 -->
+      <div class="tool-card">
+        <p class="tool-card-title">履歴操作</p>
+        <div class="tool-card-body">
+          <button id="undoBtn" class="btn btn-secondary" title="Ctrl/Cmd+Z">戻す</button>
+          <button id="redoBtn" class="btn btn-secondary" title="Ctrl/Cmd+Y">やり直し</button>
+        </div>
+      </div>
+
+      <!-- ワークスペース -->
+      <div class="tool-card">
+        <p class="tool-card-title">ワークスペース <button type="button" class="help-toggle" aria-expanded="false" data-help="help-ws">?</button></p>
+        <div class="tool-card-body">
+          <div class="ws-row">
+            <select id="workspaceSelect" class="workspace-select"></select>
+            <button id="wsRenameBtn" class="ws-btn-icon" title="リネーム" aria-label="リネーム">✎</button>
+            <button id="wsDeleteBtn" class="ws-btn-icon danger" title="削除" aria-label="削除">✕</button>
+          </div>
+          <div class="ws-row" style="margin-top:6px;">
+            <button id="workspaceSaveBtn" class="btn btn-secondary">保存</button>
+            <button id="workspaceLoadBtn" class="btn btn-secondary">読込</button>
+            <button id="workspaceNewBtn" class="btn btn-secondary">新規</button>
+            <label class="ws-autosave-label" title="パレット変更時に自動保存"><input type="checkbox" id="wsAutoSaveToggle">自動保存</label>
+          </div>
+          <div class="ws-meta">
+            <span class="ws-saved-at" id="wsSavedAt"></span>
+          </div>
+        </div>
+        <div id="help-ws" class="help-popup">パレットの状態をワークスペースとして名前付きで保存・切替できます。プロジェクトごとに異なるパレットを管理するのに便利です。切替時は自動で状態を読み込みます。</div>
+      </div>
+
+      <!-- 画像抽出 -->
+      <div class="tool-card">
+        <p class="tool-card-title">画像抽出 <button type="button" class="help-toggle" aria-expanded="false" data-help="help-extract">?</button></p>
+        <input type="file" id="imageExtractInput" accept="image/*" style="display:none">
+        <div class="tool-card-body">
+          <button id="extractBtn" class="btn btn-secondary">画像から抽出</button>
+          <div class="extract-preview" id="extractPreview"></div>
+        </div>
+        <span class="extract-help">抽出色クリックで基準色に近いパレット再生成</span>
+        <div id="help-extract" class="help-popup">画像ファイルを選択すると主要な色を自動抽出します。抽出された色チップをクリックすると、その色に近いパレットを再生成します。</div>
+      </div>
+    </div>
+    <div id="banWarning" class="ban-warning d-none" aria-live="polite"></div>
+
+    <div class="ui-preview" id="uiPreview">
+      <div class="ui-preview-header">UIモックプレビュー <button type="button" class="help-toggle" aria-expanded="false" data-help="help-preview">?</button></div>
+      <div id="help-preview" class="help-popup">生成したパレットの色がボタン・カード・入力欄などのUI要素にどう見えるかリアルタイムでプレビューします。</div>
+      <div class="ui-preview-body">
+        <div class="ui-preview-chip-row" id="uiChipRow"></div>
+        <div class="ui-preview-card" id="uiPreviewCard">
+          <div style="font-weight:700; margin-bottom:6px;">SaaS Dashboard Card</div>
+          <div style="font-size:0.82rem; opacity:0.82; margin-bottom:10px;">生成色でボタン・カード・フォームの見え方を即時確認</div>
+          <div class="ui-preview-actions">
+            <button class="ui-preview-btn" id="uiPrimaryBtn">Primary</button>
+            <button class="ui-preview-btn" id="uiSecondaryBtn">Secondary</button>
+          </div>
+          <div style="margin-top:10px;">
+            <input class="ui-preview-input" id="uiPreviewInput" value="example@company.com" readonly>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="palette" id="palette"></div>
+    <div class="compare-panel">
+      <div style="font-weight:700; margin-bottom:8px;">履歴比較ビュー (A/B) <button type="button" class="help-toggle" aria-expanded="false" data-help="help-compare">?</button></div>
+      <div id="help-compare" class="help-popup">2つのパレット状態をA/Bとして保存し、並べて比較できます。「Aを適用」「Bを適用」でワンクリックで切り替えられます。</div>
+      <div class="compare-actions">
+        <button id="setCompareABtn" class="btn btn-secondary" type="button">現在をAに保存</button>
+        <button id="setCompareBBtn" class="btn btn-secondary" type="button">現在をBに保存</button>
+        <button id="compareNowBtn" class="btn btn-primary" type="button">A/B比較</button>
+        <button id="applyCompareABtn" class="btn btn-secondary" type="button">Aを適用</button>
+        <button id="applyCompareBBtn" class="btn btn-secondary" type="button">Bを適用</button>
+      </div>
+      <div class="compare-output" id="compareOutput">A/B未設定</div>
+    </div>
+
+    <div class="suggest-panel">
+      <div style="font-weight:700; margin-bottom:8px;">スクショ貼付でUI配色提案 <button type="button" class="help-toggle" aria-expanded="false" data-help="help-suggest">?</button></div>
+      <div id="help-suggest" class="help-popup">UIのスクリーンショットをアップロードまたはCtrl+Vで貼り付けると、画像から主要色を抽出し、改善提案を表示します。</div>
+      <div class="suggest-input-row">
+        <input type="file" id="screenshotInput" accept="image/*" style="display:none">
+        <button id="uploadSuggestBtn" class="btn btn-secondary" type="button">スクショをアップロード</button>
+        <button id="pasteSuggestBtn" class="btn btn-secondary" type="button">貼り付け待機</button>
+      </div>
+      <div class="suggest-output" id="suggestOutput">スクリーンショットを貼り付け/アップロードすると、主要色と改善提案を表示します。</div>
+    </div>
+
+    <div class="history-section" id="historySection">
+      <h2>保存したパレット</h2>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">まだ保存されたパレットはありません</div>
+      </div>
+    </div>
   </div>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout5"></script>
   <script>
+    // パレットの列数を個数に応じて自動調整
+    function updatePaletteGridColumns() {
+      const palette = document.getElementById('palette');
+      if (!palette) return;
+      const count = palette.children.length || 1;
+      let cols = Math.ceil(Math.sqrt(count));
+      // 10色のときは5列2行が美しいので特別扱い
+      if (count === 10) cols = 5;
+      // 6色のときは3列2行
+      if (count === 6) cols = 3;
+      // 8色のときは4列2行
+      if (count === 8) cols = 4;
+      // 2色以下はそのまま
+      if (count <= 2) cols = count;
+      palette.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    }
+    // paletteの子要素が変わるたびに実行
+    document.addEventListener('DOMContentLoaded', function() {
+      const palette = document.getElementById('palette');
+      if (!palette) return;
+      const observer = new MutationObserver(updatePaletteGridColumns);
+      observer.observe(palette, { childList: true });
+      updatePaletteGridColumns();
+    });
+  </script>
+  <script>
+    // コピー機能（形式選択＋#なし）
+    document.addEventListener('DOMContentLoaded', function() {
+      // パレット色数でクラス切り替え
+      function updatePaletteClass() {
+        const palette = document.getElementById('palette');
+        if (!palette) return;
+        const count = palette.children.length;
+        palette.classList.toggle('palette-6', count === 6);
+        palette.classList.toggle('palette-8', count === 8);
+        palette.classList.toggle('palette-10', count === 10);
+      }
+      // 初期化・生成時に呼ぶ
+      const observer = new MutationObserver(updatePaletteClass);
+      const palette = document.getElementById('palette');
+      if (palette) {
+        observer.observe(palette, { childList: true });
+        updatePaletteClass();
+      }
+      const copyBtn = document.getElementById('copyBtn');
+      const copyFormat = document.getElementById('copyFormat');
+      const stripHashToggle = document.getElementById('stripHashToggle');
+      copyBtn?.addEventListener('click', function() {
+        const format = copyFormat.value;
+        const stripHash = stripHashToggle?.checked;
+        const palette = document.querySelectorAll('.palette .swatch');
+        let codes = [];
+        palette.forEach(sw => {
+          let code = '';
+          if (format === 'hex') {
+            code = sw.querySelector('.val-hex')?.textContent?.trim() || '';
+            if (stripHash) code = code.replace(/^#/, '');
+          } else if (format === 'rgb') {
+            code = sw.querySelector('.val-rgb')?.textContent?.trim() || '';
+          } else if (format === 'hsl') {
+            code = sw.querySelector('.val-hsl')?.textContent?.trim() || '';
+          }
+          codes.push(code);
+        });
+        const text = codes.filter(Boolean).join(' ');
+        if (text) {
+          navigator.clipboard.writeText(text).then(() => {
+            if (window.showToast) window.showToast('コピーしました');
+          });
+        }
+      });
+    });
+    if (typeof window.loadData !== 'function') {
+      window.loadData = (key, defaultValue = null) => {
+        try {
+          const scoped = localStorage.getItem(`pgp.${key}`);
+          const legacy = localStorage.getItem(key);
+          const raw = scoped ?? legacy;
+          return raw ? JSON.parse(raw) : defaultValue;
+        } catch (e) {
+          return defaultValue;
+        }
+      };
+    }
+
+    if (typeof window.saveData !== 'function') {
+      window.saveData = (key, value) => {
+        try {
+          const serialized = JSON.stringify(value);
+          localStorage.setItem(`pgp.${key}`, serialized);
+          localStorage.setItem(key, serialized);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      };
+    }
+
+    if (typeof window.showToast !== 'function') {
+      window.showToast = () => {};
+    }
+
+    if (typeof window.copyTextToClipboard !== 'function') {
+      window.copyTextToClipboard = async (text, messages = {}) => {
+        const normalized = String(text || '').trim();
+        if (!normalized) return false;
+
+        function fallbackCopy() {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = normalized;
+            ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            if (ok) {
+              if (messages.successMessage) showToast(messages.successMessage, 1600, 'success');
+              return true;
+            }
+          } catch (e) {}
+          try {
+            window.prompt('コピーするには Ctrl+C / ⌘+C を押してください:', normalized);
+            if (messages.successMessage) showToast(messages.successMessage, 1600, 'success');
+            return true;
+          } catch (e) {}
+          return false;
+        }
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(normalized);
+            if (messages.successMessage) showToast(messages.successMessage, 1600, 'success');
+            return true;
+          }
+        } catch (e) {}
+        return fallbackCopy();
+      };
+    }
+
+    if (typeof window.getWorkspaceProfiles !== 'function') {
+      window.getWorkspaceProfiles = () => [{ id: 'default', name: 'Default' }];
+    }
+    if (typeof window.getActiveWorkspaceProfile !== 'function') {
+      window.getActiveWorkspaceProfile = () => 'default';
+    }
+    if (typeof window.setActiveWorkspaceProfile !== 'function') {
+      window.setActiveWorkspaceProfile = () => {};
+    }
+    if (typeof window.createWorkspaceProfile !== 'function') {
+      window.createWorkspaceProfile = () => 'default';
+    }
+    if (typeof window.saveWorkspaceState !== 'function') {
+      window.saveWorkspaceState = () => false;
+    }
+    if (typeof window.loadWorkspaceState !== 'function') {
+      window.loadWorkspaceState = () => null;
+    }
+
+    window.__pgpFallbackGenerate = function() {
+      const palette = document.getElementById('palette');
+      const countSelectEl = document.getElementById('countSelect');
+      const familySelectEl = document.getElementById('familySelect');
+      const moodSelectEl = document.getElementById('moodSelect');
+      if (!palette || !countSelectEl) return;
+
+      const rawCount = Number.parseInt(countSelectEl.value, 10);
+      const count = Number.isFinite(rawCount) ? Math.max(1, Math.min(10, rawCount)) : 10;
+
+      // 既存スウォッチのロック状態・色を維持
+      const existing = Array.from(palette.children);
+      // 追加が必要な場合のみcreateSwatch＋updateSwatchInfo
+      while (palette.children.length < count) {
+        const swatch = createSwatch();
+        // デフォルト色をセット（後で再生成される）
+        updateSwatchInfo(swatch, '#f0f0f0');
+        palette.appendChild(swatch);
+      }
+      while (palette.children.length > count) {
+        palette.removeChild(palette.lastChild);
+      }
+      // パレット列数を必ず更新
+      if (typeof updatePaletteGridColumns === 'function') updatePaletteGridColumns();
+
+      // ロックされていないスウォッチのみ色を再生成
+      Array.from(palette.children).forEach((swatch) => {
+        if (swatch.dataset.locked === 'true') return;
+        const hex = randomHex();
+        updateSwatchInfo(swatch, hex);
+      });
+      // パレット列数を必ず更新
+      if (typeof updatePaletteGridColumns === 'function') updatePaletteGridColumns();
+
+      const pickHueByFamily = (fam, tone = 'normal') => {
+        switch (fam) {
+          case 'red': return 0 + Math.random() * 30;
+          case 'pink': return 330 + Math.random() * 30;
+          case 'orange': return 30 + Math.random() * 30;
+          case 'yellow': return 60 + Math.random() * 30;
+          case 'gold': return 38 + Math.random() * 16;
+          case 'lime': return 70 + Math.random() * 40;
+          case 'green': return 90 + Math.random() * 60;
+          case 'cyan': return 170 + Math.random() * 30;
+          case 'blue': return 210 + Math.random() * 60;
+          case 'purple': return 270 + Math.random() * 60;
+          case 'brown': return 15 + Math.random() * 30;
+          case 'mono': return Math.random() * 360;
+          default:
+            if (tone === 'warm') {
+              const roll = Math.random();
+              if (roll < 0.38) return 0 + Math.random() * 16;
+              if (roll < 0.76) return 16 + Math.random() * 22;
+              return 38 + Math.random() * 18;
+            }
+            if (tone === 'cool') {
+              if (Math.random() < 0.72) return 170 + Math.random() * 95;
+              return Math.random() < 0.55
+                ? 95 + Math.random() * 75
+                : 265 + Math.random() * 55;
+            }
+            if (tone === 'autumn') {
+              const roll = Math.random();
+              if (roll < 0.35) return Math.random() * 15;
+              if (roll < 0.70) return 15 + Math.random() * 25;
+              return 40 + Math.random() * 15;
+            }
+            if (tone === 'ocean') {
+              return 170 + Math.random() * 70;
+            }
+            if (tone === 'sunset') {
+              const roll = Math.random();
+              if (roll < 0.40) return 340 + Math.random() * 20;
+              if (roll < 0.75) return Math.random() * 40;
+              return 270 + Math.random() * 40;
+            }
+            if (tone === 'luxury') {
+              const roll = Math.random();
+              if (roll < 0.35) return 38 + Math.random() * 14;
+              if (roll < 0.55) return 270 + Math.random() * 50;
+              return Math.random() * 360;
+            }
+            return Math.random() * 360;
+        }
+      };
+
+      const toneRanges = (tone) => {
+        switch (tone) {
+          case 'pastel': return { s: [32, 56], l: [74, 90], hShift: [-8, 8] };
+          case 'vivid': return { s: [78, 100], l: [46, 62], hShift: [-6, 6] };
+          case 'warm': return { s: [44, 74], l: [58, 86], hShift: [-2, 2] };
+          case 'cool': return { s: [50, 86], l: [36, 68], hShift: [-4, 4] };
+          case 'muted': return { s: [22, 44], l: [42, 66], hShift: [-6, 6] };
+          case 'deep': return { s: [48, 82], l: [20, 40], hShift: [-6, 6] };
+          case 'neon': return { s: [86, 100], l: [52, 68], hShift: [-4, 4] };
+          case 'retro': return { s: [24, 50], l: [42, 68], hShift: [-10, 10] };
+          case 'candy': return { s: [62, 90], l: [68, 88], hShift: [-12, 12] };
+          case 'autumn': return { s: [34, 62], l: [32, 58], hShift: [-8, 8] };
+          case 'ocean': return { s: [42, 78], l: [38, 68], hShift: [-6, 6] };
+          case 'sunset': return { s: [52, 82], l: [44, 72], hShift: [-6, 6] };
+          case 'luxury': return { s: [28, 58], l: [14, 38], hShift: [-6, 6] };
+          default: return { s: [50, 90], l: [45, 85], hShift: [-6, 6] };
+        }
+      };
+
+      const clampSLByTone = (s, l, tone) => {
+        if (tone === 'warm') {
+          return {
+            s: Math.max(44, Math.min(80, s)),
+            l: Math.max(54, Math.min(88, l))
+          };
+        }
+        if (tone === 'cool') {
+          return {
+            s: Math.max(48, Math.min(88, s)),
+            l: Math.max(34, Math.min(70, l))
+          };
+        }
+        return {
+          s: Math.max(18, Math.min(100, s)),
+          l: Math.max(16, Math.min(92, l))
+        };
+      };
+
+      const normalizeHueFallback = (value) => (value % 360 + 360) % 360;
+      const clampHueByTone = (hue, tone) => {
+        const normalized = normalizeHueFallback(hue);
+        if (tone === 'warm') {
+          if (normalized <= 56) return normalized;
+          return Math.abs(normalized - 0) <= Math.abs(normalized - 56) ? 0 : 56;
+        }
+        if (tone === 'cool') {
+          if (normalized >= 95 && normalized <= 330) return normalized;
+          return Math.abs(normalized - 95) <= Math.abs(normalized - 330) ? 95 : 330;
+        }
+        if (tone === 'autumn') {
+          if (normalized <= 55) return normalized;
+          return Math.abs(normalized - 0) <= Math.abs(normalized - 55) ? 0 : 55;
+        }
+        if (tone === 'ocean') {
+          if (normalized >= 170 && normalized <= 240) return normalized;
+          return Math.abs(normalized - 170) <= Math.abs(normalized - 240) ? 170 : 240;
+        }
+        if (tone === 'sunset') {
+          if (normalized >= 340 || normalized <= 60) return normalized;
+          if (normalized >= 270 && normalized <= 330) return normalized;
+          if (normalized > 60 && normalized < 270) {
+            return Math.abs(normalized - 60) <= Math.abs(normalized - 270) ? 60 : 270;
+          }
+        }
+        return normalized;
+      };
+
+      const randomHex = () => {
+        const familyValue = familySelectEl?.value || 'all';
+        const moodValue = moodSelectEl?.value || 'normal';
+        const profile = toneRanges(moodValue);
+        const baseHue = pickHueByFamily(familyValue, moodValue);
+        const h = clampHueByTone((baseHue + (profile.hShift[0] + Math.random() * (profile.hShift[1] - profile.hShift[0])) + 360) % 360, moodValue);
+        const s = profile.s[0] + Math.random() * (profile.s[1] - profile.s[0]);
+        const l = profile.l[0] + Math.random() * (profile.l[1] - profile.l[0]);
+        const toned = clampSLByTone(s, l, moodValue);
+        const c = (1 - Math.abs(2 * toned.l / 100 - 1)) * (toned.s / 100);
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = toned.l / 100 - c / 2;
+        let r = 0, g = 0, b = 0;
+        if (h < 60) { r = c; g = x; }
+        else if (h < 120) { r = x; g = c; }
+        else if (h < 180) { g = c; b = x; }
+        else if (h < 240) { g = x; b = c; }
+        else if (h < 300) { r = x; b = c; }
+        else { r = c; b = x; }
+        const toHex = (v) => Math.round((v + m) * 255).toString(16).padStart(2, '0');
+        let hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+        if (moodValue === 'warm') {
+          const rgb = {
+            r: parseInt(hex.slice(1, 3), 16),
+            g: parseInt(hex.slice(3, 5), 16),
+            b: parseInt(hex.slice(5, 7), 16)
+          };
+          if (rgb.b !== 0) {
+            hex = `#${rgb.r.toString(16).padStart(2, '0')}${rgb.g.toString(16).padStart(2, '0')}00`.toUpperCase();
+          }
+        }
+        if (typeof adjustForFamily === 'function') {
+          hex = adjustForFamily(hex, familyValue);
+        } else if (typeof window.adjustForFamily === 'function') {
+          hex = adjustForFamily(hex, familyValue);
+        }
+        return hex;
+      };
+
+      Array.from(palette.children).forEach((swatch) => {
+        if (swatch.dataset.locked === 'true') return;
+        const hex = randomHex();
+        swatch.style.background = hex;
+        const hexEl = swatch.querySelector('.val-hex');
+        const rgbEl = swatch.querySelector('.val-rgb');
+        const hslEl = swatch.querySelector('.val-hsl');
+        if (hexEl) hexEl.textContent = hex;
+        if (rgbEl || hslEl) {
+          const r = parseInt(hex.slice(1, 3), 16);
+          const g = parseInt(hex.slice(3, 5), 16);
+          const b = parseInt(hex.slice(5, 7), 16);
+          if (rgbEl) rgbEl.textContent = `rgb(${r},${g},${b})`;
+        }
+      });
+
+      if (typeof window.__pgpEnforceMoodConsistency === 'function') {
+        window.__pgpEnforceMoodConsistency();
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const palette = document.getElementById('palette');
+        if (!palette || palette.children.length > 0) return;
+        window.__pgpFallbackGenerate();
+      }, 100);
+
+      const genBtn = document.getElementById('genBtn');
+      genBtn?.addEventListener('click', () => {
+        if (!window.__pgpMainGenerate) {
+          window.__pgpFallbackGenerate();
+        }
+      });
+
+      /* ===== Help toggle logic ===== */
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.help-toggle');
+        if (btn) {
+          const targetId = btn.getAttribute('data-help');
+          const popup = document.getElementById(targetId);
+          if (!popup) return;
+          const isOpen = popup.classList.contains('open');
+          // close all others
+          document.querySelectorAll('.help-popup.open').forEach(p => {
+            p.classList.remove('open');
+            const b = document.querySelector('.help-toggle[data-help="' + p.id + '"]');
+            if (b) b.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            popup.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        } else if (!e.target.closest('.help-popup')) {
+          document.querySelectorAll('.help-popup.open').forEach(p => {
+            p.classList.remove('open');
+            const b = document.querySelector('.help-toggle[data-help="' + p.id + '"]');
+            if (b) b.setAttribute('aria-expanded', 'false');
+          });
+        }
+      });
+    });
+
     let paletteEl = null;
     let countSelect = null;
     let familySelect = null;
     let moodSelect = null;
     let family = 'all';
     let mood = 'normal';
+    let paletteSnapshots = [];
+    let snapshotIndex = -1;
+    let isApplyingSnapshot = false;
+    let compareState = loadData('paletteCompareState', { a: null, b: null });
+
+    // ===== Color Name Database =====
+    const COLOR_NAMES = [
+      ['#FF0000','Red'],['#FF4500','Orange Red'],['#FF6347','Tomato'],['#FF7F50','Coral'],
+      ['#FFA500','Orange'],['#FFD700','Gold'],['#FFFF00','Yellow'],['#ADFF2F','Green Yellow'],
+      ['#7FFF00','Chartreuse'],['#00FF00','Lime'],['#00FA9A','Medium Spring'],['#00FFFF','Cyan'],
+      ['#00CED1','Dark Turquoise'],['#1E90FF','Dodger Blue'],['#0000FF','Blue'],
+      ['#4169E1','Royal Blue'],['#6A5ACD','Slate Blue'],['#8A2BE2','Blue Violet'],
+      ['#9400D3','Dark Violet'],['#FF00FF','Magenta'],['#FF1493','Deep Pink'],
+      ['#FF69B4','Hot Pink'],['#FFC0CB','Pink'],['#FFE4E1','Misty Rose'],
+      ['#FFDAB9','Peach Puff'],['#FAEBD7','Antique White'],['#F5DEB3','Wheat'],
+      ['#DEB887','Burly Wood'],['#D2691E','Chocolate'],['#8B4513','Saddle Brown'],
+      ['#A0522D','Sienna'],['#BC8F8F','Rosy Brown'],['#808080','Gray'],
+      ['#696969','Dim Gray'],['#2F4F4F','Dark Slate'],['#000000','Black'],
+      ['#FFFFFF','White'],['#F0F8FF','Alice Blue'],['#F0FFF0','Honeydew'],
+      ['#F5F5DC','Beige'],['#FFFFF0','Ivory'],['#FFF8DC','Cornsilk'],
+      ['#E6E6FA','Lavender'],['#B0E0E6','Powder Blue'],['#87CEEB','Sky Blue'],
+      ['#98FB98','Pale Green'],['#90EE90','Light Green'],['#20B2AA','Light Sea Green'],
+      ['#008080','Teal'],['#2E8B57','Sea Green'],['#228B22','Forest Green'],
+      ['#006400','Dark Green'],['#556B2F','Dark Olive'],['#BDB76B','Dark Khaki'],
+      ['#DAA520','Goldenrod'],['#B8860B','Dark Goldenrod'],['#CD853F','Peru'],
+      ['#F4A460','Sandy Brown'],['#E9967A','Dark Salmon'],['#FA8072','Salmon'],
+      ['#DC143C','Crimson'],['#B22222','Fire Brick'],['#8B0000','Dark Red'],
+      ['#800000','Maroon'],['#C71585','Medium Violet Red'],['#DB7093','Pale Violet Red'],
+      ['#BA55D3','Medium Orchid'],['#9370DB','Medium Purple'],['#663399','Rebecca Purple'],
+      ['#4B0082','Indigo'],['#191970','Midnight Blue'],['#000080','Navy'],
+      ['#4682B4','Steel Blue'],['#5F9EA0','Cadet Blue'],['#66CDAA','Medium Aquamarine'],
+      ['#3CB371','Medium Sea Green'],['#32CD32','Lime Green'],['#9ACD32','Yellow Green'],
+      ['#6B8E23','Olive Drab'],['#808000','Olive'],['#8B8682','Warm Gray'],
+      ['#708090','Slate Gray'],['#778899','Light Slate'],['#C0C0C0','Silver'],
+      ['#D3D3D3','Light Gray'],['#A9A9A9','Dark Gray'],
+    ];
+
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return { r, g, b };
+    }
+
+    function hexToHsl(hex) {
+      const { r, g, b } = hexToRgb(hex);
+      const r1 = r / 255, g1 = g / 255, b1 = b / 255;
+      const max = Math.max(r1, g1, b1), min = Math.min(r1, g1, b1);
+      let h = 0, s = 0, l = (max + min) / 2;
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r1: h = ((g1 - b1) / d + (g1 < b1 ? 6 : 0)) * 60; break;
+          case g1: h = ((b1 - r1) / d + 2) * 60; break;
+          case b1: h = ((r1 - g1) / d + 4) * 60; break;
+        }
+      }
+      return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function getColorName(hex) {
+      const { r, g, b } = hexToRgb(hex);
+      let minDist = Infinity, name = '';
+      for (const [refHex, refName] of COLOR_NAMES) {
+        const ref = hexToRgb(refHex);
+        const dist = (r - ref.r) ** 2 + (g - ref.g) ** 2 + (b - ref.b) ** 2;
+        if (dist < minDist) { minDist = dist; name = refName; }
+      }
+      return name;
+    }
+
+    function stripHashIfNeeded(text) {
+      const toggle = document.getElementById('stripHashToggle');
+      if (toggle && toggle.checked && typeof text === 'string') {
+        return text.replace(/#/g, '');
+      }
+      return text;
+    }
+
+    function copyValue(text) {
+      const output = stripHashIfNeeded(text);
+      copyTextToClipboard(output, {
+        successMessage: 'コピーしました: ' + output,
+        emptyMessage: '',
+        fallbackMessage: 'コピーできませんでした'
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
-      buildNav('random');
-      buildHistoryNav('random-color.html');
-      applyTheme();
-      injectCommonStyles();
+      if (typeof buildNav === 'function') buildNav('random');
+      if (typeof buildHistoryNav === 'function') buildHistoryNav('random-color.html');
+      if (typeof applyTheme === 'function') applyTheme();
+      if (typeof injectCommonStyles === 'function') injectCommonStyles();
 
       paletteEl = document.getElementById('palette');
       countSelect = document.getElementById('countSelect');
       familySelect = document.getElementById('familySelect');
       moodSelect = document.getElementById('moodSelect');
+      const moodHint = document.getElementById('moodHint');
+      const familyHint = document.getElementById('familyHint');
       const copyBtn = document.getElementById('copyBtn');
       const saveBtn = document.getElementById('saveBtn');
+      const histSaveBtn = document.getElementById('histSaveBtn');
+      const pairBtn = document.getElementById('pairBtn');
+      const tokenBtn = document.getElementById('tokenBtn');
+      const undoBtn = document.getElementById('undoBtn');
+      const redoBtn = document.getElementById('redoBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      const extractBtn = document.getElementById('extractBtn');
+      const imageExtractInput = document.getElementById('imageExtractInput');
+      const extractPreview = document.getElementById('extractPreview');
+      let _wsAutoSaveTimer = null;
+      const workspaceSelect = document.getElementById('workspaceSelect');
+      const workspaceSaveBtn = document.getElementById('workspaceSaveBtn');
+      const workspaceLoadBtn = document.getElementById('workspaceLoadBtn');
+      const workspaceNewBtn = document.getElementById('workspaceNewBtn');
+      const wsRenameBtn = document.getElementById('wsRenameBtn');
+      const wsDeleteBtn = document.getElementById('wsDeleteBtn');
+      const wsAutoSaveToggle = document.getElementById('wsAutoSaveToggle');
+      const wsSavedAtEl = document.getElementById('wsSavedAt');
+      const setCompareABtn = document.getElementById('setCompareABtn');
+      const setCompareBBtn = document.getElementById('setCompareBBtn');
+      const compareNowBtn = document.getElementById('compareNowBtn');
+      const applyCompareABtn = document.getElementById('applyCompareABtn');
+      const applyCompareBBtn = document.getElementById('applyCompareBBtn');
+      const compareOutput = document.getElementById('compareOutput');
+      const screenshotInput = document.getElementById('screenshotInput');
+      const uploadSuggestBtn = document.getElementById('uploadSuggestBtn');
+      const pasteSuggestBtn = document.getElementById('pasteSuggestBtn');
+      const suggestOutput = document.getElementById('suggestOutput');
 
       if (!paletteEl || !countSelect) {
         console.error('DOM elements not found');
         return;
       }
 
+      const MOOD_HINTS = {
+        normal: 'バランス型（迷ったらこれ）',
+        warm: '定義: 赤・橙・黄（H≈0-56）の自然な暖色トーン（青みは除外）',
+        cool: '定義: 緑・青・紫（H≈95-330）の寒色トーン',
+        pastel: '明るく淡い、やさしい色',
+        vivid: '高彩度で元気な色',
+        muted: '彩度低めで落ち着いた色',
+        deep: '暗めで重厚な色',
+        neon: '発色が強く目立つ色',
+        retro: '色あせたような懐かしいトーン',
+        candy: '明るくポップでカラフル',
+        autumn: '紅葉・落ち葉のような秋の色',
+        ocean: '海や水をイメージした青緑系',
+        sunset: '夕焼けのグラデーション感',
+        luxury: '暗めで上品、ゴールドや深い色'
+      };
+
+      const FAMILY_HINTS = {
+        all: '全色相からランダム生成',
+        red: '情熱・エネルギーの赤',
+        pink: '柔らかく華やかなピンク',
+        orange: '活発で暖かみのある橙',
+        yellow: '明るく陽気な黄色',
+        gold: 'リッチで高級感のあるゴールド',
+        lime: 'フレッシュで若々しい黄緑',
+        green: '自然・安らぎの緑',
+        cyan: '爽やかで清涼感のあるシアン',
+        blue: '信頼・知性の青',
+        purple: '神秘的で上品な紫',
+        brown: '落ち着きと温もりの茶',
+        mono: '白黒グレーの無彩色'
+      };
+
+      function updateFamilyHint() {
+        if (!familyHint || !familySelect) return;
+        familyHint.textContent = FAMILY_HINTS[familySelect.value] || FAMILY_HINTS.all;
+      }
+
+      function updateMoodHint() {
+        if (!moodHint || !moodSelect) return;
+        moodHint.textContent = MOOD_HINTS[moodSelect.value] || MOOD_HINTS.normal;
+      }
+
+      function unlockAllSwatches() {
+        if (!paletteEl) return;
+        Array.from(paletteEl.children).forEach((swatch) => {
+          swatch.dataset.locked = 'false';
+          swatch.classList.remove('locked');
+          const lock = swatch.querySelector('.lock');
+          if (lock) lock.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
+        });
+      }
+
       loadSettings();
+      updateFamilyHint();
+      updateMoodHint();
 
       countSelect.addEventListener('change', updatePalette);
-      familySelect.addEventListener('change', updatePalette);
-      moodSelect.addEventListener('change', updatePalette);
-
       familySelect.addEventListener('change', () => {
         family = familySelect.value;
+        updateFamilyHint();
+        unlockAllSwatches();
+        updatePalette();
       });
-
       moodSelect.addEventListener('change', () => {
         mood = moodSelect.value;
+        updateMoodHint();
+        unlockAllSwatches();
+        updatePalette();
       });
 
-      document.getElementById('genBtn').addEventListener('click', generateAll);
-      copyBtn.addEventListener('click', copyPalette);
-      saveBtn.addEventListener('click', savePaletteAsImage);
+      copyBtn?.addEventListener('click', copyPalette);
+      saveBtn?.addEventListener('click', savePaletteAsImage);
+      histSaveBtn?.addEventListener('click', savePaletteToHistory);
+      pairBtn?.addEventListener('click', generateLightDarkPair);
+      tokenBtn?.addEventListener('click', exportDesignTokens);
+      undoBtn?.addEventListener('click', undoPalette);
+      redoBtn?.addEventListener('click', redoPalette);
+      shareBtn?.addEventListener('click', copyShareUrl);
+      extractBtn?.addEventListener('click', () => imageExtractInput?.click());
+      imageExtractInput?.addEventListener('change', () => {
+        const file = imageExtractInput.files?.[0];
+        if (!file) return;
+        extractPaletteFromImage(file);
+      });
+      workspaceSaveBtn?.addEventListener('click', saveCurrentWorkspaceState);
+      workspaceLoadBtn?.addEventListener('click', loadCurrentWorkspaceState);
+      workspaceNewBtn?.addEventListener('click', createNewWorkspaceProfileForPage);
+      workspaceSelect?.addEventListener('change', () => {
+        setActiveWorkspaceProfile(workspaceSelect.value);
+        loadCurrentWorkspaceState();
+        updateWsSavedAt();
+      });
+      wsRenameBtn?.addEventListener('click', renameCurrentWorkspace);
+      wsDeleteBtn?.addEventListener('click', deleteCurrentWorkspace);
+      wsAutoSaveToggle?.addEventListener('change', () => {
+        setRawData('wsAutoSave', wsAutoSaveToggle.checked ? '1' : '0');
+        showToast(wsAutoSaveToggle.checked ? '自動保存ON' : '自動保存OFF', 1200, 'info');
+      });
 
-      updatePalette();
+      setCompareABtn?.addEventListener('click', () => {
+        compareState.a = getCurrentColors();
+        saveData('paletteCompareState', compareState);
+        renderCompareOutput();
+        showToast('現在のパレットをAに保存しました', 1500, 'success');
+      });
 
+      setCompareBBtn?.addEventListener('click', () => {
+        compareState.b = getCurrentColors();
+        saveData('paletteCompareState', compareState);
+        renderCompareOutput();
+        showToast('現在のパレットをBに保存しました', 1500, 'success');
+      });
+
+      compareNowBtn?.addEventListener('click', renderCompareOutput);
+
+      applyCompareABtn?.addEventListener('click', () => {
+        if (!Array.isArray(compareState.a) || compareState.a.length === 0) {
+          showToast('Aが未設定です', 1800, 'warning');
+          return;
+        }
+        applyPaletteColors(compareState.a);
+      });
+
+      applyCompareBBtn?.addEventListener('click', () => {
+        if (!Array.isArray(compareState.b) || compareState.b.length === 0) {
+          showToast('Bが未設定です', 1800, 'warning');
+          return;
+        }
+        applyPaletteColors(compareState.b);
+      });
+
+      uploadSuggestBtn?.addEventListener('click', () => screenshotInput?.click());
+      screenshotInput?.addEventListener('change', () => {
+        const file = screenshotInput.files?.[0];
+        if (!file) return;
+        analyzeScreenshotFile(file);
+      });
+
+      pasteSuggestBtn?.addEventListener('click', () => {
+        showToast('Ctrl/Cmd+V で画像を貼り付けてください', 2000, 'info');
+      });
+
+      document.addEventListener('paste', (event) => {
+        const items = Array.from(event.clipboardData?.items || []);
+        const imageItem = items.find((item) => item.type && item.type.startsWith('image/'));
+        if (!imageItem) return;
+        const file = imageItem.getAsFile();
+        if (file) {
+          event.preventDefault();
+          analyzeScreenshotFile(file);
+        }
+      });
+
+      if (workspaceSelect) {
+        populateWorkspaceProfiles();
+        updateWsSavedAt();
+        if (wsAutoSaveToggle) {
+          wsAutoSaveToggle.checked = getRawData('wsAutoSave') === '1';
+        }
+      }
+
+      const restoredFromUrl = applyStateFromUrl();
+      if (!restoredFromUrl) {
+        updatePalette();
+      }
+      renderHistory();
+      renderCompareOutput();
+      refreshQualityAndPreview();
+      captureSnapshot();
+      updateUndoRedoButtons();
+
+      document.addEventListener('keydown', (event) => {
+        const tag = String(event.target?.tagName || '').toLowerCase();
+        const editable = tag === 'input' || tag === 'textarea' || event.target?.isContentEditable;
+        if (editable) return;
+
+        const key = event.key.toLowerCase();
+        if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'z') {
+          event.preventDefault();
+          redoPalette();
+          return;
+        }
+        if ((event.ctrlKey || event.metaKey) && !event.shiftKey && key === 'z') {
+          event.preventDefault();
+          undoPalette();
+          return;
+        }
+        if ((event.ctrlKey || event.metaKey) && key === 'y') {
+          event.preventDefault();
+          redoPalette();
+          return;
+        }
+        if (key === 'g') {
+          event.preventDefault();
+          generateAll();
+          captureSnapshot();
+        }
+        if (key === 'c') {
+          event.preventDefault();
+          copyPalette();
+        }
+        if (key === 's') {
+          event.preventDefault();
+          savePaletteToHistory();
+        }
+      });
+
+      function getTextColorForBackground(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.58 ? '#0f172a' : '#ffffff';
+      }
+
+      function colorDistance(hexA, hexB) {
+        const a = hexToRgb(hexA);
+        const b = hexToRgb(hexB);
+        return Math.sqrt((a.r - b.r) ** 2 + (a.g - b.g) ** 2 + (a.b - b.b) ** 2);
+      }
+
+      function averageDistance(listA, listB) {
+        const size = Math.min(listA.length, listB.length);
+        if (!size) return 0;
+        let total = 0;
+        for (let i = 0; i < size; i += 1) total += colorDistance(listA[i], listB[i]);
+        return total / size;
+      }
+
+      function renderCompareOutput() {
+        if (!compareOutput) return;
+        const a = Array.isArray(compareState.a) ? compareState.a : [];
+        const b = Array.isArray(compareState.b) ? compareState.b : [];
+        if (a.length === 0 || b.length === 0) {
+          compareOutput.textContent = 'A/B未設定';
+          return;
+        }
+
+        const dist = averageDistance(a, b);
+        const verdict = dist < 35 ? '差分小: 同系統の微調整' : dist < 75 ? '差分中: A/Bテスト向き' : '差分大: トーン転換案';
+        const lines = [
+          `A: ${a.join(' ')}`,
+          `B: ${b.join(' ')}`,
+          `平均色差: ${dist.toFixed(1)} / 255`,
+          `判定: ${verdict}`
+        ];
+        compareOutput.textContent = lines.join('\n');
+      }
+
+      function extractColorsFromImage(image, count) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const maxSize = 200;
+        const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+        canvas.width = Math.max(1, Math.floor(image.width * scale));
+        canvas.height = Math.max(1, Math.floor(image.height * scale));
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const buckets = new Map();
+        for (let i = 0; i < data.length; i += 16) {
+          if (data[i + 3] < 128) continue;
+          const r = Math.round(data[i] / 24) * 24;
+          const g = Math.round(data[i + 1] / 24) * 24;
+          const b = Math.round(data[i + 2] / 24) * 24;
+          const key = `${r},${g},${b}`;
+          buckets.set(key, (buckets.get(key) || 0) + 1);
+        }
+        return [...buckets.entries()]
+          .sort((x, y) => y[1] - x[1])
+          .slice(0, count)
+          .map(([key]) => {
+            const [r, g, b] = key.split(',').map(Number);
+            return rgbToHex(r, g, b);
+          });
+      }
+
+      function buildSuggestionFromColors(colors) {
+        if (!Array.isArray(colors) || colors.length === 0) return '色が抽出できませんでした。';
+        const hsls = colors.map((hex) => hexToHsl(hex));
+        const avgL = hsls.reduce((acc, item) => acc + item.l, 0) / hsls.length;
+        const avgS = hsls.reduce((acc, item) => acc + item.s, 0) / hsls.length;
+        const coolCount = hsls.filter((item) => item.h >= 170 && item.h <= 290).length;
+        const warmCount = hsls.filter((item) => item.h <= 60 || item.h >= 320).length;
+        const tone = avgL >= 68 ? '明るめ' : avgL <= 36 ? '重厚' : '中間';
+        const mood = coolCount > warmCount ? 'クール寄り' : warmCount > coolCount ? 'ウォーム寄り' : 'ニュートラル';
+        const saturation = avgS >= 65 ? '高彩度' : avgS <= 35 ? '低彩度' : '中彩度';
+        const primary = colors[0];
+        const accent = colors[1] || colors[0];
+        const text = avgL >= 60 ? '#0F172A' : '#F8FAFC';
+
+        return [
+          `抽出色: ${colors.join(' ')}`,
+          `診断: ${tone} / ${mood} / ${saturation}`,
+          `提案: Primary=${primary}, Accent=${accent}, Text=${text}`,
+          `改善案: CTAは${accent}を使用し、背景は${colors[colors.length - 1]}を薄く使うと安定します。`
+        ].join('\n');
+      }
+
+      function analyzeScreenshotFile(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const image = new Image();
+          image.onload = () => {
+            const colors = extractColorsFromImage(image, Math.max(4, Math.min(8, Number(countSelect.value) || 6)));
+            if (!colors.length) {
+              suggestOutput.textContent = '主要色の抽出に失敗しました。';
+              return;
+            }
+            suggestOutput.textContent = buildSuggestionFromColors(colors);
+            compareState.b = colors;
+            saveData('paletteCompareState', compareState);
+            renderCompareOutput();
+          };
+          image.src = String(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function evaluateForbiddenCombinations(colors) {
+        const warnings = [];
+        if (colors.length < 2) return warnings;
+
+        for (let i = 0; i < colors.length; i += 1) {
+          for (let j = i + 1; j < colors.length; j += 1) {
+            const dist = colorDistance(colors[i], colors[j]);
+            if (dist < 26) {
+              warnings.push(`色が近すぎる組み合わせ: ${colors[i]} / ${colors[j]}`);
+            }
+
+            const hslA = hexToHsl(colors[i]);
+            const hslB = hexToHsl(colors[j]);
+            const redGreenPair = ((hslA.h <= 25 || hslA.h >= 335) && (hslB.h >= 95 && hslB.h <= 155)) ||
+              ((hslB.h <= 25 || hslB.h >= 335) && (hslA.h >= 95 && hslA.h <= 155));
+            if (redGreenPair && hslA.s > 55 && hslB.s > 55) {
+              warnings.push(`赤緑の高彩度組み合わせ: ${colors[i]} / ${colors[j]}`);
+            }
+          }
+        }
+
+        const tooLight = colors.filter((hex) => hexToHsl(hex).l >= 88).length;
+        const tooDark = colors.filter((hex) => hexToHsl(hex).l <= 14).length;
+        if (tooLight >= Math.ceil(colors.length * 0.6)) warnings.push('明るすぎる色が多く可読性が低下しやすい状態です');
+        if (tooDark >= Math.ceil(colors.length * 0.6)) warnings.push('暗すぎる色が多くコントラスト不足が起きやすい状態です');
+
+        return warnings.slice(0, 5);
+      }
+
+      function renderWarnings(warnings) {
+        const warningEl = document.getElementById('banWarning');
+        if (!warningEl) return;
+        if (!warnings.length) {
+          warningEl.classList.add('d-none');
+          warningEl.innerHTML = '';
+          return;
+        }
+        warningEl.classList.remove('d-none');
+        warningEl.innerHTML = `<strong>禁止組み合わせ検知:</strong><ul>${warnings.map((item) => `<li>${sanitizeHTML(item)}</li>`).join('')}</ul>`;
+      }
+
+      function renderUiPreview(colors) {
+        const chips = document.getElementById('uiChipRow');
+        const card = document.getElementById('uiPreviewCard');
+        const primaryBtn = document.getElementById('uiPrimaryBtn');
+        const secondaryBtn = document.getElementById('uiSecondaryBtn');
+        const input = document.getElementById('uiPreviewInput');
+        if (!chips || !card || !primaryBtn || !secondaryBtn || !input) return;
+
+        const base = colors[0] || '#1E3A8A';
+        const accent = colors[1] || '#2563EB';
+        const soft = colors[2] || '#E2E8F0';
+
+        chips.innerHTML = colors.slice(0, 8).map((hex, index) => {
+          const textColor = getTextColorForBackground(hex);
+          return `<div class="ui-chip" style="background:${hex};color:${textColor}">C${index + 1}</div>`;
+        }).join('');
+
+        card.style.borderColor = soft;
+        card.style.boxShadow = `0 8px 18px ${accent}22`;
+
+        primaryBtn.style.background = base;
+        primaryBtn.style.color = getTextColorForBackground(base);
+        secondaryBtn.style.background = soft;
+        secondaryBtn.style.color = '#0f172a';
+        secondaryBtn.style.border = `1px solid ${accent}`;
+        input.style.borderColor = accent;
+      }
+
+      function refreshQualityAndPreview() {
+        const colors = getCurrentColors();
+        renderWarnings(evaluateForbiddenCombinations(colors));
+        renderUiPreview(colors);
+      }
+
+      // ===== Utility =====
       function randRange(min, max) {
         return min + Math.random() * (max - min);
+      }
+
+      function rgbToHex(r, g, b) {
+        const toHex = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+      }
+
+      function renderExtractedColors(colors) {
+        extractPreview.innerHTML = '';
+        colors.forEach((hex) => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'extract-chip';
+          chip.style.background = hex;
+          chip.title = `${hex} を使って再生成`;
+          chip.addEventListener('click', () => applyExtractedColor(hex));
+          extractPreview.appendChild(chip);
+        });
+      }
+
+      function applyExtractedColor(baseHex) {
+        const baseHsl = hexToHsl(baseHex);
+        Array.from(paletteEl.children).forEach((swatch, index) => {
+          if (swatch.dataset.locked === 'true') return;
+          const hue = (baseHsl.h + randRange(-35, 35) + 360) % 360;
+          const sat = Math.max(25, Math.min(95, baseHsl.s + randRange(-12, 12)));
+          const light = Math.max(18, Math.min(90, baseHsl.l + randRange(-20, 20)));
+          const moodHex = applyMood(hslToHex(hue, sat, light), mood);
+          updateSwatchInfo(swatch, moodHex);
+        });
+        captureSnapshot();
+        refreshQualityAndPreview();
+        showToast('抽出色をベースにパレットを再生成しました');
+      }
+
+      function extractPaletteFromImage(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const image = new Image();
+          image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const maxSize = 160;
+            const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+            canvas.width = Math.max(1, Math.floor(image.width * scale));
+            canvas.height = Math.max(1, Math.floor(image.height * scale));
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+            const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const buckets = new Map();
+            for (let i = 0; i < data.length; i += 16) {
+              if (data[i + 3] < 140) continue;
+              const r = Math.round(data[i] / 24) * 24;
+              const g = Math.round(data[i + 1] / 24) * 24;
+              const b = Math.round(data[i + 2] / 24) * 24;
+              const key = `${r},${g},${b}`;
+              buckets.set(key, (buckets.get(key) || 0) + 1);
+            }
+
+            const extracted = [...buckets.entries()]
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, Math.max(4, Math.min(10, Number(countSelect.value) || 6)))
+              .map(([key]) => {
+                const [r, g, b] = key.split(',').map(Number);
+                return rgbToHex(r, g, b);
+              });
+
+            if (extracted.length === 0) {
+              showToast('抽出できる色が見つかりませんでした', 2200, 'warning');
+              return;
+            }
+            renderExtractedColors(extracted);
+            applyExtractedColor(extracted[0]);
+          };
+          image.src = String(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function getCurrentColors() {
+        return Array.from(paletteEl.children).map(sw => sw.querySelector('.val-hex').textContent);
+      }
+
+      function getCurrentLockedStates() {
+        return Array.from(paletteEl.children).map(sw => sw.dataset.locked === 'true');
+      }
+
+      function serializeState() {
+        return {
+          count: parseInt(countSelect.value, 10),
+          family: familySelect.value,
+          mood: moodSelect.value,
+          colors: getCurrentColors(),
+          locked: getCurrentLockedStates()
+        };
+      }
+
+      function applyState(state) {
+        if (!state || !Array.isArray(state.colors) || state.colors.length === 0) return false;
+        isApplyingSnapshot = true;
+        countSelect.value = String(state.count || state.colors.length);
+        familySelect.value = state.family || 'all';
+        moodSelect.value = state.mood || 'normal';
+        family = familySelect.value;
+        mood = moodSelect.value;
+
+        ensurePaletteSize();
+        const swatches = Array.from(paletteEl.children);
+        state.colors.forEach((hex, i) => {
+          const swatch = swatches[i];
+          if (!swatch) return;
+          updateSwatchInfo(swatch, hex);
+          const locked = Boolean(state.locked?.[i]);
+          swatch.dataset.locked = locked ? 'true' : 'false';
+          swatch.classList.toggle('locked', locked);
+          swatch.querySelector('.lock').innerHTML = locked
+            ? '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+            : '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
+        });
+        isApplyingSnapshot = false;
+        refreshQualityAndPreview();
+        return true;
+      }
+
+      function captureSnapshot() {
+        if (isApplyingSnapshot) { console.log('[snapshot] skipped (isApplying)'); return; }
+        const snapshot = serializeState();
+        const serialized = JSON.stringify(snapshot);
+        const last = snapshotIndex >= 0 ? JSON.stringify(paletteSnapshots[snapshotIndex]) : null;
+        if (serialized === last) { console.log('[snapshot] skipped (same)'); return; }
+
+        if (snapshotIndex < paletteSnapshots.length - 1) {
+          paletteSnapshots = paletteSnapshots.slice(0, snapshotIndex + 1);
+        }
+        paletteSnapshots.push(snapshot);
+        if (paletteSnapshots.length > 50) paletteSnapshots.shift();
+        snapshotIndex = paletteSnapshots.length - 1;
+        console.log('[snapshot] captured, index=' + snapshotIndex + ', total=' + paletteSnapshots.length + ', colors=' + snapshot.colors.slice(0,3).join(','));
+        updateUndoRedoButtons();
+
+        // debounced auto-save
+        clearTimeout(_wsAutoSaveTimer);
+        _wsAutoSaveTimer = setTimeout(() => wsAutoSaveIfEnabled(), 800);
+      }
+
+      function updateUndoRedoButtons() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        if (!undoBtn || !redoBtn) return;
+        undoBtn.disabled = snapshotIndex <= 0;
+        redoBtn.disabled = snapshotIndex >= paletteSnapshots.length - 1;
+        undoBtn.style.opacity = undoBtn.disabled ? '0.5' : '1';
+        redoBtn.style.opacity = redoBtn.disabled ? '0.5' : '1';
+      }
+
+      function undoPalette() {
+        console.log('[undo] called, snapshotIndex=' + snapshotIndex + ', total=' + paletteSnapshots.length);
+        if (snapshotIndex <= 0) { console.log('[undo] nothing to undo'); return; }
+        snapshotIndex -= 1;
+        console.log('[undo] restoring index=' + snapshotIndex);
+        applyState(paletteSnapshots[snapshotIndex]);
+        updateUndoRedoButtons();
+        updateFamilyHint();
+        updateMoodHint();
+        saveSettings();
+      }
+
+      function redoPalette() {
+        console.log('[redo] called, snapshotIndex=' + snapshotIndex + ', total=' + paletteSnapshots.length);
+        if (snapshotIndex >= paletteSnapshots.length - 1) { console.log('[redo] nothing to redo'); return; }
+        snapshotIndex += 1;
+        console.log('[redo] restoring index=' + snapshotIndex);
+        applyState(paletteSnapshots[snapshotIndex]);
+        updateUndoRedoButtons();
+        updateFamilyHint();
+        updateMoodHint();
+        saveSettings();
+      }
+
+      function applyPaletteColors(colors, locked = []) {
+        if (!Array.isArray(colors) || colors.length === 0) return;
+        countSelect.value = String(colors.length);
+        ensurePaletteSize();
+        const swatches = Array.from(paletteEl.children);
+        colors.forEach((hex, i) => {
+          const swatch = swatches[i];
+          if (!swatch) return;
+          updateSwatchInfo(swatch, hex);
+          const isLocked = Boolean(locked[i]);
+          swatch.dataset.locked = isLocked ? 'true' : 'false';
+          swatch.classList.toggle('locked', isLocked);
+          swatch.querySelector('.lock').innerHTML = isLocked
+            ? '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+            : '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
+        });
+        refreshQualityAndPreview();
+        captureSnapshot();
+      }
+
+      function makeLightPalette(colors) {
+        return colors.map((hex) => {
+          const hsl = hexToHsl(hex);
+          return hslToHex(hsl.h, Math.max(35, Math.min(84, hsl.s - 6)), Math.max(78, Math.min(92, hsl.l + 22))).toUpperCase();
+        });
+      }
+
+      function makeDarkPalette(colors) {
+        return colors.map((hex) => {
+          const hsl = hexToHsl(hex);
+          return hslToHex(hsl.h, Math.max(38, Math.min(90, hsl.s + 4)), Math.max(16, Math.min(34, hsl.l - 30))).toUpperCase();
+        });
+      }
+
+      function generateLightDarkPair() {
+        const colors = getCurrentColors();
+        if (!colors.length) return;
+        const light = makeLightPalette(colors);
+        const dark = makeDarkPalette(colors);
+        saveData('pairedPaletteDraft', {
+          light,
+          dark,
+          createdAt: new Date().toISOString()
+        });
+        applyPaletteColors(light, getCurrentLockedStates());
+        showToast('Light/Dark対パレットを生成し、Lightを適用しました');
+      }
+
+      function exportDesignTokens() {
+        const colors = getCurrentColors();
+        if (!colors.length) {
+          showToast('先にパレットを生成してください', 2000, 'warning');
+          return;
+        }
+
+        const cssVars = `:root {\n${colors.map((hex, i) => `  --palette-${String(i + 1).padStart(2, '0')}: ${hex};`).join('\n')}\n}\n`;
+        const tailwind = `export default {\n  theme: {\n    extend: {\n      colors: {\n${colors.map((hex, i) => `        palette${i + 1}: '${hex}',`).join('\n')}\n      }\n    }\n  }\n};\n`;
+        const figma = {
+          color: Object.fromEntries(colors.map((hex, i) => [
+            `palette/${String(i + 1).padStart(2, '0')}`,
+            { $type: 'color', $value: hex }
+          ]))
+        };
+
+        const dateLabel = new Date().toISOString().slice(0, 10);
+        const download = (filename, content, type) => {
+          const blob = new Blob([content], { type });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          link.click();
+          URL.revokeObjectURL(url);
+        };
+
+        download(`palette-tokens-${dateLabel}.css`, cssVars, 'text/css');
+        download(`palette-tailwind-${dateLabel}.js`, tailwind, 'text/javascript');
+        download(`palette-figma-${dateLabel}.json`, JSON.stringify(figma, null, 2), 'application/json');
+        showToast('トークンを出力しました（CSS / Tailwind / Figma）', 2200, 'success');
+      }
+
+      function applyStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const encoded = params.get('state');
+        if (!encoded) return false;
+        try {
+          const parsed = JSON.parse(decodeURIComponent(atob(encoded)));
+          return applyState(parsed);
+        } catch (error) {
+          console.warn('Invalid shared state', error);
+          return false;
+        }
+      }
+
+      function copyShareUrl() {
+        const state = serializeState();
+        const encoded = btoa(encodeURIComponent(JSON.stringify(state)));
+        const url = `${window.location.origin}${window.location.pathname}?state=${encoded}`;
+        copyTextToClipboard(url, {
+          successMessage: '共有URLをコピーしました',
+          emptyMessage: '',
+          fallbackMessage: 'URLのコピーに失敗しました'
+        });
+      }
+
+      function populateWorkspaceProfiles() {
+        const profiles = getWorkspaceProfiles();
+        const active = getActiveWorkspaceProfile();
+        workspaceSelect.innerHTML = '';
+        profiles.forEach((profile) => {
+          const option = document.createElement('option');
+          option.value = profile.id;
+          option.textContent = profile.name;
+          workspaceSelect.appendChild(option);
+        });
+        workspaceSelect.value = active;
+      }
+
+      function updateWsSavedAt() {
+        if (!wsSavedAtEl) return;
+        const id = workspaceSelect?.value || getActiveWorkspaceProfile();
+        const allStates = loadData('workspaceStates', {});
+        const entry = allStates?.[id]?.random;
+        if (entry?.savedAt) {
+          const d = new Date(entry.savedAt);
+          const pad = n => String(n).padStart(2, '0');
+          wsSavedAtEl.textContent = `最終保存: ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        } else {
+          wsSavedAtEl.textContent = '未保存';
+        }
+      }
+
+      function saveCurrentWorkspaceState() {
+        const id = workspaceSelect.value || getActiveWorkspaceProfile();
+        saveWorkspaceState('random', serializeState(), id);
+        updateWsSavedAt();
+        showToast('ワークスペースに保存しました');
+      }
+
+      function wsAutoSaveIfEnabled() {
+        if (getRawData('wsAutoSave') !== '1') return;
+        const id = workspaceSelect?.value || getActiveWorkspaceProfile();
+        saveWorkspaceState('random', serializeState(), id);
+        updateWsSavedAt();
+      }
+
+      function loadCurrentWorkspaceState() {
+        const id = workspaceSelect.value || getActiveWorkspaceProfile();
+        const state = loadWorkspaceState('random', id);
+        if (!state) {
+          return;
+        }
+        applyState(state);
+        captureSnapshot();
+        updateWsSavedAt();
+      }
+
+      function createNewWorkspaceProfileForPage() {
+        const name = prompt('新しいワークスペース名を入力してください');
+        if (!name) return;
+        const id = createWorkspaceProfile(name);
+        if (!id) return;
+        setActiveWorkspaceProfile(id);
+        populateWorkspaceProfiles();
+        workspaceSelect.value = id;
+        updateWsSavedAt();
+        showToast('ワークスペースを作成しました');
+      }
+
+      function renameCurrentWorkspace() {
+        const id = workspaceSelect?.value || getActiveWorkspaceProfile();
+        if (id === 'default') {
+          showToast('Defaultワークスペースはリネームできません', 2000, 'warning');
+          return;
+        }
+        const profiles = getWorkspaceProfiles();
+        const profile = profiles.find(p => p.id === id);
+        if (!profile) return;
+        const newName = prompt('新しい名前を入力', profile.name);
+        if (!newName || newName.trim() === '' || newName.trim() === profile.name) return;
+        profile.name = newName.trim();
+        saveData('workspaceProfiles', profiles);
+        populateWorkspaceProfiles();
+        workspaceSelect.value = id;
+        showToast('名前を変更しました');
+      }
+
+      function deleteCurrentWorkspace() {
+        const id = workspaceSelect?.value || getActiveWorkspaceProfile();
+        if (id === 'default') {
+          showToast('Defaultワークスペースは削除できません', 2000, 'warning');
+          return;
+        }
+        const profiles = getWorkspaceProfiles();
+        const profile = profiles.find(p => p.id === id);
+        if (!profile) return;
+        if (!confirm(`「${profile.name}」を削除しますか？保存データも失われます。`)) return;
+        const next = profiles.filter(p => p.id !== id);
+        saveData('workspaceProfiles', next);
+        // remove saved state
+        const allStates = loadData('workspaceStates', {});
+        delete allStates[id];
+        saveData('workspaceStates', allStates);
+        setActiveWorkspaceProfile(next[0]?.id || 'default');
+        populateWorkspaceProfiles();
+        loadCurrentWorkspaceState();
+        updateWsSavedAt();
+        showToast('ワークスペースを削除しました');
       }
 
       function hslToHex(h, s, l) {
         h = (h % 360 + 360) % 360;
         s = Math.max(0, Math.min(100, s));
         l = Math.max(0, Math.min(100, l));
-        h /= 360;
-        s /= 100;
-        l /= 100;
+        h /= 360; s /= 100; l /= 100;
 
         let r, g, b;
         if (s === 0) {
@@ -362,7 +2685,6 @@
           g = hue2rgb(p, q, h);
           b = hue2rgb(p, q, h - 1/3);
         }
-
         const toHex = v => {
           const hex = Math.round(v * 255).toString(16);
           return hex.length === 1 ? '0' + hex : hex;
@@ -370,113 +2692,801 @@
         return '#' + toHex(r) + toHex(g) + toHex(b);
       }
 
-      function applyMood(hex, mood) {
-        const r = parseInt(hex.slice(1, 3), 16) / 255;
-        const g = parseInt(hex.slice(3, 5), 16) / 255;
-        const b = parseInt(hex.slice(5, 7), 16) / 255;
-        const max = Math.max(r, g, b);
-        const min = Math.min(r, g, b);
-        let h = 0, l = (max + min) / 2, s = 0;
+      const TONE_PROFILES = {
+        normal: { s: [50, 90], l: [45, 85], hShift: [-6, 6] },
+        warm: { s: [44, 76], l: [58, 86], hShift: [-2, 2] },
+        cool: { s: [46, 88], l: [34, 70], hShift: [-4, 4] },
+        pastel: { s: [32, 56], l: [74, 90], hShift: [-8, 8] },
+        vivid: { s: [78, 100], l: [46, 62], hShift: [-6, 6] },
+        muted: { s: [22, 44], l: [42, 66], hShift: [-6, 6] },
+        deep: { s: [48, 82], l: [20, 40], hShift: [-6, 6] },
+        neon: { s: [86, 100], l: [52, 68], hShift: [-4, 4] },
+        retro: { s: [24, 50], l: [42, 68], hShift: [-10, 10] },
+        candy: { s: [62, 90], l: [68, 88], hShift: [-12, 12] },
+        autumn: { s: [34, 62], l: [32, 58], hShift: [-8, 8] },
+        ocean: { s: [42, 78], l: [38, 68], hShift: [-6, 6] },
+        sunset: { s: [52, 82], l: [44, 72], hShift: [-6, 6] },
+        luxury: { s: [28, 58], l: [14, 38], hShift: [-6, 6] }
+      };
 
-        if (max !== min) {
-          s = l < 0.5 ? (max - min) / (max + min) : (max - min) / (2 - max - min);
-          const d = max - min;
-          switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-          }
-          h *= 60;
-        }
-
-        if (mood === 'pastel') { s = 50; l = 85; }
-        if (mood === 'vivid') { s = 100; l = 50; }
-        if (mood === 'warm') { h = randRange(0, 90); s = Math.max(s, 60); }
-        if (mood === 'cool') { h = randRange(180, 300); s = Math.max(s, 60); }
-
-        return hslToHex(h, s * 100, l * 100);
+      function getToneProfile(tone) {
+        return TONE_PROFILES[tone] || TONE_PROFILES.normal;
       }
 
-      function pickHue(fam) {
+      function pickBaseHue(fam, currentMood = 'normal') {
         switch (fam) {
           case 'red': return randRange(0, 30);
+          case 'pink': return randRange(330, 360);
           case 'orange': return randRange(30, 60);
           case 'yellow': return randRange(60, 90);
+          case 'gold': return randRange(38, 54);
+          case 'lime': return randRange(70, 110);
           case 'green': return randRange(90, 150);
+          case 'cyan': return randRange(170, 200);
           case 'blue': return randRange(210, 270);
           case 'purple': return randRange(270, 330);
-          default: return randRange(0, 360);
+          case 'brown': return randRange(15, 45);
+          case 'mono': return randRange(0, 360);
+          default:
+            if (currentMood === 'warm') {
+              const roll = Math.random();
+              if (roll < 0.38) return randRange(0, 16);
+              if (roll < 0.76) return randRange(16, 38);
+              return randRange(38, 56);
+            }
+            if (currentMood === 'cool') {
+              if (Math.random() < 0.72) return randRange(170, 265);
+              return Math.random() < 0.55 ? randRange(95, 170) : randRange(265, 325);
+            }
+            if (currentMood === 'autumn') {
+              const roll = Math.random();
+              if (roll < 0.35) return randRange(0, 15);
+              if (roll < 0.70) return randRange(15, 40);
+              return randRange(40, 55);
+            }
+            if (currentMood === 'ocean') {
+              return randRange(170, 240);
+            }
+            if (currentMood === 'sunset') {
+              const roll = Math.random();
+              if (roll < 0.40) return randRange(340, 360);
+              if (roll < 0.75) return randRange(0, 40);
+              return randRange(270, 310);
+            }
+            if (currentMood === 'luxury') {
+              const roll = Math.random();
+              if (roll < 0.35) return randRange(38, 52);
+              if (roll < 0.55) return randRange(270, 320);
+              return randRange(0, 360);
+            }
+            return randRange(0, 360);
         }
       }
 
+      // ===== Swatch Creation =====
       function createSwatch() {
         const div = document.createElement('div');
         div.className = 'swatch';
         div.dataset.locked = 'false';
         div.style.background = '#f0f0f0';
 
-        const code = document.createElement('div');
-        code.className = 'code';
-        code.textContent = '#f0f0f0';
-
         const lock = document.createElement('div');
         lock.className = 'lock';
-        lock.textContent = '🔓';
+        lock.setAttribute('tabindex', '0');
+        lock.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#6366f1" stroke-width="2" fill="none"/><rect x="5" y="11" width="14" height="11" rx="2" stroke="#6366f1" stroke-width="2" fill="none"/></svg>';
+        lock.title = 'クリックでロック切替';
+
+        const detail = document.createElement('div');
+        detail.className = 'swatch-detail';
+        detail.innerHTML = `
+          <div class="color-name"></div>
+          <div class="color-values">
+            <div class="color-value"><span class="val-hex">#f0f0f0</span><button class="copy-btn" data-format="hex">Copy</button></div>
+            <div class="color-value"><span class="val-rgb">rgb(240,240,240)</span><button class="copy-btn" data-format="rgb">Copy</button></div>
+            <div class="color-value"><span class="val-hsl">hsl(0,0%,94%)</span><button class="copy-btn" data-format="hsl">Copy</button></div>
+          </div>`;
+
+        detail.querySelectorAll('.copy-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const format = btn.dataset.format;
+            const span = btn.parentElement.querySelector('span');
+            copyValue(span.textContent);
+          });
+        });
 
         lock.addEventListener('click', (e) => {
           e.stopPropagation();
           const isLocked = div.dataset.locked === 'true';
-          div.dataset.locked = !isLocked;
-          div.classList.toggle('locked');
-          lock.textContent = isLocked ? '🔓' : '🔒';
+          if (isLocked) {
+            div.dataset.locked = 'false';
+            div.classList.remove('locked');
+            lock.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#6366f1" stroke-width="2" fill="none"/><rect x="5" y="11" width="14" height="11" rx="2" stroke="#6366f1" stroke-width="2" fill="none"/></svg>';
+          } else {
+            div.dataset.locked = 'true';
+            div.classList.add('locked');
+            lock.innerHTML = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="11" rx="2" stroke="#818cf8" stroke-width="2.1" fill="none"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#818cf8" stroke-width="2.1" fill="none"/></svg>';
+          }
         });
 
-        div.appendChild(code);
         div.appendChild(lock);
+        div.appendChild(detail);
 
-        div.addEventListener('click', () => {
+        div.addEventListener('click', (e) => {
+          if (e.target.closest('.swatch-detail') || e.target.closest('.lock')) return;
           if (div.dataset.locked === 'false') {
             generateColor(div);
+            captureSnapshot();
           }
         });
 
         return div;
       }
 
+      function updateSwatchInfo(swatch, hex) {
+        let safeHex = hex;
+        const currentMood = moodSelect?.value || mood || 'normal';
+        if (currentMood === 'warm' || currentMood === 'cool') {
+          const sourceHsl = hexToHsl(hex);
+          const shaped = shapeToneByMood(sourceHsl.h, sourceHsl.s, sourceHsl.l, currentMood);
+          safeHex = hslToHex(shaped.h, shaped.s, shaped.l);
+        }
+        safeHex = suppressBlueTintForWarm(safeHex, currentMood);
+
+        swatch.style.background = safeHex;
+        const { r, g, b } = hexToRgb(safeHex);
+        const hsl = hexToHsl(safeHex);
+        const name = getColorName(safeHex);
+
+        const detail = swatch.querySelector('.swatch-detail');
+        detail.querySelector('.color-name').textContent = name;
+        detail.querySelector('.val-hex').textContent = safeHex.toUpperCase();
+        detail.querySelector('.val-rgb').textContent = `rgb(${r},${g},${b})`;
+        detail.querySelector('.val-hsl').textContent = `hsl(${hsl.h},${hsl.s}%,${hsl.l}%)`;
+      }
+
+      function normalizeHue(value) {
+        return (value % 360 + 360) % 360;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function hueDistance(a, b) {
+        const delta = Math.abs(a - b) % 360;
+        return delta > 180 ? 360 - delta : delta;
+      }
+
+      const MOOD_HUE_RANGES = {
+        warm: [[0, 56]],
+        cool: [[95, 330]],
+        autumn: [[0, 55]],
+        ocean: [[170, 240]],
+        sunset: [[0, 60], [270, 360]]
+      };
+
+      function isWarmHue(hue) {
+        const normalized = normalizeHue(hue);
+        return normalized <= 56;
+      }
+
+      function isCoolHue(hue) {
+        const normalized = normalizeHue(hue);
+        return normalized >= 95 && normalized <= 330;
+      }
+
+      function isHueInRanges(hue, ranges) {
+        const normalized = normalizeHue(hue);
+        return ranges.some(([start, end]) => normalized >= start && normalized <= end);
+      }
+
+      function clampHueToMood(hue, currentMood) {
+        const ranges = MOOD_HUE_RANGES[currentMood];
+        const normalized = normalizeHue(hue);
+        if (!ranges) return normalized;
+        if (isHueInRanges(normalized, ranges)) return normalized;
+
+        let bestHue = normalized;
+        let bestDist = Infinity;
+        ranges.forEach(([start, end]) => {
+          const center = normalizeHue((start + end) / 2);
+          [start, end, center].forEach((candidate) => {
+            const dist = hueDistance(normalized, candidate);
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestHue = candidate;
+            }
+          });
+        });
+
+        return normalizeHue(bestHue);
+      }
+
+      function suppressBlueTintForWarm(hex, currentMood) {
+        if (currentMood !== 'warm') return hex;
+        const rgb = hexToRgb(hex);
+        if (rgb.b === 0) return hex;
+        return rgbToHex(rgb.r, rgb.g, 0);
+      }
+
+      /* Family-specific saturation/lightness adjustments */
+      function adjustForFamily(hex, currentFamily) {
+        if (!currentFamily || currentFamily === 'all') return hex;
+        const hsl = hexToHsl(hex);
+        let { h, s, l } = hsl;
+
+        if (currentFamily === 'brown') {
+          s = clamp(s * 0.45, 12, 40);
+          l = clamp(l * 0.65, 18, 48);
+          return hslToHex(h, s, l);
+        }
+        if (currentFamily === 'mono') {
+          s = clamp(s * 0.05, 0, 6);
+          return hslToHex(h, s, l);
+        }
+        if (currentFamily === 'gold') {
+          s = clamp(s, 40, 72);
+          l = clamp(l, 38, 62);
+          return hslToHex(h, s, l);
+        }
+        return hex;
+      }
+
+      function shapeToneByMood(h, s, l, currentMood) {
+        const hue = clampHueToMood(h, currentMood);
+        if (currentMood === 'warm') {
+          if (hue >= 40) {
+            s = clamp(s - 8, 38, 68);
+            l = clamp(l + 4, 64, 88);
+          } else if (hue <= 18) {
+            s = clamp(s + 3, 50, 84);
+            l = clamp(l + 2, 56, 84);
+          }
+          return {
+            h: hue,
+            s: clamp(s, 44, 80),
+            l: clamp(l, 54, 88)
+          };
+        }
+        if (currentMood === 'cool') {
+          return {
+            h: hue,
+            s: clamp(s, 46, 88),
+            l: clamp(l, 34, 70)
+          };
+        }
+        if (currentMood === 'retro') {
+          return {
+            h: hue,
+            s: clamp(s - 6, 20, 52),
+            l: clamp(l, 40, 70)
+          };
+        }
+        if (currentMood === 'candy') {
+          return {
+            h: hue,
+            s: clamp(s + 8, 60, 94),
+            l: clamp(l + 6, 66, 90)
+          };
+        }
+        if (currentMood === 'autumn') {
+          // 秋: 暖色寄り H 0-50 + 茶系
+          const autumnHue = hue > 60 && hue < 300 ? clamp(hue % 50, 0, 50) : hue;
+          return {
+            h: autumnHue,
+            s: clamp(s - 4, 30, 65),
+            l: clamp(l, 28, 60)
+          };
+        }
+        if (currentMood === 'ocean') {
+          // 海: H 170-240 に制限
+          const oceanHue = (hue < 170 || hue > 240) ? clamp(170 + (hue % 70), 170, 240) : hue;
+          return {
+            h: oceanHue,
+            s: clamp(s, 40, 80),
+            l: clamp(l, 35, 70)
+          };
+        }
+        if (currentMood === 'sunset') {
+          // 夕焼け: H 340-60 (赤~橙~黄) + H 270-310 (紫)
+          let sunsetHue = hue;
+          if (hue > 60 && hue < 270) {
+            sunsetHue = Math.random() < 0.7 ? hue % 60 : 270 + (hue % 40);
+          }
+          return {
+            h: sunsetHue,
+            s: clamp(s + 4, 48, 85),
+            l: clamp(l, 40, 74)
+          };
+        }
+        if (currentMood === 'luxury') {
+          // 高級: 暗めで低彩度、金色系アクセント
+          const isGold = hue >= 35 && hue <= 55;
+          return {
+            h: hue,
+            s: clamp(isGold ? s + 8 : s - 8, 22, 60),
+            l: clamp(isGold ? l + 4 : l - 6, 12, 40)
+          };
+        }
+        return {
+          h: hue,
+          s: clamp(s, 18, 100),
+          l: clamp(l, 16, 92)
+        };
+      }
+
+      function getHueSpread(hues) {
+        if (!Array.isArray(hues) || hues.length <= 1) return 0;
+        let maxGap = 0;
+        for (let i = 0; i < hues.length; i += 1) {
+          for (let j = i + 1; j < hues.length; j += 1) {
+            maxGap = Math.max(maxGap, hueDistance(hues[i], hues[j]));
+          }
+        }
+        return maxGap;
+      }
+
+      function pickHarmonyTemplate(currentMood) {
+        const templates = {
+          analog: [0, 16, -16, 32, -32, 48, -48, 64, -64, 80],
+          mono: [0, 6, -6, 12, -12, 18, -18, 24, -24, 30],
+          warm: [0, 4, -4, 8, -8, 13, -13, 18, -18, 22],
+          cool: [0, 8, -8, 16, -16, 24, -24, 32, -32, 40],
+          split: [0, 150, 210, 18, 168, 228, -18, 132, 252, 48],
+          triad: [0, 120, 240, 20, 140, 260, -20, 100, 220, 40]
+        };
+
+        if (currentMood === 'warm') {
+          return Math.random() < 0.82 ? templates.warm : templates.mono;
+        }
+        if (currentMood === 'cool') {
+          return Math.random() < 0.8 ? templates.cool : templates.mono;
+        }
+
+        if (currentMood === 'neon' || currentMood === 'vivid' || currentMood === 'candy') {
+          return Math.random() < 0.55 ? templates.triad : templates.split;
+        }
+        if (currentMood === 'pastel' || currentMood === 'muted' || currentMood === 'retro') {
+          return Math.random() < 0.65 ? templates.analog : templates.mono;
+        }
+        if (currentMood === 'autumn') {
+          return Math.random() < 0.7 ? templates.warm : templates.analog;
+        }
+        if (currentMood === 'ocean') {
+          return Math.random() < 0.7 ? templates.cool : templates.analog;
+        }
+        if (currentMood === 'sunset') {
+          const sunsetTemplate = [0, 12, -12, 24, -24, 40, -40, 56, -56, 72];
+          return Math.random() < 0.75 ? sunsetTemplate : templates.analog;
+        }
+        if (currentMood === 'luxury') {
+          return Math.random() < 0.6 ? templates.mono : templates.analog;
+        }
+        return Math.random() < 0.7 ? templates.analog : templates.split;
+      }
+
+      function average(list) {
+        if (!list.length) return 0;
+        return list.reduce((sum, value) => sum + value, 0) / list.length;
+      }
+
+      function scorePalette(colors, currentMood) {
+        if (!Array.isArray(colors) || colors.length === 0) return -Infinity;
+
+        const hsls = colors.map((hex) => hexToHsl(hex));
+        const hues = hsls.map((v) => v.h);
+        const sats = hsls.map((v) => v.s);
+        const lights = hsls.map((v) => v.l);
+
+        let minDist = Infinity;
+        let distTotal = 0;
+        let pairs = 0;
+        for (let i = 0; i < colors.length; i += 1) {
+          for (let j = i + 1; j < colors.length; j += 1) {
+            const dist = colorDistance(colors[i], colors[j]);
+            minDist = Math.min(minDist, dist);
+            distTotal += dist;
+            pairs += 1;
+          }
+        }
+        if (!Number.isFinite(minDist)) minDist = 0;
+        const avgDist = pairs ? distTotal / pairs : 0;
+
+        const satAvg = average(sats);
+        const lightAvg = average(lights);
+        const lightSpread = (Math.max(...lights) - Math.min(...lights));
+        const satSpread = (Math.max(...sats) - Math.min(...sats));
+        const hueSpread = getHueSpread(hues);
+
+        const warmCount = hues.filter((h) => isWarmHue(h)).length;
+        const coolCount = hues.filter((h) => isCoolHue(h)).length;
+        const warmOpposingCount = hues.filter((h) => !isWarmHue(h)).length;
+        const coolOpposingCount = hues.filter((h) => !isCoolHue(h)).length;
+        const warmRedCount = hues.filter((h) => h <= 18).length;
+        const warmOrangeCount = hues.filter((h) => h > 18 && h < 40).length;
+        const warmYellowCount = hues.filter((h) => h >= 40 && h <= 62).length;
+        const warmRatio = warmCount / colors.length;
+        const warmRedRatio = warmRedCount / colors.length;
+        const coolRatio = coolCount / colors.length;
+        const warmBlueTintCount = colors.filter((hex) => {
+          const rgb = hexToRgb(hex);
+          return rgb.b > 0;
+        }).length;
+
+        const toneTargets = {
+          normal: { sat: 64, light: 58 },
+          warm: { sat: 52, light: 70 },
+          cool: { sat: 62, light: 54 },
+          pastel: { sat: 42, light: 80 },
+          vivid: { sat: 86, light: 54 },
+          muted: { sat: 30, light: 52 },
+          deep: { sat: 60, light: 30 },
+          neon: { sat: 94, light: 57 },
+          retro: { sat: 36, light: 54 },
+          candy: { sat: 74, light: 78 },
+          autumn: { sat: 46, light: 44 },
+          ocean: { sat: 58, light: 52 },
+          sunset: { sat: 66, light: 56 },
+          luxury: { sat: 40, light: 26 }
+        };
+        const target = toneTargets[currentMood] || toneTargets.normal;
+
+        let score = 0;
+        score += Math.min(minDist, 55) * 2.1;
+        score += Math.min(avgDist, 120) * 0.55;
+        score += lightSpread * 1.6;
+        score += Math.min(hueSpread, 130) * 0.62;
+        score += satSpread * 0.46;
+        score -= Math.abs(satAvg - target.sat) * 1.2;
+        score -= Math.abs(lightAvg - target.light) * 1.0;
+
+        if (minDist < 12) score -= 110;
+        else if (minDist < 20) score -= 45;
+
+        if (!['pastel', 'candy'].includes(currentMood)) {
+          const darkThreshold = currentMood === 'warm' ? 32 : 40;
+          const hasReadableDark = lights.some((v) => v <= darkThreshold);
+          const hasReadableLight = lights.some((v) => v >= 64);
+          if (!hasReadableDark) score -= currentMood === 'warm' ? 6 : 18;
+          if (!hasReadableLight) score -= 18;
+        }
+
+        if (currentMood === 'warm') {
+          score += warmRatio * 44;
+          score -= coolRatio * 22;
+          score -= warmOpposingCount * 130;
+          if (warmRatio < 0.7) score -= 60;
+
+          const warmBandCount = [warmRedCount, warmOrangeCount, warmYellowCount].filter((n) => n > 0).length;
+          const warmYellowRatio = warmYellowCount / colors.length;
+          const warmOrangeRatio = warmOrangeCount / colors.length;
+
+          // Strong bonus for having all 3 bands represented
+          if (warmBandCount === 3) score += 60;
+          else if (warmBandCount === 2) score += 20;
+          else score -= 80;
+
+          // Penalize any single band dominating > 50%
+          if (warmRedRatio > 0.55) score -= (warmRedRatio - 0.55) * 100;
+          if (warmOrangeRatio > 0.55) score -= (warmOrangeRatio - 0.55) * 100;
+          if (warmYellowRatio > 0.55) score -= (warmYellowRatio - 0.55) * 100;
+
+          // Bonus for balanced presence
+          if (warmRedCount > 0 && warmOrangeCount > 0) score += 16;
+          if (warmRedCount > 0 && warmYellowCount > 0) score += 12;
+          if (warmOrangeCount > 0 && warmYellowCount > 0) score += 8;
+
+          // Ideal ratio ranges
+          if (warmRedRatio >= 0.15 && warmRedRatio <= 0.45) score += 18;
+          if (warmOrangeRatio >= 0.20 && warmOrangeRatio <= 0.50) score += 14;
+          if (warmYellowRatio >= 0.10 && warmYellowRatio <= 0.35) score += 10;
+
+          // Ensure red is never missing
+          if (warmRedCount === 0) score -= 60;
+          if (satAvg > 78) score -= (satAvg - 78) * 1.4;
+          if (lightAvg < 64) score -= (64 - lightAvg) * 3.0;
+          if (lightAvg > 88) score -= (lightAvg - 88) * 1.0;
+          score -= warmBlueTintCount * 600;
+        } else if (currentMood === 'cool') {
+          score += coolRatio * 44;
+          score -= warmRatio * 22;
+          score -= coolOpposingCount * 130;
+          if (coolRatio < 0.7) score -= 60;
+        }
+
+        return score;
+      }
+
+      /* Warm band definitions for independent per-color picking */
+      const WARM_BANDS = [
+        { name: 'red',    range: [0, 16] },
+        { name: 'orange', range: [16, 38] },
+        { name: 'yellow', range: [38, 56] }
+      ];
+
+      function pickWarmBandSequence(count) {
+        /* Build a band assignment that guarantees variety.
+           For 3+ colors: at least one from each of red, orange, yellow.
+           For 2 colors: red + orange or red + yellow or orange + yellow.
+           For 1 color: random. */
+        const bands = [];
+        if (count >= 3) {
+          // Ensure one of each, then fill with weighted random
+          const base = [0, 1, 2]; // red, orange, yellow
+          // Shuffle base
+          for (let i = base.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [base[i], base[j]] = [base[j], base[i]];
+          }
+          bands.push(...base);
+          for (let i = 3; i < count; i++) {
+            const roll = Math.random();
+            if (roll < 0.38) bands.push(0);      // red
+            else if (roll < 0.76) bands.push(1); // orange
+            else bands.push(2);                   // yellow
+          }
+        } else if (count === 2) {
+          const pairs = [[0, 1], [0, 2], [1, 2], [0, 1], [0, 2]];
+          const pair = pairs[Math.floor(Math.random() * pairs.length)];
+          bands.push(...pair);
+        } else {
+          const roll = Math.random();
+          if (roll < 0.38) bands.push(0);
+          else if (roll < 0.76) bands.push(1);
+          else bands.push(2);
+        }
+        return bands;
+      }
+
+      function generatePaletteCandidate(size, currentFamily, currentMood) {
+        const count = Math.max(1, size | 0);
+        const profile = getToneProfile(currentMood);
+        const colors = [];
+
+        if (currentMood === 'warm') {
+          /* Warm-specific: pick each color from an assigned band independently */
+          const bandSeq = pickWarmBandSequence(count);
+          for (let i = 0; i < count; i += 1) {
+            const progress = count > 1 ? (i / (count - 1)) : 0;
+            const wave = Math.sin(progress * Math.PI * 2);
+            const band = WARM_BANDS[bandSeq[i]];
+
+            let hue = randRange(band.range[0], band.range[1]);
+            let sat = randRange(profile.s[0], profile.s[1]) + wave * 6;
+            let light = randRange(profile.l[0], profile.l[1]) + (0.5 - progress) * 8;
+
+            if (i === 0) sat += 4;
+            else if (i === count - 1 && count >= 4) light += 8;
+
+            ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat, light, currentMood));
+
+            let hex = hslToHex(hue, sat, light);
+            hex = suppressBlueTintForWarm(hex, currentMood);
+            let hsl = hexToHsl(hex);
+
+            if (hsl.l >= 92 || (currentFamily !== 'mono' && hsl.s <= 10) || hsl.l <= 8) {
+              light = clamp(profile.l[0] + randRange(4, 18), 24, 84);
+              sat = clamp(profile.s[0] + randRange(10, 24), 28, 100);
+              ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat, light, currentMood));
+              hex = hslToHex(hue, sat, light);
+              hex = suppressBlueTintForWarm(hex, currentMood);
+              hsl = hexToHsl(hex);
+            }
+
+            if (colors.length > 0 && colorDistance(colors[colors.length - 1], hex) < 18) {
+              // Shift to a different band if too similar
+              const altBand = WARM_BANDS[(bandSeq[i] + 1) % 3];
+              hue = randRange(altBand.range[0], altBand.range[1]);
+              ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat + 6, light + 4, currentMood));
+              hex = hslToHex(hue, sat, light);
+              hex = suppressBlueTintForWarm(hex, currentMood);
+            }
+
+            colors.push(hex);
+          }
+        } else {
+          /* Non-warm: original harmony template approach */
+          const baseHue = pickBaseHue(currentFamily, currentMood);
+          const template = pickHarmonyTemplate(currentMood);
+
+          for (let i = 0; i < count; i += 1) {
+            const progress = count > 1 ? (i / (count - 1)) : 0;
+            const wave = Math.sin(progress * Math.PI * 2);
+
+            let hue = normalizeHue(baseHue + (template[i % template.length] || 0) + randRange(profile.hShift[0], profile.hShift[1]));
+            hue = clampHueToMood(hue, currentMood);
+            let sat = randRange(profile.s[0], profile.s[1]) + wave * 6;
+            let light = randRange(profile.l[0], profile.l[1]) + (0.5 - progress) * 6;
+
+            if (i === 0) {
+              sat += 4;
+            } else if (i === count - 1 && count >= 4 && !['deep', 'neon'].includes(currentMood)) {
+              light += 10;
+            }
+
+            ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat, light, currentMood));
+
+            let hex = hslToHex(hue, sat, light);
+            hex = suppressBlueTintForWarm(hex, currentMood);
+            let hsl = hexToHsl(hex);
+
+            if (hsl.l >= 92 || (currentFamily !== 'mono' && hsl.s <= 10) || hsl.l <= 8) {
+              light = clamp(profile.l[0] + randRange(4, 18), 24, 84);
+              sat = clamp(profile.s[0] + randRange(10, 24), 28, 100);
+              ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat, light, currentMood));
+              hex = hslToHex(hue, sat, light);
+              hex = suppressBlueTintForWarm(hex, currentMood);
+              hsl = hexToHsl(hex);
+            }
+
+            if (colors.length > 0 && colorDistance(colors[colors.length - 1], hex) < 18) {
+              hue = normalizeHue(hue + 22);
+              hue = clampHueToMood(hue, currentMood);
+              ({ h: hue, s: sat, l: light } = shapeToneByMood(hue, sat + 6, light + 4, currentMood));
+              hex = hslToHex(hue, sat, light);
+              hex = suppressBlueTintForWarm(hex, currentMood);
+            }
+
+            colors.push(hex);
+          }
+        }
+
+        // Apply family-specific adjustments
+        for (let i = 0; i < colors.length; i++) {
+          colors[i] = adjustForFamily(colors[i], currentFamily);
+        }
+
+        return colors;
+      }
+
+      function generatePaletteSeries(size, currentFamily, currentMood) {
+        const count = Math.max(1, size | 0);
+        const attempts = 18;
+        let best = null;
+        let bestScore = -Infinity;
+
+        for (let i = 0; i < attempts; i += 1) {
+          const candidate = generatePaletteCandidate(count, currentFamily, currentMood);
+          const score = scorePalette(candidate, currentMood);
+          if (score > bestScore || !best) {
+            best = candidate;
+            bestScore = score;
+          }
+        }
+
+        return best || generatePaletteCandidate(count, currentFamily, currentMood);
+      }
+
       function generateColor(swatch) {
-        const h = pickHue(family);
-        const s = randRange(50, 90);
-        const l = randRange(45, 85);
-        let hex = hslToHex(h, s, l);
-        hex = applyMood(hex, mood);
-        swatch.style.background = hex;
-        swatch.querySelector('.code').textContent = hex;
+        const currentFamily = familySelect?.value || family;
+        const currentMood = moodSelect?.value || mood;
+        const baseHue = pickBaseHue(currentFamily, currentMood);
+        const profile = getToneProfile(currentMood);
+
+        let chosen = null;
+        for (let i = 0; i < 8; i += 1) {
+          const sourceHue = clampHueToMood((baseHue + randRange(profile.hShift[0], profile.hShift[1]) + 360) % 360, currentMood);
+          const sourceSat = randRange(profile.s[0], profile.s[1]);
+          const sourceLight = randRange(profile.l[0], profile.l[1]);
+          const { h: hue, s: sat, l: light } = shapeToneByMood(sourceHue, sourceSat, sourceLight, currentMood);
+          const hex = hslToHex(hue, sat, light);
+          const hsl = hexToHsl(hex);
+
+          const tooWhite = hsl.l >= 92;
+          const tooGray = currentFamily !== 'mono' && hsl.s <= 12;
+          const tooDark = hsl.l <= 8;
+
+          if (!tooWhite && !tooGray && !tooDark) {
+            chosen = hex;
+            break;
+          }
+        }
+
+        if (!chosen) {
+          const fallbackHue = clampHueToMood((baseHue + randRange(-4, 4) + 360) % 360, currentMood);
+          const fallbackTone = shapeToneByMood(fallbackHue, Math.max(42, profile.s[0]), Math.min(72, Math.max(40, profile.l[0])), currentMood);
+          chosen = hslToHex(fallbackTone.h, fallbackTone.s, fallbackTone.l);
+        }
+
+        chosen = adjustForFamily(chosen, currentFamily);
+        updateSwatchInfo(swatch, chosen);
+      }
+
+      function enforceMoodConsistency() {
+        if (!paletteEl) return;
+        const currentMood = moodSelect?.value || mood || 'normal';
+        if (!['warm', 'cool'].includes(currentMood)) return;
+
+        Array.from(paletteEl.children).forEach((swatch) => {
+          const hexEl = swatch.querySelector('.val-hex');
+          if (!hexEl) return;
+          const originalHex = String(hexEl.textContent || '').trim();
+          if (!/^#([0-9a-fA-F]{6})$/.test(originalHex)) return;
+
+          const hsl = hexToHsl(originalHex);
+          const shaped = shapeToneByMood(hsl.h, hsl.s, hsl.l, currentMood);
+          const fixedHex = hslToHex(shaped.h, shaped.s, shaped.l);
+          if (fixedHex.toUpperCase() !== originalHex.toUpperCase()) {
+            updateSwatchInfo(swatch, fixedHex);
+          }
+        });
       }
 
       function generateAll() {
-        Array.from(paletteEl.children).forEach(sw => {
-          if (sw.dataset.locked === 'false') {
-            generateColor(sw);
+        try {
+          if (!paletteEl) return;
+          ensurePaletteSize();
+          const count = getSafePaletteCount();
+          const swatches = Array.from(paletteEl.children).slice(0, count);
+          const unlocked = swatches.filter((sw) => sw.dataset.locked === 'false');
+          if (unlocked.length === 0) {
+            enforceMoodConsistency();
+            refreshQualityAndPreview();
+            captureSnapshot();
+            return;
+          }
+
+          const currentFamily = familySelect?.value || family;
+          const currentMood = moodSelect?.value || mood;
+          const generated = generatePaletteSeries(unlocked.length, currentFamily, currentMood);
+
+          unlocked.forEach((swatch, index) => {
+            const hex = generated[index] || generated[generated.length - 1];
+            updateSwatchInfo(swatch, hex);
+          });
+
+          enforceMoodConsistency();
+          refreshQualityAndPreview();
+          captureSnapshot();
+        } catch (err) {
+          console.error('[generateAll] Error:', err);
+        }
+      }
+
+      window.__pgpEnforceMoodConsistency = enforceMoodConsistency;
+      window.__pgpMainGenerate = generateAll;
+      window.adjustForFamily = adjustForFamily;
+
+      function getSafePaletteCount() {
+        const raw = Number.parseInt(countSelect?.value, 10);
+        if (!Number.isFinite(raw)) return 10;
+        return Math.max(1, Math.min(10, raw));
+      }
+
+      function ensurePaletteSize() {
+        // 必要な数だけスウォッチを生成し、余分はDOMから削除
+        const count = getSafePaletteCount();
+        // 余分なスウォッチはremoveChildで完全に削除
+        while (paletteEl.children.length > count) {
+          paletteEl.removeChild(paletteEl.lastChild);
+        }
+        // 足りない分だけ追加
+        while (paletteEl.children.length < count) {
+          paletteEl.appendChild(createSwatch());
+        }
+        // ロック状態やクラスを整理
+        Array.from(paletteEl.children).forEach((swatch) => {
+          swatch.style.display = '';
+          const isLocked = swatch.dataset.locked === 'true';
+          swatch.classList.toggle('locked', isLocked);
+          const lock = swatch.querySelector('.lock');
+          if (lock) {
+            lock.innerHTML = isLocked
+              ? '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+              : '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
           }
         });
       }
 
       function updatePalette() {
-        const count = parseInt(countSelect.value, 10);
-        const currentCount = paletteEl.children.length;
-
-        for (let i = currentCount; i < count; i++) {
-          paletteEl.appendChild(createSwatch());
-        }
-
-        while (paletteEl.children.length > count) {
-          paletteEl.removeChild(paletteEl.lastChild);
-        }
+        ensurePaletteSize();
 
         generateAll();
         saveSettings();
       }
 
+      // ===== Settings =====
       function loadSettings() {
         const settings = loadData('randomColorSettings', {});
         if (settings.count) countSelect.value = settings.count;
@@ -495,36 +3505,154 @@
         saveData('randomColorSettings', settings);
       }
 
+      // ===== Copy & Export =====
       function copyPalette() {
-        const codes = Array.from(paletteEl.children).map(sw => sw.querySelector('.code').textContent).join(' ');
+        const count = getSafePaletteCount();
+        const codes = Array.from(paletteEl.children)
+          .slice(0, count)
+          .map(sw => sw.querySelector('.val-hex').textContent)
+          .map(c => stripHashIfNeeded(c)).join(' ');
         copyTextToClipboard(codes, {
-          successMessage: '📋 パレットをコピーしました',
-          emptyMessage: '⚠️ 先にカラーを生成してください',
-          fallbackMessage: 'ℹ️ コピー不可の環境です。カラーコードを手動でコピーしてください'
+          successMessage: 'パレットをコピーしました',
+          emptyMessage: '先にカラーを生成してください',
+          fallbackMessage: 'コピーできませんでした'
         });
       }
 
       function savePaletteAsImage() {
-        const swatches = Array.from(paletteEl.children);
+        const count = getSafePaletteCount();
+        const swatches = Array.from(paletteEl.children).slice(0, count);
         if (swatches.length === 0) return;
         const cols = Math.min(5, swatches.length);
         const rows = Math.ceil(swatches.length / cols);
-        const size = 120;
+        const size = 160;
+        const labelH = 32;
         const canvas = document.createElement('canvas');
         canvas.width = cols * size;
-        canvas.height = rows * size;
+        canvas.height = rows * (size + labelH);
         const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         swatches.forEach((sw, i) => {
-          const hex = sw.querySelector('.code').textContent;
+          const hex = sw.querySelector('.val-hex').textContent;
           const x = (i % cols) * size;
-          const y = Math.floor(i / cols) * size;
+          const y = Math.floor(i / cols) * (size + labelH);
           ctx.fillStyle = hex;
           ctx.fillRect(x, y, size, size);
+          ctx.fillStyle = '#333';
+          ctx.font = '600 13px Inter, system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(hex, x + size / 2, y + size + 20);
         });
         const link = document.createElement('a');
         link.download = 'palette.png';
         link.href = canvas.toDataURL();
         link.click();
+      }
+
+      // ===== Palette History =====
+      function getPaletteHistory() {
+        return loadData('paletteHistory', []);
+      }
+
+      function savePaletteToHistory() {
+        const count = getSafePaletteCount();
+        const colors = Array.from(paletteEl.children)
+          .slice(0, count)
+          .map(sw => sw.querySelector('.val-hex').textContent);
+        if (colors.length === 0) return;
+
+        const history = getPaletteHistory();
+        history.unshift({
+          id: Date.now(),
+          colors: colors,
+          createdAt: new Date().toISOString()
+        });
+
+        // Keep max 20 palettes
+        if (history.length > 20) history.length = 20;
+        saveData('paletteHistory', history);
+        renderHistory();
+        showToast('パレットを保存しました');
+        captureSnapshot();
+      }
+
+      function deletePaletteFromHistory(id) {
+        let history = getPaletteHistory();
+        history = history.filter(h => h.id !== id);
+        saveData('paletteHistory', history);
+        renderHistory();
+      }
+
+      function restorePalette(colors) {
+        countSelect.value = colors.length;
+        ensurePaletteSize();
+        const swatches = Array.from(paletteEl.children);
+        for (let i = 0; i < swatches.length; i++) {
+          if (i < colors.length) {
+            swatches[i].style.display = '';
+            swatches[i].dataset.locked = 'false';
+            swatches[i].classList.remove('locked');
+            swatches[i].querySelector('.lock').innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
+            updateSwatchInfo(swatches[i], colors[i]);
+          } else {
+            swatches[i].style.display = 'none';
+            swatches[i].dataset.locked = 'false';
+            swatches[i].classList.remove('locked');
+            swatches[i].querySelector('.lock').innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><rect x="5" y="11" width="14" height="11" rx="2"/></svg>';
+            updateSwatchInfo(swatches[i], '#f0f0f0');
+          }
+        }
+        refreshQualityAndPreview();
+        showToast('パレットを復元しました');
+        captureSnapshot();
+      }
+
+      function renderHistory() {
+        const list = document.getElementById('historyList');
+        const history = getPaletteHistory();
+
+        if (history.length === 0) {
+          list.innerHTML = '<div class="history-empty">まだ保存されたパレットはありません</div>';
+          return;
+        }
+
+        list.innerHTML = '';
+        history.forEach(item => {
+          const el = document.createElement('div');
+          el.className = 'history-item';
+
+          const colorsDiv = document.createElement('div');
+          colorsDiv.className = 'history-colors';
+          item.colors.slice(0, 10).forEach(hex => {
+            const mini = document.createElement('div');
+            mini.className = 'mini-swatch';
+            mini.style.background = hex;
+            mini.title = hex;
+            colorsDiv.appendChild(mini);
+          });
+
+          const meta = document.createElement('span');
+          meta.className = 'history-meta';
+          const d = new Date(item.createdAt);
+          meta.textContent = `${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'history-delete';
+          delBtn.textContent = '✕';
+          delBtn.title = '削除';
+          delBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deletePaletteFromHistory(item.id);
+          });
+
+          el.appendChild(colorsDiv);
+          el.appendChild(meta);
+          el.appendChild(delBtn);
+          el.addEventListener('click', () => restorePalette(item.colors));
+
+          list.appendChild(el);
+        });
       }
 
     });

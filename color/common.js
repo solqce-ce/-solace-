@@ -34,7 +34,17 @@ const APP_STORAGE_KEYS = [
   'gallery',
   'randomColorSettings',
   'emojiSettings',
-  'appSettings'
+  'appSettings',
+  'paletteHistory',
+  'workspaceProfiles',
+  'activeWorkspaceProfile',
+  'workspaceStates',
+  'teamWorkspace',
+  'brandGuidelines',
+  'auditReports',
+  'paletteCompareState',
+  'pairedPaletteDraft',
+  'appOfflineBackup'
 ];
 
 function getScopedKey(key) {
@@ -75,13 +85,17 @@ function removeRawData(key) {
   localStorage.removeItem(key);
 }
 
+function normalizeThemeValue(theme) {
+  return theme === 'dark' || theme === 'light' ? theme : null;
+}
+
 function getThemePreference() {
-  return getRawData('theme') ||
+  return normalizeThemeValue(getRawData('theme')) ||
     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 }
 
 function setThemePreference(theme) {
-  setRawData('theme', theme);
+  setRawData('theme', normalizeThemeValue(theme) || 'light');
 }
 
 // ========== テーマ管理 ==========
@@ -196,7 +210,24 @@ function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '⭐') {
 
 // ========== 履歴機能 ==========
 
+const HIDDEN_NAV_PAGES = new Set(['profile-enterprise.html', 'settings-enterprise.html']);
+
+function getPageFileName(url) {
+  if (typeof url !== 'string' || !url) return '';
+  try {
+    const parsed = new URL(url, window.location.href);
+    return parsed.pathname.split('/').pop() || '';
+  } catch (e) {
+    return url.split('#')[0].split('?')[0].split('/').pop() || '';
+  }
+}
+
+function isHiddenPageUrl(url) {
+  return HIDDEN_NAV_PAGES.has(getPageFileName(url));
+}
+
 function addToHistory(pageUrl, pageName, pageEmoji = '📄') {
+  if (isHiddenPageUrl(pageUrl)) return;
   const history = getHistory();
   
   // 同じページを再度訪問した場合は古い履歴を削除
@@ -231,7 +262,7 @@ function buildHistoryNav(currentPage) {
   const historyNav = document.getElementById('historyNav');
   if (!historyNav) return;
   
-  const history = getHistory();
+  const history = getHistory().filter(item => !isHiddenPageUrl(item.url));
   
   if (history.length === 0) {
     historyNav.style.display = 'none';
@@ -300,15 +331,50 @@ function buildNav(activePage = "") {
   }
 
   const links = [
-    { href: "index-enterprise.html", icon: "🏠", label: "ホーム", key: "index" },
-    { href: "emoji-generator-enterprise.html", icon: "😊", label: "絵文字", key: "emoji" },
-    { href: "pose-generator-enterprise.html", icon: "🧍", label: "ポーズ", key: "pose" },
-    { href: "chara-generator-enterprise.html", icon: "👥", label: "キャラ", key: "chara" },
-    { href: "random-color.html", icon: "🌈", label: "カラー", key: "random" },
-    { href: "gallery.html", icon: "🎨", label: "ギャラリー", key: "gallery" },
-    { href: "profile-enterprise.html", icon: "👤", label: "プロフ", key: "profile" },
-    { href: "settings-enterprise.html", icon: "⚙️", label: "設定", key: "settings" }
+    { href: "index-enterprise.html", icon: "🏠", label: "ホーム", key: "index", group: "スタート" },
+    { href: "random-color.html", icon: "🎨", label: "カラー生成", key: "random", group: "配色" },
+    { href: "harmony.html", icon: "🎯", label: "配色ハーモニー", key: "harmony", group: "配色" },
+    { href: "gradient-generator.html", icon: "🌈", label: "グラデーション", key: "gradient", group: "配色" },
+    { href: "contrast-checker.html", icon: "◐", label: "見やすさチェック", key: "contrast", group: "配色" },
+    { href: "emoji-generator-enterprise.html", icon: "😊", label: "絵文字生成", key: "emoji", group: "生成" },
+    { href: "pose-generator-enterprise.html", icon: "🧍", label: "ポーズ生成", key: "pose", group: "生成" },
+    { href: "chara-generator-enterprise.html", icon: "👥", label: "キャラ生成", key: "chara", group: "生成" },
+    { href: "gallery.html", icon: "🖼️", label: "作品ギャラリー", key: "gallery", group: "管理" }
   ];
+
+  const sectionOrder = ["スタート", "配色", "生成", "管理"];
+  const sectionMeta = {
+    "スタート": { title: "スタート", icon: "🏠" },
+    "配色": { title: "配色ツール", icon: "🎨" },
+    "生成": { title: "生成ツール", icon: "✨" },
+    "管理": { title: "管理", icon: "🗂️" }
+  };
+  const sectionHtml = sectionOrder.map((section) => {
+    const sectionLinks = links.filter((link) => link.group === section);
+    if (sectionLinks.length === 0) return '';
+    const sectionInfo = sectionMeta[section] || { title: section, icon: '•' };
+
+    return `
+      <section class="nav-group-card" aria-label="${sectionInfo.title}">
+        <p class="nav-group-title">
+          <span class="nav-group-icon" aria-hidden="true">${sectionInfo.icon}</span>
+          <span>${sectionInfo.title}</span>
+        </p>
+        <div class="nav-group-links">
+          ${sectionLinks.map(l => {
+            const isActive = l.key === activePage;
+            return `
+              <a href="${l.href}" class="nav-link nav-group-link${isActive ? ' active' : ''}" title="${l.label}">
+                <span class="nav-link-icon">${l.icon}</span>
+                <span class="nav-text">${l.label}</span>
+                ${isActive ? '<span class="nav-indicator"></span>' : ''}
+              </a>
+            `;
+          }).join('')}
+        </div>
+      </section>
+    `;
+  }).join('');
 
   nav.innerHTML = `
     <button class="nav-toggle" id="navToggle" aria-label="メニューを開く">
@@ -320,24 +386,34 @@ function buildNav(activePage = "") {
         <button class="nav-close" id="navClose" aria-label="メニューを閉じる">✕</button>
       </div>
       <div class="nav-links">
-        ${links.map(l => {
-          const isActive = l.key === activePage;
-          return `
-            <a href="${l.href}" class="nav-link${isActive ? ' active' : ''}" title="${l.label}">
-              <span class="nav-icon">${l.icon}</span>
-              <span class="nav-text">${l.label}</span>
-              ${isActive ? '<span class="nav-indicator"></span>' : ''}
-            </a>
-          `;
-        }).join('')}
+        ${sectionHtml}
       </div>
       <div class="nav-footer">
+        <a class="nav-creator-link" href="../index.html" title="製作者サイトへ" aria-label="製作者サイトへ移動" target="_blank" rel="noopener noreferrer">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-text">製作者サイト</span>
+        </a>
         <button class="nav-theme-toggle" id="navThemeToggle" title="テーマ切り替え" aria-label="テーマを切り替え">
           <span class="nav-icon">🌙</span>
         </button>
       </div>
+      <div class="nav-legal-links" aria-label="法務リンク">
+        <a href="../terms.html" target="_blank" rel="noopener noreferrer">利用規約</a>
+        <span aria-hidden="true">・</span>
+        <a href="../privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシー</a>
+        <span aria-hidden="true">・</span>
+        <a href="../tokutei-shotorihiki.html" target="_blank" rel="noopener noreferrer">特商法表記</a>
+        <span aria-hidden="true">・</span>
+        <a href="../cancellation-policy.html" target="_blank" rel="noopener noreferrer">返金・キャンセル</a>
+      </div>
     </div>
   `;
+
+  nav.querySelectorAll('.nav-link').forEach((link) => {
+    if (isHiddenPageUrl(link.getAttribute('href') || '')) {
+      link.remove();
+    }
+  });
 
   // イベントリスナー
   const toggle = document.getElementById("navToggle");
@@ -526,25 +602,100 @@ function injectCommonStyles() {
 
     .nav-links {
       flex: 1;
-      padding: 16px 0;
+      padding: 12px 16px 16px;
       overflow-y: auto;
+    }
+
+    .nav-group-card {
+      padding: 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      background: var(--bg-light);
+    }
+
+    html.dark .nav-group-card {
+      background: rgba(51, 65, 85, 0.82);
+      border-color: rgba(226, 232, 240, 0.22);
+    }
+
+    .nav-group-card + .nav-group-card {
+      margin-top: 10px;
+    }
+
+    .nav-group-title {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    html.dark .nav-group-title {
+      color: #cbd5e1;
+    }
+
+    .nav-group-icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .nav-group-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-guide {
+      margin: 12px 16px 8px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: rgba(51, 65, 85, 0.06);
+      flex-shrink: 0;
+    }
+
+    .nav-guide-title {
+      margin: 0 0 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .nav-guide-text {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
 
     .nav-link {
       display: flex !important;
       align-items: center !important;
-      gap: 12px;
-      padding: 14px 20px;
+      gap: 10px;
+      padding: 10px 12px;
       color: var(--text-primary);
       text-decoration: none;
       font-weight: 500;
       transition: var(--transition);
-      border-left: 3px solid transparent;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
       position: relative;
+      background: var(--bg-card);
+      min-height: 0;
+    }
+
+    html.dark .nav-link {
+      background: rgba(30, 41, 59, 0.86);
+      border-color: rgba(226, 232, 240, 0.22);
+      color: #e2e8f0;
     }
 
     .nav-link:hover {
       background: rgba(51, 65, 85, 0.08);
+      border-color: #334155;
       color: #334155;
     }
 
@@ -555,37 +706,42 @@ function injectCommonStyles() {
 
     .nav-link.active {
       background: rgba(51, 65, 85, 0.12);
-      border-left-color: #334155;
+      border-color: #334155;
       color: #334155;
       font-weight: 600;
     }
 
     html.dark .nav-link.active {
       background: rgba(148, 163, 184, 0.22);
-      border-left-color: #e2e8f0;
+      border-color: #e2e8f0;
       color: #f8fafc;
     }
 
-    .nav-icon {
-      font-size: 20px;
+    .nav-link-icon {
+      font-size: 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      width: 20px;
     }
 
     .nav-text {
       font-size: 14px;
+      font-weight: 600;
+      line-height: 1.2;
       flex: 1;
     }
 
     .nav-indicator {
       position: absolute;
-      right: 0;
-      width: 3px;
-      height: 24px;
+      top: 50%;
+      right: 10px;
+      width: 6px;
+      height: 6px;
       background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-      border-radius: 2px;
+      border-radius: 999px;
+      transform: translateY(-50%);
     }
 
     .nav-footer {
@@ -594,6 +750,38 @@ function injectCommonStyles() {
       display: flex;
       gap: 10px;
       flex-shrink: 0;
+    }
+
+    .nav-legal-links {
+      padding: 0 20px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    html.dark .nav-legal-links {
+      color: #cbd5e1;
+    }
+
+    .nav-legal-links a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .nav-legal-links a:hover {
+      color: var(--text-primary);
+      border-bottom-color: currentColor;
+    }
+
+    html.dark .nav-legal-links a:hover {
+      color: #f8fafc;
     }
 
     .nav-theme-toggle {
@@ -609,6 +797,36 @@ function injectCommonStyles() {
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .nav-creator-link {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      background: var(--bg-light);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .nav-creator-link:hover {
+      background: rgba(51, 65, 85, 0.1);
+      border-color: #334155;
+      color: #334155;
+    }
+
+    html.dark .nav-creator-link:hover {
+      background: rgba(148, 163, 184, 0.18);
+      border-color: #e2e8f0;
+      color: #f8fafc;
     }
 
     .nav-theme-toggle:hover {
@@ -746,6 +964,90 @@ function injectCommonStyles() {
       color: #fff;
     }
 
+    /* ===== ユーティリティクラス（既存ページ互換） ===== */
+    .d-none { display: none !important; }
+    .text-center { text-align: center !important; }
+    .text-left { text-align: left !important; }
+    .pre-wrap { white-space: pre-wrap !important; }
+    .opacity-08 { opacity: 0.8 !important; }
+    .font-095em { font-size: 0.95em !important; }
+    .label-bold { font-weight: 700 !important; }
+
+    .mb-md { margin-bottom: 16px !important; }
+    .mt-sm { margin-top: 8px !important; }
+    .mt-lg { margin-top: 24px !important; }
+    .mt-2xl { margin-top: 40px !important; }
+
+    .flex-center {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .flex-gap-sm {
+      display: flex !important;
+      gap: 8px !important;
+      align-items: center;
+    }
+
+    .flex-gap-md-wrap {
+      display: flex !important;
+      gap: 12px !important;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .grid-auto-200 {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .grid-auto-350 {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 16px;
+    }
+
+    .btn-auto {
+      width: auto !important;
+      min-width: 120px;
+    }
+
+    .form-select {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .card-content-padding { padding: 16px !important; }
+    .card-title {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .card-text-sm {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .gradient-text-purple {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
     /* ===== モバイルレスポンシブ ===== */
     @media (max-width: 768px) {
       #mainNav {
@@ -793,7 +1095,7 @@ function injectCommonStyles() {
       }
 
       .nav-link {
-        padding: 12px 16px;
+        padding: 10px 12px;
         gap: 10px;
       }
 
@@ -801,9 +1103,56 @@ function injectCommonStyles() {
         font-size: 13px;
       }
     }
+
+    html.lightweight *,
+    html.lightweight *::before,
+    html.lightweight *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   `;
   
   document.head.appendChild(style);
+}
+
+function applyRuntimePreferences() {
+  const defaults = {
+    animation: true,
+    lightweightMode: false,
+    offlineBackup: true
+  };
+  const settings = { ...defaults, ...(loadData('appSettings', {}) || {}) };
+  document.documentElement.classList.toggle('lightweight', Boolean(settings.lightweightMode));
+  return settings;
+}
+
+function createOfflineBackupSnapshot() {
+  try {
+    const snapshot = {
+      createdAt: new Date().toISOString(),
+      data: {}
+    };
+    APP_STORAGE_KEYS.forEach((key) => {
+      const value = getRawData(key);
+      if (value !== null && value !== undefined) {
+        snapshot.data[key] = value;
+      }
+    });
+    setRawData('appOfflineBackup', JSON.stringify(snapshot));
+  } catch (error) {
+    console.warn('オフラインバックアップの作成に失敗しました', error);
+  }
+}
+
+function setupOfflineBackup(settings) {
+  if (!settings.offlineBackup) return;
+  const saveBackup = () => createOfflineBackupSnapshot();
+  window.addEventListener('beforeunload', saveBackup);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveBackup();
+  });
 }
 
 // ========== ユーティリティ ==========
@@ -857,9 +1206,33 @@ function copyTextToClipboard(text, options = {}) {
     return Promise.resolve(false);
   }
 
+  function fallbackCopy() {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = normalized;
+      ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) {
+        showToast(successMessage, toastDuration, 'success');
+        return true;
+      }
+    } catch (e) {}
+    // Last resort: show prompt for manual copy
+    try {
+      window.prompt('コピーするには Ctrl+C / ⌘+C を押してください:', normalized);
+      showToast(successMessage, toastDuration, 'success');
+      return true;
+    } catch (e) {}
+    showToast(errorMessage, 2800, 'warning');
+    return false;
+  }
+
   if (!navigator.clipboard || !window.isSecureContext) {
-    showToast(fallbackMessage, 2800, 'info');
-    return Promise.resolve(false);
+    return Promise.resolve(fallbackCopy());
   }
 
   return navigator.clipboard.writeText(normalized)
@@ -868,9 +1241,133 @@ function copyTextToClipboard(text, options = {}) {
       return true;
     })
     .catch(() => {
-      showToast(errorMessage, 2800, 'warning');
-      return false;
+      return fallbackCopy();
     });
+}
+
+function registerGlobalShortcuts() {
+  const isEditableTarget = (target) => {
+    const tag = String(target?.tagName || '').toLowerCase();
+    return tag === 'input' || tag === 'textarea' || target?.isContentEditable;
+  };
+
+  const clickFirstAvailable = (selectors) => {
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
+      if (!el || el.disabled) continue;
+      el.click();
+      return true;
+    }
+    return false;
+  };
+
+  document.addEventListener('keydown', (event) => {
+    if (event.defaultPrevented) return;
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (isEditableTarget(event.target)) return;
+
+    const key = String(event.key || '').toLowerCase();
+    if (!['r', 'c', 's'].includes(key)) return;
+
+    if (key === 'r') {
+      const fired = clickFirstAvailable([
+        '#genBtn',
+        '#generateEmojisBtn',
+        '#generatePoseBtn',
+        '#generateBtn',
+        '#addSampleBtn'
+      ]);
+      if (fired) event.preventDefault();
+      return;
+    }
+
+    if (key === 'c') {
+      const fired = clickFirstAvailable([
+        '#copyBtn',
+        '#copyAllBtn',
+        '#copyCssBtn',
+        '#copyVarsBtn'
+      ]);
+      if (fired) event.preventDefault();
+      return;
+    }
+
+    if (key === 's') {
+      const fired = clickFirstAvailable([
+        '#histSaveBtn',
+        '#savePoseBtn',
+        '#saveCompositionBtn',
+        '#saveProfileBtn',
+        '#workspaceSaveBtn'
+      ]);
+      if (fired) event.preventDefault();
+    }
+  });
+}
+
+// ========== ワークスペース保存 ==========
+
+function getWorkspaceProfiles() {
+  const profiles = loadData('workspaceProfiles', []);
+  if (!Array.isArray(profiles) || profiles.length === 0) {
+    const initial = [{ id: 'default', name: 'Default', createdAt: new Date().toISOString() }];
+    saveData('workspaceProfiles', initial);
+    if (!getRawData('activeWorkspaceProfile')) {
+      setRawData('activeWorkspaceProfile', 'default');
+    }
+    return initial;
+  }
+  return profiles;
+}
+
+function getActiveWorkspaceProfile() {
+  const active = getRawData('activeWorkspaceProfile');
+  const profiles = getWorkspaceProfiles();
+  if (active && profiles.some((profile) => profile.id === active)) {
+    return active;
+  }
+  const fallback = profiles[0]?.id || 'default';
+  setRawData('activeWorkspaceProfile', fallback);
+  return fallback;
+}
+
+function setActiveWorkspaceProfile(profileId) {
+  const profiles = getWorkspaceProfiles();
+  if (!profiles.some((profile) => profile.id === profileId)) return false;
+  setRawData('activeWorkspaceProfile', profileId);
+  return true;
+}
+
+function createWorkspaceProfile(name) {
+  const normalizedName = String(name || '').trim();
+  if (!normalizedName) return null;
+
+  const profiles = getWorkspaceProfiles();
+  const existed = profiles.find((profile) => profile.name.toLowerCase() === normalizedName.toLowerCase());
+  if (existed) return existed.id;
+
+  const id = `ws_${Date.now().toString(36)}`;
+  const next = [...profiles, { id, name: normalizedName, createdAt: new Date().toISOString() }];
+  saveData('workspaceProfiles', next);
+  return id;
+}
+
+function saveWorkspaceState(pageKey, state, profileId = null) {
+  const targetId = profileId || getActiveWorkspaceProfile();
+  const allStates = loadData('workspaceStates', {});
+  if (!allStates[targetId]) allStates[targetId] = {};
+  allStates[targetId][pageKey] = {
+    state,
+    savedAt: new Date().toISOString()
+  };
+  saveData('workspaceStates', allStates);
+  return true;
+}
+
+function loadWorkspaceState(pageKey, profileId = null) {
+  const targetId = profileId || getActiveWorkspaceProfile();
+  const allStates = loadData('workspaceStates', {});
+  return allStates?.[targetId]?.[pageKey]?.state || null;
 }
 
 // ========== 初期化 ==========
@@ -879,9 +1376,28 @@ document.addEventListener("DOMContentLoaded", () => {
   migrateStorageKeys();
   applyTheme();
   injectCommonStyles();
+  registerGlobalShortcuts();
+  const runtimeSettings = applyRuntimePreferences();
+  setupOfflineBackup(runtimeSettings);
   
   // 現在のページを履歴に追加
   const pageName = document.title.split(' - ')[0] || 'ページ';
-  const pageEmoji = '📄';
-  addToHistory(window.location.pathname.split('/').pop() || 'index-enterprise.html', pageName, pageEmoji);
+  const currentFile = window.location.pathname.split('/').pop() || 'index-enterprise.html';
+  const pageMap = {
+    'index-enterprise.html': '🏠',
+    'random-color.html': '🎨',
+    'harmony.html': '🎯',
+    'gradient-generator.html': '🌈',
+    'contrast-checker.html': '◐',
+    'emoji-generator-enterprise.html': '😊',
+    'pose-generator-enterprise.html': '🧍',
+    'chara-generator-enterprise.html': '👥',
+    'gallery.html': '🖼️',
+    'profile-enterprise.html': '👤',
+    'settings-enterprise.html': '⚙️'
+  };
+  const pageEmoji = pageMap[currentFile] || '📄';
+  if (!isHiddenPageUrl(currentFile)) {
+    addToHistory(currentFile, pageName, pageEmoji);
+  }
 });

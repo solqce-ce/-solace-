@@ -1,0 +1,62 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start local server (5500)",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "http.server",
+        "5500"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop local server (5500)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "pids=$(lsof -tiTCP:5500 -sTCP:LISTEN || true); if [ -n \"$pids\" ]; then kill $pids; echo \"Stopped: $pids\"; else echo \"No server listening on 5500\"; fi"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Open forwarded URL (5500)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "url=\"https://${CODESPACE_NAME}-5500.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/index.html\"; echo \"Opening: $url\"; \"$BROWSER\" \"$url\""
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Start server + Open forwarded URL (5500)",
+      "dependsOn": [
+        "Start local server (5500)",
+        "Open forwarded URL (5500)"
+      ],
+      "dependsOrder": "sequence",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

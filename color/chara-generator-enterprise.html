@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
   <title>キャラ構成ジェネレーター - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -83,6 +94,61 @@
       font-weight: 500;
     }
 
+    .quick-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .step-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(51, 65, 85, 0.08);
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    html.dark .step-chip {
+      background: rgba(148, 163, 184, 0.15);
+      border-color: rgba(226, 232, 240, 0.3);
+      color: #e2e8f0;
+    }
+
+    .generation-controls {
+      margin-bottom: 20px;
+      padding: 16px;
+      border: 1px solid rgba(51, 65, 85, 0.2);
+      background: rgba(51, 65, 85, 0.04);
+      display: grid;
+      gap: 10px;
+    }
+
+    html.dark .generation-controls {
+      background: rgba(148, 163, 184, 0.12);
+      border-color: rgba(226, 232, 240, 0.28);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .control-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-light);
+      min-width: 74px;
+    }
+
+    html.dark .control-label {
+      color: #dbeafe;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -119,7 +185,7 @@
 
     html.dark .card {
       background: rgba(51, 65, 85, 0.9);
-      border-color: rgba(51, 65, 85, 0.15);
+      border-color: rgba(226, 232, 240, 0.2);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
@@ -328,6 +394,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
@@ -336,25 +403,37 @@
     <div class="page-header">
       <h1>キャラ構成ジェネレーター</h1>
       <p>キャラクターの容姿・設定・世界観をランダムで生成します（テキスト出力）</p>
+      <div class="quick-steps" aria-label="操作ステップ">
+        <span class="step-chip">1. 人数を選ぶ</span>
+        <span class="step-chip">2. 案数を選ぶ</span>
+        <span class="step-chip">3. 生成してコピー</span>
+      </div>
     </div>
     <div class="history-nav" id="historyNav"></div>
 
-    <div class="flex-gap-md-wrap mb-md">
-      <label for="countSelect" class="label-bold">生成人数</label>
-      <select id="countSelect" class="form-select">
-        <option value="1">1人</option>
-        <option value="2">2人</option>
-        <option value="3" selected>3人</option>
-        <option value="4">4人</option>
-        <option value="5">5人</option>
-      </select>
-      <label for="variantNum" class="label-bold">複数案</label>
-      <select id="variantNum" class="form-select">
-        <option value="1">1案</option>
-        <option value="3">3案</option>
-        <option value="5" selected>5案</option>
-      </select>
-      <button class="btn btn-primary btn-auto" id="generateBtn">🎲 ランダム生成</button>
+    <div class="generation-controls" aria-label="主要操作">
+      <div class="control-row">
+        <span class="control-label">生成人数</span>
+        <select id="countSelect" class="form-select btn-auto">
+          <option value="1">1人</option>
+          <option value="2">2人</option>
+          <option value="3" selected>3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <span class="control-label">複数案</span>
+        <select id="variantNum" class="form-select btn-auto">
+          <option value="1">1案</option>
+          <option value="3">3案</option>
+          <option value="5" selected>5案</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <span class="control-label">操作</span>
+        <button class="btn btn-primary btn-auto" id="generateBtn">🎲 キャラ案を生成</button>
+      </div>
     </div>
 
     <div class="grid" id="charsGrid">
@@ -368,11 +447,11 @@
         <div class="composition-title">詳細（コピー可）</div>
         <pre id="detailedList" class="pre-wrap mt-sm">—</pre>
       </div>
-      <button type="button" id="saveCompositionBtn" class="btn btn-primary">💾 構成を保存</button>
+      <button type="button" id="saveCompositionBtn" class="btn btn-primary">📋 結果テキストをコピー</button>
     </div>
   </div>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     const firstNames = ['アオイ','ユウ','カナ','ショウ','ミナ','リク','サラ','ケイ','ハル','ユキ','タク','ナツ','レン','ミオ','ヒナ','ソウタ','リナ','ユウタ','マコト','ユイ','カオリ','ナオ','コウ','サキ','ヒロ'];
     const ages = ['乳幼児','幼年','児童','少年','少女','青春期','青年','成人','中年','壮年','高年'];

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
+  <title>Contrast Checker - Palette Generator Pro</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-17HK77SMHP');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: #fafafa; color: #1a1a1a;
+      transition: background 0.3s, color 0.3s;
+    }
+    html.dark body { background: #111113; color: #e4e4e7; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 64px 32px 96px; }
+
+    .page-header { margin-bottom: 48px; }
+    .page-header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 8px; }
+    html.dark .page-header h1 { color: #fafafa; }
+    .page-header .subtitle { font-size: 0.875rem; color: #71717a; margin: 0; }
+    html.dark .page-header .subtitle { color: #a1a1aa; }
+
+    /* Color Inputs */
+    .color-inputs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
+    }
+    .color-card {
+      background: #fff; border: 1px solid #e4e4e7; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    html.dark .color-card { background: #18181b; border-color: #27272a; }
+    .color-card .card-label {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #71717a;
+    }
+    html.dark .color-card .card-label { color: #a1a1aa; }
+    .color-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .color-row input[type="color"] {
+      width: 44px; height: 44px; border: 1px solid #e4e4e7; border-radius: 10px;
+      cursor: pointer; background: none; padding: 3px; flex-shrink: 0;
+    }
+    html.dark .color-row input[type="color"] { border-color: #3f3f46; }
+    .color-row input[type="text"] {
+      flex: 1; padding: 10px 12px; font-size: 0.875rem; border-radius: 8px;
+      border: 1px solid #e4e4e7; background: #fafafa; color: #1a1a1a;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    html.dark .color-row input[type="text"] {
+      background: #27272a; border-color: #3f3f46; color: #e4e4e7;
+    }
+    .swap-btn {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      z-index: 2; width: 36px; height: 36px; border-radius: 50%;
+      background: #fff; border: 1px solid #e4e4e7; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem; transition: all 0.15s; color: #52525b;
+    }
+    html.dark .swap-btn { background: #27272a; border-color: #3f3f46; color: #a1a1aa; }
+    .swap-btn:hover { background: #f4f4f5; border-color: #d4d4d8; }
+    html.dark .swap-btn:hover { background: #3f3f46; }
+    .color-inputs-wrapper { position: relative; }
+
+    /* Preview */
+    .preview-section {
+      border-radius: 12px; overflow: hidden; border: 1px solid #e4e4e7;
+      margin-bottom: 32px;
+    }
+    html.dark .preview-section { border-color: #27272a; }
+    .preview-box {
+      padding: 48px 32px; text-align: center; transition: all 0.2s;
+    }
+    .preview-box .preview-heading {
+      font-size: 2rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .preview-box .preview-body {
+      font-size: 1rem; line-height: 1.6; max-width: 500px; margin: 0 auto;
+    }
+    .preview-box .preview-small {
+      font-size: 0.75rem; margin-top: 16px; opacity: 0.8;
+    }
+
+    /* Results */
+    .results-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
+    }
+    .result-card {
+      background: #fff; border: 1px solid #e4e4e7; border-radius: 12px;
+      padding: 20px; text-align: center;
+    }
+    html.dark .result-card { background: #18181b; border-color: #27272a; }
+    .result-card .ratio {
+      font-size: 2.5rem; font-weight: 700; letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+    .result-card .ratio-label {
+      font-size: 0.75rem; color: #71717a; margin-bottom: 16px;
+    }
+    html.dark .result-card .ratio-label { color: #a1a1aa; }
+
+    .wcag-badges { display: flex; flex-direction: column; gap: 6px; }
+    .wcag-badge {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+    }
+    .wcag-badge.pass { background: #ecfdf5; color: #059669; }
+    html.dark .wcag-badge.pass { background: rgba(5,150,105,0.12); color: #34d399; }
+    .wcag-badge.fail { background: #fef2f2; color: #dc2626; }
+    html.dark .wcag-badge.fail { background: rgba(220,38,38,0.12); color: #f87171; }
+    .wcag-badge .badge-status {
+      padding: 2px 8px; border-radius: 4px; font-size: 0.625rem;
+      font-weight: 700; letter-spacing: 0.5px;
+    }
+    .wcag-badge.pass .badge-status { background: #059669; color: #fff; }
+    .wcag-badge.fail .badge-status { background: #dc2626; color: #fff; }
+
+    /* Info */
+    .info-section {
+      background: #fff; border: 1px solid #e4e4e7; border-radius: 12px;
+      padding: 24px;
+    }
+    html.dark .info-section { background: #18181b; border-color: #27272a; }
+    .info-section h3 {
+      font-size: 0.875rem; font-weight: 600; margin: 0 0 12px;
+    }
+    .info-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+    .info-table th {
+      text-align: left; padding: 8px 12px; font-weight: 600;
+      border-bottom: 1px solid #e4e4e7; color: #71717a;
+    }
+    html.dark .info-table th { border-bottom-color: #27272a; color: #a1a1aa; }
+    .info-table td {
+      padding: 8px 12px; border-bottom: 1px solid #f4f4f5;
+    }
+    html.dark .info-table td { border-bottom-color: #27272a; }
+    .info-table tr:last-child td { border-bottom: none; }
+
+    .actions-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 8px 12px;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #e4e4e7;
+      background: transparent;
+      color: #52525b;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    html.dark .action-btn {
+      border-color: #3f3f46;
+      color: #a1a1aa;
+    }
+    .action-btn:hover {
+      background: #f4f4f5;
+    }
+    html.dark .action-btn:hover {
+      background: #27272a;
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 40px 16px 64px; }
+      .color-inputs, .results-grid { grid-template-columns: 1fr; }
+      .swap-btn { top: auto; bottom: -18px; left: 50%; }
+      .page-header h1 { font-size: 1.375rem; }
+      .result-card .ratio { font-size: 2rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
+</head>
+<body>
+  <nav id="mainNav"></nav>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Contrast Checker</h1>
+      <p class="subtitle">WCAG 2.1 準拠のコントラスト比を判定</p>
+    </div>
+    <div class="history-nav" id="historyNav"></div>
+
+    <div class="actions-row">
+      <button class="action-btn" id="autoFixBtn">AA用に自動調整</button>
+      <button class="action-btn" id="autoFixSimBtn">シミュレーション改善</button>
+      <button class="action-btn" id="copyCssBtn">CSSコピー</button>
+      <button class="action-btn" id="shareBtn">共有URL</button>
+      <select class="action-btn" id="simMode" style="min-width:160px;">
+        <option value="normal" selected>通常表示</option>
+        <option value="protanopia">P型シミュレーション</option>
+        <option value="deuteranopia">D型シミュレーション</option>
+        <option value="tritanopia">T型シミュレーション</option>
+      </select>
+    </div>
+
+    <div class="color-inputs-wrapper">
+      <div class="color-inputs">
+        <div class="color-card">
+          <span class="card-label">テキスト色</span>
+          <div class="color-row">
+            <input type="color" id="fgColor" value="#1a1a1a">
+            <input type="text" id="fgHex" value="#1A1A1A" maxlength="7" spellcheck="false">
+          </div>
+        </div>
+        <div class="color-card">
+          <span class="card-label">背景色</span>
+          <div class="color-row">
+            <input type="color" id="bgColor" value="#ffffff">
+            <input type="text" id="bgHex" value="#FFFFFF" maxlength="7" spellcheck="false">
+          </div>
+        </div>
+      </div>
+      <button class="swap-btn" id="swapBtn" title="色を入れ替え">⇄</button>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-box" id="previewBox">
+        <div class="preview-heading">見出しテキスト</div>
+        <div class="preview-body">これはプレビュー用のテキストです。この組み合わせが実際のUIでどのように見えるかを確認できます。</div>
+        <div class="preview-small">小さなテキスト (12px) のプレビュー</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="ratio" id="ratioDisplay">21.0:1</div>
+        <div class="ratio-label">コントラスト比</div>
+        <div class="wcag-badges" id="normalBadges">
+          <div class="wcag-badge pass"><span>通常テキスト AA</span><span class="badge-status">PASS</span></div>
+          <div class="wcag-badge pass"><span>通常テキスト AAA</span><span class="badge-status">PASS</span></div>
+        </div>
+      </div>
+      <div class="result-card">
+        <div class="ratio" id="ratioDisplayLarge" style="opacity:0.85">—</div>
+        <div class="ratio-label" id="simRatioLabel">シミュレーション比</div>
+        <div class="wcag-badges" id="largeBadges">
+          <div class="wcag-badge pass"><span>大テキスト AA</span><span class="badge-status">PASS</span></div>
+          <div class="wcag-badge pass"><span>大テキスト AAA</span><span class="badge-status">PASS</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>色覚多様性 改善提案</h3>
+      <div class="report-box" id="improvementTips" style="margin-bottom:14px; white-space:pre-wrap;">未評価</div>
+
+      <h3>WCAG 2.1 基準</h3>
+      <table class="info-table">
+        <thead>
+          <tr><th>レベル</th><th>通常テキスト</th><th>大テキスト (18pt+)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AA (最低基準)</td><td>4.5:1 以上</td><td>3.0:1 以上</td></tr>
+          <tr><td>AAA (推奨)</td><td>7.0:1 以上</td><td>4.5:1 以上</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="common.js?v=20260303-navlayout4"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      buildNav('contrast');
+      buildHistoryNav('contrast-checker.html');
+      applyTheme();
+      injectCommonStyles();
+
+      const fgColorEl = document.getElementById('fgColor');
+      const fgHexEl = document.getElementById('fgHex');
+      const bgColorEl = document.getElementById('bgColor');
+      const bgHexEl = document.getElementById('bgHex');
+      const swapBtn = document.getElementById('swapBtn');
+      const previewBox = document.getElementById('previewBox');
+      const ratioDisplay = document.getElementById('ratioDisplay');
+      const ratioDisplayLarge = document.getElementById('ratioDisplayLarge');
+      const simRatioLabel = document.getElementById('simRatioLabel');
+      const normalBadges = document.getElementById('normalBadges');
+      const largeBadges = document.getElementById('largeBadges');
+      const autoFixBtn = document.getElementById('autoFixBtn');
+      const copyCssBtn = document.getElementById('copyCssBtn');
+      const autoFixSimBtn = document.getElementById('autoFixSimBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      const simModeEl = document.getElementById('simMode');
+      const improvementTips = document.getElementById('improvementTips');
+      let simMode = 'normal';
+
+      function rgbToHex(r, g, b) {
+        const toHex = (value) => Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+      }
+
+      function simulateColorBlind(hex, mode) {
+        if (mode === 'normal') return hex.toUpperCase();
+        const r = parseInt(hex.slice(1,3),16);
+        const g = parseInt(hex.slice(3,5),16);
+        const b = parseInt(hex.slice(5,7),16);
+        const matrixMap = {
+          protanopia: [
+            [0.56667, 0.43333, 0],
+            [0.55833, 0.44167, 0],
+            [0, 0.24167, 0.75833]
+          ],
+          deuteranopia: [
+            [0.625, 0.375, 0],
+            [0.7, 0.3, 0],
+            [0, 0.3, 0.7]
+          ],
+          tritanopia: [
+            [0.95, 0.05, 0],
+            [0, 0.43333, 0.56667],
+            [0, 0.475, 0.525]
+          ]
+        };
+        const matrix = matrixMap[mode] || matrixMap.deuteranopia;
+        const nr = r * matrix[0][0] + g * matrix[0][1] + b * matrix[0][2];
+        const ng = r * matrix[1][0] + g * matrix[1][1] + b * matrix[1][2];
+        const nb = r * matrix[2][0] + g * matrix[2][1] + b * matrix[2][2];
+        return rgbToHex(nr, ng, nb);
+      }
+
+      function luminance(hex) {
+        const r = parseInt(hex.slice(1,3),16)/255;
+        const g = parseInt(hex.slice(3,5),16)/255;
+        const b = parseInt(hex.slice(5,7),16)/255;
+        const toLinear = c => c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+        return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+      }
+
+      function contrastRatio(hex1, hex2) {
+        const l1 = luminance(hex1);
+        const l2 = luminance(hex2);
+        const lighter = Math.max(l1, l2);
+        const darker = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      function syncUrlState() {
+        const params = new URLSearchParams(window.location.search);
+        params.set('fg', fgColorEl.value.toUpperCase());
+        params.set('bg', bgColorEl.value.toUpperCase());
+        params.set('sim', simMode);
+        history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+      }
+
+      function applyStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const fg = (params.get('fg') || '').toUpperCase();
+        const bg = (params.get('bg') || '').toUpperCase();
+        const sim = params.get('sim');
+        if (/^#[0-9A-F]{6}$/.test(fg)) {
+          fgColorEl.value = fg;
+          fgHexEl.value = fg;
+        }
+        if (/^#[0-9A-F]{6}$/.test(bg)) {
+          bgColorEl.value = bg;
+          bgHexEl.value = bg;
+        }
+        const validSim = ['normal', 'protanopia', 'deuteranopia', 'tritanopia'];
+        if (validSim.includes(sim)) {
+          simMode = sim;
+          simModeEl.value = sim;
+        }
+      }
+
+      function badge(label, pass) {
+        return `<div class="wcag-badge ${pass ? 'pass' : 'fail'}">
+          <span>${label}</span>
+          <span class="badge-status">${pass ? 'PASS' : 'FAIL'}</span>
+        </div>`;
+      }
+
+      function update() {
+        const fg = fgColorEl.value;
+        const bg = bgColorEl.value;
+        const ratio = contrastRatio(fg, bg);
+        const ratioStr = ratio.toFixed(2);
+        const fgSim = simulateColorBlind(fg, simMode);
+        const bgSim = simulateColorBlind(bg, simMode);
+        const simRatio = contrastRatio(fgSim, bgSim);
+
+        previewBox.style.color = fgSim;
+        previewBox.style.background = bgSim;
+
+        ratioDisplay.textContent = ratioStr + ':1';
+        ratioDisplayLarge.textContent = simRatio.toFixed(2) + ':1';
+        simRatioLabel.textContent = simMode === 'normal' ? 'シミュレーション比（通常）' : `シミュレーション比（${simMode}）`;
+
+        // Color the ratio based on pass/fail
+        if (ratio >= 7) {
+          ratioDisplay.style.color = '#059669';
+        } else if (ratio >= 4.5) {
+          ratioDisplay.style.color = '#d97706';
+        } else {
+          ratioDisplay.style.color = '#dc2626';
+        }
+
+        normalBadges.innerHTML = badge('通常テキスト AA (≥4.5:1)', ratio >= 4.5)
+          + badge('通常テキスト AAA (≥7.0:1)', ratio >= 7);
+
+        largeBadges.innerHTML = badge('シミュレーション AA (≥4.5:1)', simRatio >= 4.5)
+          + badge('シミュレーション AAA (≥7.0:1)', simRatio >= 7);
+
+        const tips = [];
+        if (ratio < 4.5) {
+          tips.push('通常表示でAA未達です。まず前景色の明度差を広げてください。');
+        }
+        if (simMode !== 'normal' && simRatio < 4.5) {
+          tips.push(`${simMode}でAA未達です。赤・緑の高彩度組み合わせを避け、青系/明暗差で区別してください。`);
+        }
+        if (simMode !== 'normal' && simRatio >= 4.5 && ratio >= 4.5) {
+          tips.push(`通常・${simMode}の両方でAAを満たしています。導入候補として安全です。`);
+        }
+        if (tips.length === 0) {
+          tips.push('現状は問題ありません。文字サイズや太さでも可読性を最終確認してください。');
+        }
+        improvementTips.textContent = tips.join('\n');
+
+        syncUrlState();
+      }
+
+      function autoFixForAA() {
+        const bg = bgColorEl.value;
+        const black = '#000000';
+        const white = '#FFFFFF';
+        const blackRatio = contrastRatio(black, bg);
+        const whiteRatio = contrastRatio(white, bg);
+
+        if (blackRatio >= 4.5 || whiteRatio >= 4.5) {
+          const next = blackRatio >= whiteRatio ? black : white;
+          fgColorEl.value = next;
+          fgHexEl.value = next;
+          update();
+          showToast('AAに合わせてテキスト色を調整しました');
+          return;
+        }
+
+        const bgLum = luminance(bg);
+        for (let i = 0; i <= 255; i += 1) {
+          const value = bgLum > 0.5 ? 255 - i : i;
+          const hex = `#${value.toString(16).padStart(2, '0').repeat(3)}`.toUpperCase();
+          if (contrastRatio(hex, bg) >= 4.5) {
+            fgColorEl.value = hex;
+            fgHexEl.value = hex;
+            update();
+            showToast('AAに合わせてテキスト色を調整しました');
+            return;
+          }
+        }
+
+        showToast('自動調整に失敗しました', 2200, 'warning');
+      }
+
+      function autoFixForSimulation() {
+        const bg = bgColorEl.value;
+        const candidates = ['#0F172A', '#111827', '#FFFFFF', '#E2E8F0', '#1E3A8A'];
+        let best = fgColorEl.value;
+        let bestScore = -1;
+        candidates.forEach((candidate) => {
+          const simFg = simulateColorBlind(candidate, simMode);
+          const simBg = simulateColorBlind(bg, simMode);
+          const score = contrastRatio(simFg, simBg);
+          if (score > bestScore) {
+            bestScore = score;
+            best = candidate;
+          }
+        });
+
+        fgColorEl.value = best;
+        fgHexEl.value = best;
+        update();
+        showToast(`シミュレーション向けにテキスト色を調整しました (${best})`, 2200, 'success');
+      }
+
+      function syncInputs(colorEl, hexEl) {
+        colorEl.addEventListener('input', () => {
+          hexEl.value = colorEl.value.toUpperCase();
+          update();
+        });
+        hexEl.addEventListener('input', () => {
+          let val = hexEl.value.trim();
+          if (!val.startsWith('#')) val = '#' + val;
+          if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+            colorEl.value = val;
+            update();
+          }
+        });
+      }
+
+      syncInputs(fgColorEl, fgHexEl);
+      syncInputs(bgColorEl, bgHexEl);
+
+      swapBtn.addEventListener('click', () => {
+        const tmpColor = fgColorEl.value;
+        const tmpHex = fgHexEl.value;
+        fgColorEl.value = bgColorEl.value;
+        fgHexEl.value = bgHexEl.value;
+        bgColorEl.value = tmpColor;
+        bgHexEl.value = tmpHex;
+        update();
+      });
+
+      autoFixBtn.addEventListener('click', autoFixForAA);
+      autoFixSimBtn.addEventListener('click', autoFixForSimulation);
+
+      copyCssBtn.addEventListener('click', () => {
+        const css = `color: ${fgColorEl.value.toUpperCase()};\nbackground-color: ${bgColorEl.value.toUpperCase()};`;
+        copyTextToClipboard(css, {
+          successMessage: 'CSSをコピーしました',
+          emptyMessage: '', fallbackMessage: 'コピーできませんでした'
+        });
+      });
+
+      shareBtn.addEventListener('click', () => {
+        syncUrlState();
+        const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+        copyTextToClipboard(url, {
+          successMessage: '共有URLをコピーしました',
+          emptyMessage: '', fallbackMessage: 'コピーできませんでした'
+        });
+      });
+
+      simModeEl.addEventListener('change', () => {
+        simMode = simModeEl.value;
+        update();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const tag = String(event.target?.tagName || '').toLowerCase();
+        const editable = tag === 'input' || tag === 'textarea' || event.target?.isContentEditable;
+        if (editable) return;
+        const key = event.key.toLowerCase();
+        if (key === 'f') {
+          event.preventDefault();
+          autoFixBtn.click();
+        }
+        if (key === 'c') {
+          event.preventDefault();
+          copyCssBtn.click();
+        }
+        if (key === 's') {
+          event.preventDefault();
+          shareBtn.click();
+        }
+        if (key === 'v') {
+          event.preventDefault();
+          const modes = ['normal', 'protanopia', 'deuteranopia', 'tritanopia'];
+          const idx = modes.indexOf(simMode);
+          simMode = modes[(idx + 1) % modes.length];
+          simModeEl.value = simMode;
+          update();
+        }
+      });
+
+      applyStateFromUrl();
+      update();
+    });
+  </script>
+</body>
+</html>

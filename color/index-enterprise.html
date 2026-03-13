@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            (function() {
+                try {
+                    const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+                    const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                    document.documentElement.className = theme;
+                } catch (e) {
+                    document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+            })();
+        </script>
     <title>Palette Generator Pro</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -67,7 +78,7 @@
         .hero {
             text-align: center;
             margin-bottom: 100px;
-            padding: 120px 60px;
+            padding: 96px 56px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             border: none;
             border-radius: 0;
@@ -90,7 +101,7 @@
             background: 
                 radial-gradient(circle at 20% 30%, rgba(51, 65, 85, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 80% 70%, rgba(51, 65, 85, 0.06) 0%, transparent 50%);
-            animation: pulse 20s ease-in-out infinite;
+            animation: none;
         }
 
         @keyframes pulse {
@@ -100,12 +111,12 @@
 
         .hero h1 {
             font-family: 'Syne', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 6rem);
-            font-weight: 800;
-            margin-bottom: 32px;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 700;
+            margin-bottom: 16px;
             color: #0f172a;
-            line-height: 1;
-            letter-spacing: -3px;
+            line-height: 1.15;
+            letter-spacing: -0.6px;
             position: relative;
             z-index: 1;
         }
@@ -115,16 +126,16 @@
         }
 
         .hero p {
-            font-size: 1.35rem;
-            opacity: 0.85;
-            margin-bottom: 50px;
-            max-width: 800px;
+            font-size: 1.05rem;
+            opacity: 0.92;
+            margin-bottom: 34px;
+            max-width: 720px;
             margin-left: auto;
             margin-right: auto;
             font-weight: 500;
             position: relative;
             z-index: 1;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
         .hero-cta {
@@ -302,6 +313,72 @@
             text-decoration: underline;
         }
 
+        .help-fab {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(51, 65, 85, 0.25);
+            background: rgba(255, 255, 255, 0.7);
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            opacity: 0.6;
+            z-index: 1200;
+            transition: opacity 0.2s ease, background 0.2s ease;
+        }
+
+        .help-fab:hover {
+            opacity: 0.95;
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        html.dark .help-fab {
+            background: rgba(15, 23, 42, 0.78);
+            border-color: rgba(148, 163, 184, 0.35);
+            color: #e2e8f0;
+        }
+
+        .help-panel {
+            position: fixed;
+            right: 18px;
+            bottom: 54px;
+            width: min(300px, calc(100vw - 24px));
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid rgba(51, 65, 85, 0.18);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+            display: none;
+            z-index: 1200;
+        }
+
+        .help-panel.show {
+            display: block;
+        }
+
+        html.dark .help-panel {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(148, 163, 184, 0.28);
+            color: #e2e8f0;
+        }
+
+        .help-panel h4 {
+            margin: 0 0 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .help-panel ol {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.82rem;
+            line-height: 1.55;
+        }
+
         .btn {
             padding: 18px 40px;
             border: none;
@@ -383,17 +460,15 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 0;
+            gap: 16px;
             margin-bottom: 100px;
         }
 
         .feature-card {
             padding: 60px 40px;
-            border-radius: 0;
+            border-radius: 14px;
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            border-right: none;
-            border-bottom: none;
             box-shadow: none;
             transition: all 0.3s ease;
 
@@ -404,26 +479,10 @@
             cursor: pointer;
         }
 
-        .feature-card:nth-child(3n) {
-            border-right: 1px solid #e2e8f0;
-        }
-
-        .feature-card:nth-last-child(-n+3) {
-            border-bottom: 1px solid #e2e8f0;
-        }
-
         html.dark .feature-card {
             background: #334155;
             border-color: #475569;
             box-shadow: none;
-        }
-
-        html.dark .feature-card:nth-child(3n) {
-            border-right-color: #475569;
-        }
-
-        html.dark .feature-card:nth-last-child(-n+3) {
-            border-bottom-color: #475569;
         }
 
         .feature-card::before {
@@ -555,7 +614,7 @@
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
             .features-header h2 {
@@ -605,7 +664,7 @@
 
         @media (max-width: 480px) {
             .hero h1 {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             .features-header h2 {
@@ -621,6 +680,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
     <nav id="mainNav"></nav>
@@ -628,61 +688,11 @@
     <div class="container">
         <!-- ヒーロー -->
         <section class="hero" id="top">
-            <h1>✨ Palette Generator Pro</h1>
-            <p>企業案件でも使いやすい、シンプルな生成ツールセット。必要なページへすぐジャンプできます。</p>
+            <h1>Palette Generator Pro</h1>
+            <p>企業プロジェクトで必要な配色・生成・検証を一つに集約。チームで再利用しやすい運用設計に対応します。</p>
             <div class="hero-cta">
-                <a href="emoji-generator-enterprise.html" class="btn btn-primary">🚀 すぐ始める</a>
-                <a href="random-color.html" class="btn btn-secondary">🎨 カラー生成</a>
-            </div>
-        </section>
-
-        <section class="jump-panel" aria-label="クイックジャンプ">
-            <h2>クイックジャンプ</h2>
-            <p>目的別にすぐ移動できます。最短で作業を開始してください。</p>
-
-            <div class="jump-group">
-                <div class="jump-group-title">ページ内ジャンプ</div>
-                <div class="jump-grid">
-                    <a href="#flow" class="jump-link"><span>利用フロー</span><span>→</span></a>
-                    <a href="#tools" class="jump-link"><span>ツール一覧</span><span>→</span></a>
-                    <a href="#start" class="jump-link"><span>今すぐ開始</span><span>→</span></a>
-                </div>
-            </div>
-
-            <div class="jump-group">
-                <div class="jump-group-title">主要ツール</div>
-                <div class="jump-grid">
-                    <a href="emoji-generator-enterprise.html" class="jump-link"><span>😊 絵文字</span><span>→</span></a>
-                    <a href="pose-generator-enterprise.html" class="jump-link"><span>🧍 ポーズ</span><span>→</span></a>
-                    <a href="random-color.html" class="jump-link"><span>🌈 カラー</span><span>→</span></a>
-                    <a href="gallery.html" class="jump-link"><span>🎨 ギャラリー</span><span>→</span></a>
-                    <a href="settings-enterprise.html" class="jump-link"><span>⚙️ 設定</span><span>→</span></a>
-                </div>
-            </div>
-        </section>
-
-        <section class="quick-start" id="flow" aria-label="初めての方向けガイド">
-            <h2>はじめての3ステップ</h2>
-            <p>迷ったらこの順番で使えば、最短で作品づくりを始められます。</p>
-            <div class="quick-start-grid">
-                <article class="quick-start-card">
-                    <span class="quick-step">STEP 1</span>
-                    <h3>作る</h3>
-                    <p>まずは絵文字やポーズを生成して、アイデアを形にします。</p>
-                    <a href="emoji-generator-enterprise.html" class="quick-start-link">絵文字ジェネレーターへ →</a>
-                </article>
-                <article class="quick-start-card">
-                    <span class="quick-step">STEP 2</span>
-                    <h3>保存する</h3>
-                    <p>良い案をギャラリーに集めて、あとで見返しやすくします。</p>
-                    <a href="gallery.html" class="quick-start-link">ギャラリーへ →</a>
-                </article>
-                <article class="quick-start-card">
-                    <span class="quick-step">STEP 3</span>
-                    <h3>共有する</h3>
-                    <p>設定ページからデータを書き出して、チームと共有できます。</p>
-                    <a href="settings-enterprise.html" class="quick-start-link">設定ページへ →</a>
-                </article>
+                <a href="emoji-generator-enterprise.html" class="btn btn-primary">機能を試す</a>
+                <a href="random-color.html" class="btn btn-secondary">カラー生成へ</a>
             </div>
         </section>
 
@@ -704,10 +714,37 @@
 
             <a href="random-color.html" class="feature-card">
                 <div class="feature-card-inner">
-                    <div class="feature-icon">🌈</div>
+                    <div class="feature-icon">🎨</div>
                     <h3 class="feature-title">ランダムカラー</h3>
                     <p class="feature-desc">ワンクリックで美しいカラーパレットを生成。デザイン作業が加速します。</p>
-                    <div class="feature-badge">新機能</div>
+                    <div class="feature-badge">人気</div>
+                </div>
+            </a>
+
+            <a href="harmony.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">カラーハーモニー</h3>
+                    <p class="feature-desc">補色・類似色・トライアドなど、調和するパレットを自動生成。</p>
+                    <div class="feature-badge">New</div>
+                </div>
+            </a>
+
+            <a href="gradient-generator.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">🌈</div>
+                    <h3 class="feature-title">グラデーション</h3>
+                    <p class="feature-desc">美しいグラデーションを作成し、CSSコードをそのままコピー。</p>
+                    <div class="feature-badge">New</div>
+                </div>
+            </a>
+
+            <a href="contrast-checker.html" class="feature-card">
+                <div class="feature-card-inner">
+                    <div class="feature-icon">◐</div>
+                    <h3 class="feature-title">コントラストチェッカー</h3>
+                    <p class="feature-desc">WCAG 2.1 準拠のコントラスト比を判定。アクセシビリティ対応に。</p>
+                    <div class="feature-badge">New</div>
                 </div>
             </a>
 
@@ -729,7 +766,7 @@
 
             <a href="gallery.html" class="feature-card">
                 <div class="feature-card-inner">
-                    <div class="feature-icon">🎨</div>
+                    <div class="feature-icon">🖼️</div>
                     <h3 class="feature-title">ギャラリー</h3>
                     <p class="feature-desc">作成した全作品を管理・整理。検索とフィルタリング機能完備。</p>
                 </div>
@@ -746,13 +783,39 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Palette Generator Pro. All rights reserved.</p>
+        <p>&copy; 2026 Palette Generator Pro. All rights reserved.</p>
     </footer>
 
-    <script src="common.js"></script>
+    <button type="button" class="help-fab" id="helpFab" aria-label="ヘルプを開く">?</button>
+    <aside class="help-panel" id="helpPanel" aria-label="ヘルプ">
+        <h4>簡易ヘルプ</h4>
+        <ol>
+            <li>ナビゲーションまたは機能カードから使いたいツールへ移動。</li>
+            <li>各ツールで生成し、必要なら保存・共有。</li>
+            <li>ギャラリーで管理、設定でエクスポート。</li>
+        </ol>
+    </aside>
+
+    <script src="common.js?v=20260303-navlayout4"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             buildNav("index");
+            buildHistoryNav("index-enterprise.html");
+            applyTheme();
+            injectCommonStyles();
+
+            const helpFab = document.getElementById("helpFab");
+            const helpPanel = document.getElementById("helpPanel");
+            if (helpFab && helpPanel) {
+                helpFab.addEventListener("click", () => {
+                    helpPanel.classList.toggle("show");
+                });
+
+                document.addEventListener("click", (event) => {
+                    if (event.target === helpFab || helpPanel.contains(event.target)) return;
+                    helpPanel.classList.remove("show");
+                });
+            }
         });
     </script>
 </body>

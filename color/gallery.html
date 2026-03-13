@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('pgp.theme') || localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      } catch (e) {
+        document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    })();
+  </script>
   <title>ギャラリー - Palette Generator Pro</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
@@ -396,6 +407,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="corporate-theme.css?v=20260302e">
 </head>
 <body>
   <nav id="mainNav"></nav>
@@ -413,6 +425,10 @@
         <button type="button" id="filterAllBtn" class="filter-tab active" data-filter="all">すべて</button>
         <button type="button" id="filterFavoritesBtn" class="filter-tab" data-filter="favorites">❤️ お気に入り</button>
       </div>
+      <select id="sortSelect" class="form-select" aria-label="ソート順">
+        <option value="recent" selected>最近使った順</option>
+        <option value="favorites">お気に入り順</option>
+      </select>
       <button type="button" id="addSampleBtn" class="btn btn-primary">➕ サンプル追加</button>
     </div>
 
@@ -425,20 +441,56 @@
     <div class="gallery-grid d-none" id="galleryGrid"></div>
   </div>
 
-  <script src="common.js"></script>
+  <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     const sampleArtworks = [
-      { id: 1, name: '笑顔のポートレート', emoji: '😊', date: '2024-02-27', type: 'emoji' },
-      { id: 2, name: 'ジャンプポーズ', emoji: '🤸', date: '2024-02-26', type: 'pose' },
-      { id: 3, name: 'ファミリーシーン', emoji: '👨👩👧', date: '2024-02-25', type: 'chara' },
-      { id: 4, name: 'パステルパレット', emoji: '🌈', date: '2024-02-24', type: 'color' },
-      { id: 5, name: 'スタンディング', emoji: '🧍', date: '2024-02-23', type: 'pose' },
-      { id: 6, name: 'グループ構成', emoji: '👥', date: '2024-02-22', type: 'chara' },
+      { id: 1, name: '笑顔のポートレート', emoji: '😊', date: '2024-02-27', type: 'emoji', tags: ['portrait', 'smile'], description: '柔らかい印象のプロフィール用絵文字セット', colors: ['#FFD166', '#06D6A0'] },
+      { id: 2, name: 'ジャンプポーズ', emoji: '🤸', date: '2024-02-26', type: 'pose', tags: ['action', 'sports'], description: '躍動感のあるランディング向けポーズ案', colors: ['#2563EB', '#38BDF8'] },
+      { id: 3, name: 'ファミリーシーン', emoji: '👨👩👧', date: '2024-02-25', type: 'chara', tags: ['family', 'warm'], description: '家族向けサービス訴求のビジュアル構成', colors: ['#F59E0B', '#F97316'] },
+      { id: 4, name: 'パステルパレット', emoji: '🌈', date: '2024-02-24', type: 'color', tags: ['palette', 'pastel'], description: 'SaaSの背景色・UI補助色に使える配色', colors: ['#A7F3D0', '#BFDBFE', '#FDE68A'] },
+      { id: 5, name: 'スタンディング', emoji: '🧍', date: '2024-02-23', type: 'pose', tags: ['business', 'present'], description: '提案資料で使いやすい立ちポーズ', colors: ['#1E3A8A', '#14B8A6'] },
+      { id: 6, name: 'グループ構成', emoji: '👥', date: '2024-02-22', type: 'chara', tags: ['team', 'collaboration'], description: '導入事例セクション向けのチーム構図', colors: ['#334155', '#0EA5E9'] },
     ];
 
     let artworks = [];
     let currentFilter = 'all';
     let currentQuery = '';
+    let currentSort = 'recent';
+
+    function toArray(value) {
+      return Array.isArray(value) ? value : [];
+    }
+
+    function normalizeArtwork(art, index) {
+      const tags = toArray(art.tags).map((tag) => String(tag).toLowerCase());
+      const colors = toArray(art.colors).map((color) => String(color).toLowerCase());
+      const description = String(art.description || '');
+      const id = Number(art.id) || Date.now() + index;
+      const date = String(art.date || new Date().toISOString().slice(0, 10));
+      return {
+        ...art,
+        id,
+        date,
+        tags,
+        colors,
+        description,
+        lastUsedAt: String(art.lastUsedAt || art.createdAt || art.date || new Date().toISOString())
+      };
+    }
+
+    function persistGallery() {
+      saveData('gallery', artworks);
+    }
+
+    function buildSearchBlob(art) {
+      return [
+        art.name,
+        art.type,
+        art.description,
+        ...(art.tags || []),
+        ...(art.colors || [])
+      ].join(' ').toLowerCase();
+    }
 
     function getDisplayItems() {
       let displayItems = artworks;
@@ -446,11 +498,20 @@
         displayItems = artworks.filter((art) => isFavorite(art.id));
       }
 
-      if (!currentQuery) {
-        return displayItems;
+      if (currentQuery) {
+        displayItems = displayItems.filter((art) => buildSearchBlob(art).includes(currentQuery));
       }
 
-      return displayItems.filter((art) => art.name.toLowerCase().includes(currentQuery));
+      if (currentSort === 'favorites') {
+        return [...displayItems].sort((a, b) => {
+          const aFav = isFavorite(a.id) ? 1 : 0;
+          const bFav = isFavorite(b.id) ? 1 : 0;
+          if (aFav !== bFav) return bFav - aFav;
+          return new Date(b.lastUsedAt).getTime() - new Date(a.lastUsedAt).getTime();
+        });
+      }
+
+      return [...displayItems].sort((a, b) => new Date(b.lastUsedAt).getTime() - new Date(a.lastUsedAt).getTime());
     }
 
     function createCardHtml(art) {
@@ -497,7 +558,8 @@
 
     function addSampleArtwork() {
       if (artworks.length < sampleArtworks.length) {
-        artworks.push(sampleArtworks[artworks.length]);
+        artworks.push(normalizeArtwork(sampleArtworks[artworks.length], artworks.length));
+        persistGallery();
         renderGallery();
         showToast('✅ サンプルを追加しました', 2000, 'success');
       } else {
@@ -508,6 +570,8 @@
     function viewArtwork(id) {
       const art = artworks.find(a => a.id === id);
       if (art) {
+        art.lastUsedAt = new Date().toISOString();
+        persistGallery();
         showToast(`📖 ${art.name} を表示しました`, 2000, 'info');
       }
     }
@@ -536,6 +600,11 @@
         renderGallery();
       });
 
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderGallery();
+      });
+
       document.getElementById('galleryGrid').addEventListener('click', (event) => {
         const actionEl = event.target.closest('[data-action]');
         if (!actionEl) return;
@@ -557,6 +626,8 @@
         }
       });
 
+      const stored = loadData('gallery', []);
+      artworks = toArray(stored).map(normalizeArtwork);
       renderGallery();
     });
   </script>
