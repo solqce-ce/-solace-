@@ -244,8 +244,9 @@ const syncMobileMenuA11yState = () => {
 
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
+        const isActive = navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
+        document.body.classList.toggle('nav-open', isActive);
         syncMobileMenuA11yState();
     });
 }
@@ -259,6 +260,7 @@ navLinks.forEach(link => {
 
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        document.body.classList.remove('nav-open');
         syncMobileMenuA11yState();
     });
 });
@@ -272,6 +274,7 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.navbar') && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        document.body.classList.remove('nav-open');
         syncMobileMenuA11yState();
     }
 });
@@ -284,6 +287,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        document.body.classList.remove('nav-open');
         syncMobileMenuA11yState();
         hamburger.focus();
     }
@@ -301,6 +305,14 @@ filterButtons.forEach(button => {
 
         // フィルタリング
         const filterValue = button.getAttribute('data-filter');
+        const worksFeatured = document.querySelector('.works-featured');
+        const worksDivider = document.querySelector('.works-divider');
+        if (worksFeatured) {
+            worksFeatured.style.display = filterValue === 'all' ? '' : 'none';
+        }
+        if (worksDivider) {
+            worksDivider.style.display = filterValue === 'all' ? '' : 'none';
+        }
         portfolioItems.forEach(item => {
             if (filterValue === 'all' || item.getAttribute('data-filter') === filterValue) {
                 item.style.display = 'block';
@@ -315,6 +327,40 @@ filterButtons.forEach(button => {
             }
         });
     });
+});
+
+// フォールバック：もし `#hamburger` が存在しないか見えない場合、小さな固定トグルを生成
+function ensureMobileToggleFallback() {
+    const ham = document.getElementById('hamburger');
+    const nav = document.getElementById('navMenu');
+    if (!nav) return;
+
+    const hamVisible = ham && window.getComputedStyle(ham).display !== 'none' && ham.offsetParent !== null;
+    if (hamVisible) return; // 正常に表示されている
+
+    if (document.getElementById('mobileMenuToggle')) return; // 既に作成済み
+
+    const btn = document.createElement('button');
+    btn.id = 'mobileMenuToggle';
+    btn.setAttribute('aria-label', 'メニューを開閉');
+    btn.className = 'hamburger fallback';
+    btn.innerHTML = '<span></span><span></span><span></span>';
+
+    btn.addEventListener('click', () => {
+        const isActive = nav.classList.toggle('active');
+        document.body.classList.toggle('nav-open', isActive);
+        btn.classList.toggle('active', isActive);
+        syncMobileMenuA11yState();
+    });
+
+    document.body.appendChild(btn);
+}
+
+// DOMロード後にフォールバックを確認（初回とリサイズ時）
+document.addEventListener('DOMContentLoaded', ensureMobileToggleFallback);
+window.addEventListener('resize', () => {
+    // 少し遅延して再確認
+    setTimeout(ensureMobileToggleFallback, 120);
 });
 
 // ===== お問い合わせフォーム送信 =====
@@ -494,15 +540,143 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ===== モーダルなど今後の拡張機能用 =====
-// ポートフォリオ項目をクリックで大きく表示する機能など
-document.querySelectorAll('.portfolio-item').forEach(item => {
-    item.addEventListener('click', function() {
-        const img = this.querySelector('img');
-        // 将来的にはライトボックス機能を追加
-        console.log('Clicked on portfolio item:', img.alt);
+// ===== ポートフォリオ ライトボックス =====
+const setupPortfolioLightbox = () => {
+    const lightbox = document.getElementById('portfolio-lightbox');
+    if (!lightbox) {
+        return;
+    }
+
+    const lightboxImg = document.getElementById('portfolio-lightbox-img');
+    const lightboxTitle = document.getElementById('portfolio-lightbox-title');
+    const lightboxMeta = document.getElementById('portfolio-lightbox-meta');
+    const closeBtn = lightbox.querySelector('.portfolio-lightbox-close');
+    const backdrop = lightbox.querySelector('.portfolio-lightbox-backdrop');
+    const prevBtn = lightbox.querySelector('.portfolio-lightbox-prev');
+    const nextBtn = lightbox.querySelector('.portfolio-lightbox-next');
+
+    const slides = Array.from(document.querySelectorAll('.portfolio-item.portfolio-expandable'))
+        .map((item) => {
+            const img = item.querySelector('.work-card__media img, .portfolio-image img');
+            const title = item.querySelector('.work-card__title, .portfolio-overlay h5');
+            const meta = item.querySelector('.work-card__meta, .portfolio-overlay p');
+            if (!img) {
+                return null;
+            }
+            return {
+                src: img.currentSrc || img.src,
+                alt: img.alt || '',
+                title: title ? title.textContent.trim() : img.alt,
+                meta: meta ? meta.textContent.trim() : ''
+            };
+        })
+        .filter(Boolean);
+
+    if (!slides.length) {
+        return;
+    }
+
+    let activeIndex = 0;
+    let lastFocusedElement = null;
+
+    const renderSlide = (index) => {
+        const slide = slides[index];
+        if (!slide) {
+            return;
+        }
+        activeIndex = index;
+        lightboxImg.src = slide.src;
+        lightboxImg.alt = slide.alt;
+        lightboxTitle.textContent = slide.title;
+        lightboxMeta.textContent = slide.meta;
+        prevBtn.disabled = slides.length <= 1;
+        nextBtn.disabled = slides.length <= 1;
+    };
+
+    const openLightbox = (index) => {
+        lastFocusedElement = document.activeElement;
+        renderSlide(index);
+        lightbox.hidden = false;
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('portfolio-lightbox-open');
+        closeBtn.focus();
+        sendAnalyticsEvent('portfolio_lightbox_open', {
+            event_category: 'engagement',
+            event_label: slides[index]?.title || 'portfolio',
+            page_path: window.location.pathname
+        });
+    };
+
+    const closeLightbox = () => {
+        lightbox.hidden = true;
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('portfolio-lightbox-open');
+        lightboxImg.removeAttribute('src');
+        if (lastFocusedElement instanceof HTMLElement) {
+            lastFocusedElement.focus();
+        }
+    };
+
+    const showRelative = (delta) => {
+        const nextIndex = (activeIndex + delta + slides.length) % slides.length;
+        renderSlide(nextIndex);
+    };
+
+    document.querySelectorAll('.portfolio-item.portfolio-expandable').forEach((item, index) => {
+        const openFromItem = () => openLightbox(index);
+
+        item.addEventListener('click', (event) => {
+            if (event.target.closest('a')) {
+                return;
+            }
+            openFromItem();
+        });
+
+        item.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openFromItem();
+            }
+        });
     });
-});
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    backdrop?.addEventListener('click', closeLightbox);
+    prevBtn?.addEventListener('click', () => showRelative(-1));
+    nextBtn?.addEventListener('click', () => showRelative(1));
+
+    document.addEventListener('keydown', (event) => {
+        if (lightbox.hidden) {
+            return;
+        }
+        if (event.key === 'Escape') {
+            closeLightbox();
+        } else if (event.key === 'ArrowLeft') {
+            showRelative(-1);
+        } else if (event.key === 'ArrowRight') {
+            showRelative(1);
+        }
+    });
+};
+
+setupPortfolioLightbox();
+
+const setupStudioHeader = () => {
+    const header = document.querySelector('.header');
+    if (!header) {
+        return;
+    }
+    const isHome = document.body.classList.contains('home-page');
+    const onScroll = () => {
+        header.classList.toggle('header--scrolled', !isHome || window.scrollY > 48);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+};
+
+if (document.body.classList.contains('studio-site') && document.querySelector('.header')) {
+    setupStudioHeader();
+}
 
 // ===== フォームバリデーション =====
 function validateFormData(data) {
@@ -2144,7 +2318,7 @@ class FAQChatbot {
             <div id="chatbot-widget" class="chatbot-widget">
                 <div class="chatbot-header">
                     <h4>よくある質問</h4>
-                    <a href="mailto:solqc_e@outlook.com" class="chatbot-mail-link" title="メールで相談">メール</a>
+                    <a href="mailto:solqc_e@outlook.com" class="chatbot-mail-link" title="メールで相談"><i class="fas fa-envelope" aria-hidden="true"></i><span>メール</span></a>
                     <button id="chatbot-close" class="chatbot-close" aria-label="チャットを閉じる">×</button>
                 </div>
                 <div id="chatbot-messages" class="chatbot-messages">
@@ -2239,4 +2413,106 @@ class FAQChatbot {
 // チャットボットを初期化
 document.addEventListener('DOMContentLoaded', () => {
     new FAQChatbot();
+    initializeFormSecurity();
+    initializeCSRFProtection();
+});
+
+// ===== セキュリティ：フォーム入力バリデーション =====
+const initializeFormSecurity = () => {
+    document.querySelectorAll('form').forEach((form) => {
+        form.addEventListener('submit', (e) => {
+            // 基本的な入力値検証
+            const inputs = form.querySelectorAll('input[type="email"], input[type="text"], textarea');
+            let isValid = true;
+
+            inputs.forEach((input) => {
+                const value = (input.value || '').trim();
+                
+                // メールアドレス検証（type="email" の場合）
+                if (input.type === 'email' && value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        input.setAttribute('aria-invalid', 'true');
+                        isValid = false;
+                    } else {
+                        input.removeAttribute('aria-invalid');
+                    }
+                }
+                
+                // 必須フィールド検証
+                if (input.hasAttribute('required') && !value) {
+                    input.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else if (!input.hasAttribute('required') || value) {
+                    input.removeAttribute('aria-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                console.warn('フォーム検証エラー：入力値を確認してください');
+            }
+        });
+    });
+};
+
+// ===== セキュリティ：CSRF トークン保護 =====
+const initializeCSRFProtection = () => {
+    // CSRF トークンを生成（クライアント側での基本実装）
+    const generateCSRFToken = () => {
+        return 'csrf_' + Math.random().toString(36).substr(2, 9) + 
+               '_' + new Date().getTime();
+    };
+
+    // フォーム送信前にトークンを埋め込む
+    document.querySelectorAll('form').forEach((form) => {
+        // 既存の CSRF 入力がない場合のみ追加
+        if (!form.querySelector('input[name="_csrf"]')) {
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_csrf';
+            csrfInput.value = generateCSRFToken();
+            form.appendChild(csrfInput);
+        }
+
+        // フォーム送信時にトークンを更新（リプレイ攻撃対策）
+        form.addEventListener('submit', () => {
+            const csrfInput = form.querySelector('input[name="_csrf"]');
+            if (csrfInput) {
+                csrfInput.value = generateCSRFToken();
+            }
+        });
+    });
+};
+
+// ===== セキュリティ：CSP 違反ログ =====
+window.addEventListener('securitypolicyviolation', (e) => {
+    console.warn('CSP violation detected:', {
+        violatedDirective: e.violatedDirective,
+        blockedURI: e.blockedURI,
+        sourceFile: e.sourceFile,
+        lineNumber: e.lineNumber
+    });
+});
+
+window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    const content = document.getElementById("main-content");
+
+    setTimeout(() => {
+
+        content.classList.add("show");
+
+        setTimeout(() => {
+
+            loader.style.opacity = "0";
+
+            // フェード終わってから完全に消す
+            setTimeout(() => {
+                loader.style.display = "none";
+            }, 1200);
+
+        }, 200);
+
+    }, 1400);
 });

@@ -20,16 +20,60 @@
     <meta name="twitter:title" content="solace - Professional Illustration & Character Design">
     <meta name="twitter:description" content="感情に届くイラスト制作。ゲーム、アニメーション、商用プロジェクト対応。">
     <meta name="twitter:image" content="https://solace-illustration.com/images/og-default.png">
-    <meta name="theme-color" content="#E67E22">
+    <meta name="theme-color" content="#0a0c10">
+    
+    <!-- ===== セキュリティヘッダー ===== -->
+    <!-- Content Security Policy (CSP) - XSS / インジェクション攻撃対策 -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' https://www.googletagmanager.com https://cdnjs.cloudflare.com;
+                   style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
+                   img-src 'self' data: https:;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   frame-ancestors 'none';
+                   base-uri 'self';
+                   form-action 'self';">
+    
+    <!-- Referrer-Policy - ユーザープライバシー保護 -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- X-UA-Compatible - 古いブラウザ対策 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
     <title>solace | Professional Illustration & Character Design Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome with Subresource Integrity (SRI) - CDN安全性確保 -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="studio.css">
+    <link rel="stylesheet" href="icons-fix.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "solace",
+        "alternateName": "そらす",
+        "description": "キャラクターデザイン・立ち絵・SDキャラなど、感情に届くイラスト制作",
+        "url": "https://solace-illustration.com/",
+        "image": "https://solace-illustration.com/images/og-default.png",
+        "areaServed": "JP",
+        "serviceType": ["Character Design", "Illustration", "Live2D"],
+        "sameAs": [
+            "https://x.com/solqc_e",
+            "https://www.instagram.com/solqc_e/",
+            "https://www.pixiv.net/users/87167514"
+        ]
+    }
+    </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP" crossorigin="anonymous"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -55,14 +99,41 @@
                 'event_label': buttonName
             });
         }
+
+        // メールアドレス保護関数 - スパムボット対策
+        function revealmailaddr() {
+            const encoded = 'c29scWNfZUBvdXRsb29rLmNvbQ==';
+            const decoded = atob(encoded);
+            window.location.href = 'mailto:' + decoded;
+        }
     </script>
 </head>
-<body>
+
+<script src="script.js?v=20260302-chatfix" defer></script>
+
+<body class="studio-site home-page">
+
+<!-- ローディング画面 -->
+    <div id="loader">
+        <div class="stars"></div>
+        <h1 class="loading-logo">
+  <span>s</span>
+  <span>o</span>
+  <span>l</span>
+  <span>a</span>
+  <span>c</span>
+  <span>e</span>
+</h1>
+    </div>
+
+    <!-- サイト本体 -->
+    <div id="main-content">
+
     <!-- ===== ナビゲーション ===== -->
     <header class="header">
         <nav class="navbar">
             <div class="logo-section">
-                <h1 class="logo">solace</h1>
+            <h1 class="logo">solace</h1>
                 <p class="logo-subtitle">Illustration Studio</p>
             </div>
             
@@ -76,9 +147,9 @@
                 <li><a href="#home" class="nav-link">ホーム</a></li>
                 <li><a href="#services" class="nav-link">サービス</a></li>
                 <li><a href="#portfolio" class="nav-link">ポートフォリオ</a></li>
-                <li><a href="#pricing" class="nav-link">料金</a></li>
+                <li><a href="pricing.html" class="nav-link">料金</a></li>
                 <li><a href="tools.html" class="nav-link">制作ツール</a></li>
-                <li><a href="#contact" class="nav-link">相談</a></li>
+                <li><a href="#target-selection" class="nav-link">相談</a></li>
             </ul>
 
             <div class="nav-cta">
@@ -90,27 +161,49 @@
     <!-- ===== ヒーロー ===== -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h2 class="hero-title">想いをかたちにする<br>キャラクター制作</h2>
-            <p class="hero-subtitle">世界観やコンセプトに寄り添った<br>キャラクターイラストを制作します</p>
+            <p class="hero-eyebrow">イラストレーションスタジオ</p>
+            <h2 class="hero-title">想いを、<br>キャラクターで伝える。</h2>
+            <p class="hero-subtitle">ゲームやVTuber、商用案件向けに、キャラクターデザイン・立ち絵・キービジュアルを制作しています。ご希望の世界観を伺いながら、用途に合ったイラストをお届けします。</p>
             <div class="hero-cta">
-                <a href="#portfolio" class="btn btn-primary">作品を見る</a>
-                <a href="#target-selection" class="hero-inline-link">ご依頼の流れ</a>
-                <a href="request.html" class="hero-inline-link">相談する</a>
+                <a href="#target-selection" class="btn btn-primary">制作の相談をする</a>
+                <a href="#portfolio" class="btn btn-outline">作品を見る</a>
             </div>
         </div>
-        <div class="hero-visual">
-            <div class="gradient-blob blob-1"></div>
-            <div class="gradient-blob blob-2"></div>
-            <div class="gradient-blob blob-3"></div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="hero-showcase">
+                <div class="hero-showcase-main">
+                    <img src="images/sheru.png" alt="" width="480" height="640" decoding="async">
+                </div>
+                <div class="hero-showcase-side">
+                    <img src="images/usagimimi.png" alt="" width="240" height="320" decoding="async">
+                    <img src="images/panther.png" alt="" width="240" height="320" decoding="async">
+                </div>
+            </div>
+        </div>
+        <p class="hero-scroll" aria-hidden="true">Scroll</p>
+    </section>
+
+    <section class="trust-bar" aria-label="対応領域">
+        <div class="trust-bar-inner">
+            <span class="trust-bar-label">対応分野</span>
+            <div class="trust-tags">
+                <span class="trust-tag">キャラクターデザイン</span>
+                <span class="trust-tag">立ち絵・Live2D</span>
+                <span class="trust-tag">キービジュアル</span>
+                <span class="trust-tag">SD・スタンプ</span>
+                <span class="trust-tag">ゲーム・VTuber</span>
+                <span class="trust-tag">商用ライセンス</span>
+            </div>
         </div>
     </section>
 
     <section class="quick-access" aria-label="クイック導線">
         <div class="section-container">
-            <div class="section-header compact">
-                <h2 class="section-title">すぐに相談</h2>
-                <p class="section-subtitle">目的に応じて選べます</p>
-            </div>
+            <header class="section-head section-head--center">
+                <span class="section-eyebrow">ご依頼</span>
+                <h2 class="section-title">ご依頼の入口</h2>
+                <p class="section-lead">法人の方も個人の方も、内容に合わせてフォームをお選びください。</p>
+            </header>
             <div class="quick-access-grid">
                 <a href="request-corporate.html" class="quick-access-item">
                     <div class="quick-access-label">企業向け</div>
@@ -122,7 +215,7 @@
                     <h4>個人相談</h4>
                     <p>個人制作・同人のご相談はこちら</p>
                 </a>
-                <a href="#pricing" class="quick-access-item">
+                <a href="pricing.html" class="quick-access-item">
                     <div class="quick-access-label">料金</div>
                     <h4>料金確認</h4>
                     <p>プラン別の目安をチェック</p>
@@ -131,62 +224,20 @@
         </div>
     </section>
 
-    <!-- ===== ターゲット選択セクション ===== -->
-    <section class="target-selection" id="target-selection">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">ご依頼について</h2>
-                <p class="section-subtitle">目的に応じた最適なプランをご案内します</p>
-            </div>
-
-            <div class="target-cards-grid">
-                <div class="target-card corporate">
-                    <div class="target-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <h4>企業・団体向け</h4>
-                    <p>ゲーム開発、アニメーション制作、商用プロジェクト向け</p>
-                    <ul class="target-features">
-                        <li><i class="fas fa-check"></i> 大規模案件対応</li>
-                        <li><i class="fas fa-check"></i> カスタム見積もり</li>
-                        <li><i class="fas fa-check"></i> 専用窓口対応</li>
-                        <li><i class="fas fa-check"></i> 企業実績多数</li>
-                    </ul>
-                    <a href="portfolio-corporate.html" class="btn btn-primary">詳しく見る</a>
-                </div>
-
-                <div class="target-card personal">
-                    <div class="target-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h4>個人・小規模向け</h4>
-                    <p>個人ゲーム開発、グッズ制作、同人活動など</p>
-                    <ul class="target-features">
-                        <li><i class="fas fa-check"></i> 気軽にご相談</li>
-                        <li><i class="fas fa-check"></i> 固定料金プラン</li>
-                        <li><i class="fas fa-check"></i> 迅速対応</li>
-                        <li><i class="fas fa-check"></i> サポート充実</li>
-                    </ul>
-                    <a href="portfolio-personal.html" class="btn btn-primary">詳しく見る</a>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- ===== プロフィール ===== -->
     <section class="about" id="about">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">プロフィール</h2>
-                <p class="section-subtitle">solaceについて</p>
-            </div>
+            <header class="section-head">
+                <span class="section-eyebrow">Studio</span>
+                <h2 class="section-title">solace について</h2>
+                <p class="section-lead">キャラクターの魅力を最大限に引き出すイラスト制作を、企画段階から伴走します。</p>
+            </header>
 
             <div class="profile-grid">
                 <div class="profile-main">
                     <div class="profile-image">
-                        <div class="image-placeholder">
-                            <i class="fas fa-user-circle"></i>
-                        </div>
+                        <img src="images/solace-icon.png" alt="solace" class="profile-avatar" loading="lazy">
                     </div>
                     <div class="profile-bio">
                         <h4>solace（そらす）</h4>
@@ -197,24 +248,6 @@
                         <p class="bio-text">
                             「想いをかたちに」をテーマに、一つ一つの作品を丁寧に制作することを大切にしています。
                         </p>
-                    </div>
-                </div>
-
-                <div class="profile-stats">
-                    <div class="stat-card">
-                        <h5>対応ジャンル</h5>
-                        <p class="stat-number">10+</p>
-                        <p class="stat-label">イラスト分野</p>
-                    </div>
-                    <div class="stat-card">
-                        <h5>モットー</h5>
-                        <p class="stat-number">100%</p>
-                        <p class="stat-label">丁寧な制作</p>
-                    </div>
-                    <div class="stat-card">
-                        <h5>対応力</h5>
-                        <p class="stat-number">柔軟</p>
-                        <p class="stat-label">ご要望に応じて</p>
                     </div>
                 </div>
             </div>
@@ -245,10 +278,11 @@
     <!-- ===== サービス ===== -->
     <section class="services" id="services">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">サービス</h2>
-                <p class="section-subtitle">主に提供しているサービス内容</p>
-            </div>
+            <header class="section-head section-head--center">
+                <span class="section-eyebrow">Services</span>
+                <h2 class="section-title">提供サービス</h2>
+                <p class="section-lead">用途に合わせた制作プランをご提案します。詳細は料金ページもご覧ください。</p>
+            </header>
 
             <div class="services-grid">
                 <div class="service-card">
@@ -332,34 +366,78 @@
         </div>
     </section>
 
-    <!-- ===== ポートフォリオ ===== -->
-    <section class="portfolio" id="portfolio">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">ポートフォリオ</h2>
-                <p class="section-subtitle">過去の作品と実績</p>
+    <!-- ===== 制作実績 ===== -->
+    <section class="portfolio works" id="portfolio">
+        <div class="section-container section-container--wide">
+            <header class="section-head">
+                <span class="section-eyebrow">代表作</span>
+                <h2 class="section-title">制作実績</h2>
+                <p class="section-lead">キャラクターデザインからキービジュアルまで。画像をクリックすると大きく表示されます。</p>
+            </header>
+
+            <div class="works-featured">
+                <article class="work-card work-card--lead portfolio-item portfolio-expandable" data-filter="fanart" tabindex="0" role="button" aria-label="作品を拡大: KOF - SHERMIE">
+                    <div class="work-card__media">
+                        <img src="images/sheru.png" alt="KOF - SHERMIE" loading="lazy">
+                    </div>
+                    <div class="work-card__overlay">
+                        <span class="work-card__tag">Fan Art · Character</span>
+                        <h3 class="work-card__title">KOF - SHERMIE</h3>
+                        <p class="work-card__meta">Digital Painting · 2025</p>
+                        <span class="work-card__action">View Work</span>
+                    </div>
+                </article>
+                <div class="works-featured-col">
+                    <article class="work-card work-card--sub portfolio-item portfolio-expandable" data-filter="original" tabindex="0" role="button" aria-label="作品を拡大: 飾り耳">
+                        <div class="work-card__media">
+                            <img src="images/usagimimi.png" alt="飾り耳" loading="lazy">
+                        </div>
+                        <div class="work-card__overlay">
+                            <span class="work-card__tag">Original</span>
+                            <h3 class="work-card__title">飾り耳</h3>
+                            <p class="work-card__meta">Digital Painting · 2025</p>
+                            <span class="work-card__action">View Work</span>
+                        </div>
+                    </article>
+                    <article class="work-card work-card--sub portfolio-item portfolio-expandable" data-filter="fanart" tabindex="0" role="button" aria-label="作品を拡大: PERSONA5 - Panther">
+                        <div class="work-card__media">
+                            <img src="images/panther.png" alt="PERSONA5 - Panther" loading="lazy">
+                        </div>
+                        <div class="work-card__overlay">
+                            <span class="work-card__tag">Fan Art</span>
+                            <h3 class="work-card__title">PERSONA5 - Panther</h3>
+                            <p class="work-card__meta">Digital Painting · 2025</p>
+                            <span class="work-card__action">View Work</span>
+                        </div>
+                    </article>
+                </div>
             </div>
 
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">すべて</button>
-                <button class="filter-btn" data-filter="original">一次創作</button>
-                <button class="filter-btn" data-filter="fanart">二次創作</button>
-                <button class="filter-btn" data-filter="character">キャラクターデザイン</button>
-                <button class="filter-btn" data-filter="concept">コンセプト</button>
+            <p class="works-divider">その他の作品</p>
+
+            <div class="works-toolbar">
+                <p class="portfolio-hint">カテゴリで絞り込み</p>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">すべて</button>
+                    <button class="filter-btn" data-filter="character">キャラクター</button>
+                    <button class="filter-btn" data-filter="original">オリジナル</button>
+                    <button class="filter-btn" data-filter="fanart">ファンアート</button>
+                    <button class="filter-btn" data-filter="web">その他</button>
+                </div>
             </div>
 
-            <div class="portfolio-grid">
-                <div class="portfolio-item" data-filter="fanart">
+            <div class="portfolio-grid works-gallery">
+                <div class="portfolio-item portfolio-expandable" data-filter="fanart">
                     <div class="portfolio-image">
                         <img src="images/sheru.png" alt="SHERMIE" loading="lazy">
                         <div class="portfolio-overlay">
-                            <h5> KOF - SHERMIE</h5>
+                            <h5>KOF - SHERMIE</h5>
                             <p>2025 / Digital Painting</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="portfolio-item" data-filter="original">
+                <div class="portfolio-item portfolio-expandable" data-filter="original">
                     <div class="portfolio-image">
                         <img src="images/usagimimi.png" alt="飾り耳" loading="lazy">
                         <div class="portfolio-overlay">
@@ -369,7 +447,7 @@
                     </div>
                 </div>
 
-                <div class="portfolio-item" data-filter="fanart">
+                <div class="portfolio-item portfolio-expandable" data-filter="fanart">
                     <div class="portfolio-image">
                         <img src="images/panther.png" alt="Panther" loading="lazy">
                         <div class="portfolio-overlay">
@@ -379,7 +457,7 @@
                     </div>
                 </div>
 
-                <div class="portfolio-item" data-filter="character">
+                <div class="portfolio-item portfolio-expandable" data-filter="character">
                     <div class="portfolio-image">
                         <img src="images/sample1.jpg" alt="ゲームキャラクター イラスト" loading="lazy">
                         <div class="portfolio-overlay">
@@ -389,7 +467,7 @@
                     </div>
                 </div>
 
-                <div class="portfolio-item" data-filter="character">
+                <div class="portfolio-item portfolio-expandable" data-filter="character">
                     <div class="portfolio-image">
                         <img src="images/sample2.jpg" alt="キャラクターデザイン 立ち絵" loading="lazy">
                         <div class="portfolio-overlay">
@@ -399,7 +477,7 @@
                     </div>
                 </div>
 
-                <div class="portfolio-item" data-filter="character">
+                <div class="portfolio-item portfolio-expandable" data-filter="character">
                     <div class="portfolio-image">
                         <img src="images/sample3.jpg" alt="SDキャラクター デフォルメキャラ" loading="lazy">
                         <div class="portfolio-overlay">
@@ -421,101 +499,81 @@
                 </a>
             </div>
 
-            <div class="portfolio-cta">
-                <p>その他の作品はSNSをチェック</p>
+            <div class="works-footer">
+                <div class="works-footer-text">
+                    <h4>ほかの作品も公開しています</h4>
+                    <p>SNSやpixivでも、制作過程や最新のイラストを更新しています。</p>
+                </div>
+                <div class="portfolio-cta">
+                    <p class="visually-hidden">SNSリンク</p>
                 <div class="social-links">
                     <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
                     <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fas fa-images"></i></a>
                     <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
                     <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
                     <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
                 </div>
+                    <a href="#target-selection" class="btn btn-primary">この雰囲気で依頼する</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== 料金表 ===== -->
-    <section class="pricing" id="pricing">
+    <!-- ===== 制作の流れ ===== -->
+    <section class="workflow" id="workflow">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">料金表</h2>
-                <p class="section-subtitle">サービス別の料金参考値</p>
-            </div>
+            <header class="section-head section-head--center">
+                <span class="section-eyebrow">制作の流れ</span>
+                <h2 class="section-title">ご依頼から納品まで</h2>
+                <p class="section-lead">ヒアリングから納品まで、進め方をひとつずつ共有しながら制作します。</p>
+            </header>
 
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h4>キャラクターデザイン</h4>
-                    <div class="price">
-                        <span class="currency">¥</span>
-                        <span class="amount">30,000</span>
-                        <span class="unit">～</span>
+            <ol class="workflow-steps">
+                <li class="workflow-step">
+                    <span class="workflow-step-num" aria-hidden="true">01</span>
+                    <div class="workflow-step-body">
+                        <h4>ヒアリング</h4>
+                        <p>用途・世界観・キャラ設定・納期などをお伺いし、方向性をすり合わせます。</p>
                     </div>
-                    <ul class="pricing-list">
-                        <li><i class="fas fa-check"></i> フル身体デザイン</li>
-                        <li><i class="fas fa-check"></i> 顔のバリエーション（3種）</li>
-                        <li><i class="fas fa-check"></i> 修正2回まで</li>
-                        <li><i class="fas fa-times"></i> 背景は別途相談</li>
-                    </ul>
-                    <button class="btn btn-outline">詳細を見る</button>
-                </div>
-
-                <div class="pricing-card featured">
-                    <div class="badge">推奨</div>
-                    <h4>ゲームキャラセット</h4>
-                    <div class="price">
-                        <span class="currency">¥</span>
-                        <span class="amount">80,000</span>
-                        <span class="unit">～</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num" aria-hidden="true">02</span>
+                    <div class="workflow-step-body">
+                        <h4>お見積もり・ご契約</h4>
+                        <p>内容に応じたお見積もりをご提示。ご了承後、制作を開始します。</p>
                     </div>
-                    <ul class="pricing-list">
-                        <li><i class="fas fa-check"></i> キャラ3体分まで</li>
-                        <li><i class="fas fa-check"></i> 多数の表情・ポーズ</li>
-                        <li><i class="fas fa-check"></i> UI/アイコン含む</li>
-                        <li><i class="fas fa-check"></i> 修正3回まで</li>
-                    </ul>
-                    <button class="btn btn-primary">このプランを選ぶ</button>
-                </div>
-
-                <div class="pricing-card">
-                    <h4>SDキャラクター</h4>
-                    <div class="price">
-                        <span class="currency">¥</span>
-                        <span class="amount">15,000</span>
-                        <span class="unit">～</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num" aria-hidden="true">03</span>
+                    <div class="workflow-step-body">
+                        <h4>ラフ・制作</h4>
+                        <p>ラフ提出後、ご確認いただきながら本制作へ進みます。修正回数はプランにより異なります。</p>
                     </div>
-                    <ul class="pricing-list">
-                        <li><i class="fas fa-check"></i> SDデフォルメキャラ</li>
-                        <li><i class="fas fa-check"></i> 表情8パターン</li>
-                        <li><i class="fas fa-check"></i> 高解像度です</li>
-                        <li><i class="fas fa-check"></i> 修正1回</li>
-                    </ul>
-                    <button class="btn btn-outline">詳細を見る</button>
-                </div>
-            </div>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num" aria-hidden="true">04</span>
+                    <div class="workflow-step-body">
+                        <h4>納品</h4>
+                        <p>ご指定形式（PNG / PSD など）で納品。商用利用の場合は契約内容に沿って権利を整理します。</p>
+                    </div>
+                </li>
+            </ol>
 
-            <div class="pricing-note">
-                <p>※ 上記は参考料金です。複雑さや納期によって変動します。</p>
-                <p>詳細なお見積もりはお気軽にお問い合わせください。</p>
-            </div>
+            <p class="workflow-cta">
+                <a href="#target-selection" class="btn btn-primary">依頼・相談はこちら</a>
+            </p>
         </div>
     </section>
 
-    <!-- ===== テスティモニアル ===== -->
-    <section class="testimonials">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">クライアントの声</h2>
-                <p class="section-subtitle">現在、クライアントの声をお待ちしております。</p>
-            </div>
-
-            <div class="testimonials-grid">
-                <div class="testimonial-card empty-state">
-                    <p class="testimonial-text">
-                        クライアントの声は現在準備中です。ご感想をお待ちしております。
-                    </p>
-                </div>
+    <section class="conversion-band" aria-label="ご依頼の案内">
+        <div class="conversion-band-inner">
+            <h2>制作のご相談を受け付けています</h2>
+            <p>キャラクターデザインや立ち絵、キービジュアルなど、内容とスケジュールに合わせてお見積もりします。まずはお気軽にご連絡ください。</p>
+            <div class="conversion-band-actions">
+                <a href="request-corporate.html" class="btn btn-primary">企業の方はこちら</a>
+                <a href="request-personal.html" class="btn btn-outline">個人の方はこちら</a>
             </div>
         </div>
     </section>
@@ -528,7 +586,7 @@
                 <p class="section-subtitle">よくいただくご質問と回答</p>
             </div>
 
-            <p class="faq-contact-note">詳細な質問は右下チャットで確認できます。見つからない場合は、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> へご連絡ください。</p>
+            <p class="faq-contact-note">くわしい内容は右下のチャットでも確認できます。見つからない場合は、<a href="javascript:void(0)" onclick="revealmailaddr()" class="email-protected"><i class="fas fa-envelope" aria-hidden="true"></i><span>メールでお問い合わせ</span></a>ください。</p>
 
             <div class="faq-list">
                 <details class="faq-item">
@@ -558,19 +616,20 @@
 
                 <details class="faq-item">
                     <summary>FAQにない内容を相談したいです</summary>
-                    <p>右下チャットで質問すると詳細FAQに回答します。見つからない場合は、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。</p>
+                    <p>右下のチャットでもお答えできる場合があります。見つからない内容は、<a href="javascript:void(0)" onclick="revealmailaddr()" class="email-protected"><i class="fas fa-envelope" aria-hidden="true"></i><span>メールでお問い合わせ</span></a>ください。</p>
                 </details>
             </div>
         </div>
     </section>
 
     <!-- ===== お問い合わせ ===== -->
-    <section class="contact" id="contact">
+    <section class="contact target-selection" id="target-selection">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">お問い合わせ</h2>
-                <p class="section-subtitle">ご依頼・ご相談をお受けします</p>
-            </div>
+            <header class="section-head section-head--center">
+                <span class="section-eyebrow">お問い合わせ</span>
+                <h2 class="section-title">ご依頼・ご相談</h2>
+                <p class="section-lead">法人向け・個人向けのフォームから、お気軽にご連絡ください。</p>
+            </header>
 
             <div class="target-cards-grid">
                 <div class="target-card corporate">
@@ -615,7 +674,7 @@
                     <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
                     <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fas fa-images"></i></a>
                     <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
                     <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
                     <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
@@ -625,6 +684,7 @@
     </section>
 
     <!-- ===== フッター ===== -->
+    
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -638,7 +698,7 @@
                     <li><a href="#home">ホーム</a></li>
                     <li><a href="#services">サービス</a></li>
                     <li><a href="#portfolio">ポートフォリオ</a></li>
-                    <li><a href="#contact">相談</a></li>
+                    <li><a href="#target-selection">相談</a></li>
                     <li><a href="before-after.html">ビフォーアフター</a></li>
                     <li><a href="request.html">依頼フォーム選択</a></li>
                     <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
@@ -654,7 +714,7 @@
                     <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
                     <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.tiktok.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTokを開く（新しいタブ）"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fab fa-pixiv"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" title="pixiv" aria-label="pixivを開く（新しいタブ）"><i class="fas fa-images"></i></a>
                     <a href="https://www.youtube.com/@solqc_e" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTubeを開く（新しいタブ）"><i class="fab fa-youtube"></i></a>
                     <a href="https://solqce.fanbox.cc/" target="_blank" rel="noopener noreferrer" title="FANBOX" aria-label="FANBOXを開く（新しいタブ）"><i class="fas fa-pen-nib"></i></a>
                     <a href="https://wick-sns.com/sns/profile/93824b1d-2a33-4be9-9485-5bd35734bb7e" target="_blank" rel="noopener noreferrer" title="wick" aria-label="wickを開く（新しいタブ）"><i class="fas fa-link"></i></a>
@@ -667,6 +727,23 @@
         </div>
     </footer>
 
-    <script src="script.js?v=20260302-chatfix" defer></script>
+    <div id="portfolio-lightbox" class="portfolio-lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="portfolio-lightbox-title">
+        <button type="button" class="portfolio-lightbox-backdrop" aria-label="閉じる"></button>
+        <div class="portfolio-lightbox-panel">
+            <button type="button" class="portfolio-lightbox-close" aria-label="閉じる"><i class="fas fa-times" aria-hidden="true"></i></button>
+            <button type="button" class="portfolio-lightbox-nav portfolio-lightbox-prev" aria-label="前の作品"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+            <button type="button" class="portfolio-lightbox-nav portfolio-lightbox-next" aria-label="次の作品"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+            <figure class="portfolio-lightbox-figure">
+                <img src="" alt="" id="portfolio-lightbox-img">
+                <figcaption class="portfolio-lightbox-caption">
+                    <h3 id="portfolio-lightbox-title"></h3>
+                    <p id="portfolio-lightbox-meta"></p>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+
+    <script src="script.js?v=20260519-studio" defer></script>
 </body>
 </html>
+

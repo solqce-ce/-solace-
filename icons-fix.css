@@ -1,0 +1,78 @@
+/* Font Awesome アイコン表示の修正 */
+.social-links a i,
+.footer-social a i,
+.target-icon i,
+.service-icon i,
+.skill-item > i,
+.chatbot-toggle-btn i,
+.chatbot-send-btn i,
+.chatbot-mail-link i,
+.portfolio-lightbox-close i,
+.portfolio-lightbox-nav i,
+.email-protected i {
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.fab,
+.fa-brands,
+i.fab {
+    font-family: "Font Awesome 6 Brands", "Font Awesome 6 Free";
+    font-weight: 400;
+}
+
+.fas,
+.fa-solid,
+i.fas {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+/* studio テーマでリンク色がアイコンを消していた問題 */
+body.studio-site .social-links a,
+body.studio-site .social-links a i {
+    color: var(--cream) !important;
+}
+
+body.studio-site .social-links a:hover,
+body.studio-site .social-links a:hover i {
+    color: var(--ink) !important;
+}
+
+body.studio-site .footer-social a i {
+    color: var(--gold-light) !important;
+}
+
+body.studio-site .footer-social a:hover i {
+    color: var(--ink) !important;
+}
+
+body.studio-site .email-protected {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-weight: 500;
+}
+
+body.studio-site .email-protected i {
+    color: var(--gold);
+}
+
+body.studio-site .chatbot-mail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+}
+
+body.studio-site .chatbot-toggle-btn i,
+body.studio-site .chatbot-send-btn i {
+    color: inherit;
+    font-size: 1.1em;
+}
+
+/* pixiv は FA に無いため代替表示 */
+a[title="pixiv"] i.fa-images::before {
+    opacity: 0.95;
+}
