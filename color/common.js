@@ -126,7 +126,7 @@ function updateThemeButton() {
   const btn = document.querySelector(".nav-theme-toggle");
   if (btn) {
     const isDark = document.documentElement.classList.contains("dark");
-    btn.innerHTML = `<span class="nav-icon">${isDark ? '☀️' : '🌙'}</span>`;
+    btn.innerHTML = `<span class="nav-icon">${isDark ? '◐' : '◑'}</span>`;
   }
 }
 
@@ -153,7 +153,7 @@ function showToast(msg, duration = 2500, type = "default") {
 
 // ========== お気に入り機能 ==========
 
-function addToFavorites(itemId, itemName, itemEmoji = '⭐') {
+function addToFavorites(itemId, itemName, itemEmoji = '·') {
   const favorites = getFavorites();
   
   // 重複チェック
@@ -190,7 +190,7 @@ function getFavorites() {
   return Array.isArray(favorites) ? favorites : [];
 }
 
-function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '⭐') {
+function toggleFavoriteButton(button, itemId, itemName, itemEmoji = '·') {
   const isFav = isFavorite(itemId);
   
   if (isFav) {
@@ -226,7 +226,7 @@ function isHiddenPageUrl(url) {
   return HIDDEN_NAV_PAGES.has(getPageFileName(url));
 }
 
-function addToHistory(pageUrl, pageName, pageEmoji = '📄') {
+function addToHistory(pageUrl, pageName, pageEmoji = '·') {
   if (isHiddenPageUrl(pageUrl)) return;
   const history = getHistory();
   
@@ -278,7 +278,7 @@ function buildHistoryNav(currentPage) {
 
   const icon = document.createElement('span');
   icon.className = 'history-icon';
-  icon.textContent = '📜';
+  icon.textContent = '↺';
 
   const title = document.createElement('span');
   title.className = 'history-title';
@@ -305,7 +305,7 @@ function buildHistoryNav(currentPage) {
 
     const emoji = document.createElement('span');
     emoji.className = 'history-link-emoji';
-    emoji.textContent = String(item.emoji ?? '📄');
+    emoji.textContent = String(item.emoji ?? '·');
 
     const name = document.createElement('span');
     name.className = 'history-link-name';
@@ -331,23 +331,23 @@ function buildNav(activePage = "") {
   }
 
   const links = [
-    { href: "index-enterprise.html", icon: "🏠", label: "ホーム", key: "index", group: "スタート" },
-    { href: "random-color.html", icon: "🎨", label: "カラー生成", key: "random", group: "配色" },
-    { href: "harmony.html", icon: "🎯", label: "配色ハーモニー", key: "harmony", group: "配色" },
-    { href: "gradient-generator.html", icon: "🌈", label: "グラデーション", key: "gradient", group: "配色" },
-    { href: "contrast-checker.html", icon: "◐", label: "見やすさチェック", key: "contrast", group: "配色" },
-    { href: "emoji-generator-enterprise.html", icon: "😊", label: "絵文字生成", key: "emoji", group: "生成" },
-    { href: "pose-generator-enterprise.html", icon: "🧍", label: "ポーズ生成", key: "pose", group: "生成" },
-    { href: "chara-generator-enterprise.html", icon: "👥", label: "キャラ生成", key: "chara", group: "生成" },
-    { href: "gallery.html", icon: "🖼️", label: "作品ギャラリー", key: "gallery", group: "管理" }
+    { href: "../tools.html", icon: "⌂", label: "ツール一覧", key: "hub", group: "スタート" },
+    { href: "palette-workbench.html", icon: "◌", label: "パレット", key: "random", group: "配色" },
+    { href: "harmony.html", icon: "◎", label: "ハーモニー", key: "harmony", group: "配色" },
+    { href: "gradient-generator.html", icon: "↗", label: "グラデーション", key: "gradient", group: "配色" },
+    { href: "contrast-checker.html", icon: "◐", label: "コントラスト", key: "contrast", group: "配色" },
+    { href: "emoji-generator-enterprise.html", icon: "□", label: "絵文字", key: "emoji", group: "生成" },
+    { href: "pose-generator-enterprise.html", icon: "∿", label: "ポーズ", key: "pose", group: "生成" },
+    { href: "chara-generator-enterprise.html", icon: "◎", label: "キャラクター", key: "chara", group: "生成" },
+    { href: "gallery.html", icon: "▦", label: "ギャラリー", key: "gallery", group: "管理" }
   ];
 
   const sectionOrder = ["スタート", "配色", "生成", "管理"];
   const sectionMeta = {
-    "スタート": { title: "スタート", icon: "🏠" },
-    "配色": { title: "配色ツール", icon: "🎨" },
-    "生成": { title: "生成ツール", icon: "✨" },
-    "管理": { title: "管理", icon: "🗂️" }
+    "スタート": { title: "スタート", icon: "⌂" },
+    "配色": { title: "配色ツール", icon: "◌" },
+    "生成": { title: "生成ツール", icon: "＋" },
+    "管理": { title: "管理", icon: "▦" }
   };
   const sectionHtml = sectionOrder.map((section) => {
     const sectionLinks = links.filter((link) => link.group === section);
@@ -377,7 +377,7 @@ function buildNav(activePage = "") {
   }).join('');
 
   nav.innerHTML = `
-    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く">
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-controls="navMenu" aria-expanded="false">
       <span class="nav-toggle-icon">≡</span>
     </button>
     <div class="nav-menu" id="navMenu">
@@ -390,11 +390,11 @@ function buildNav(activePage = "") {
       </div>
       <div class="nav-footer">
         <a class="nav-creator-link" href="../index.html" title="製作者サイトへ" aria-label="製作者サイトへ移動" target="_blank" rel="noopener noreferrer">
-          <span class="nav-icon">🌐</span>
+          <span class="nav-icon">↗</span>
           <span class="nav-text">製作者サイト</span>
         </a>
         <button class="nav-theme-toggle" id="navThemeToggle" title="テーマ切り替え" aria-label="テーマを切り替え">
-          <span class="nav-icon">🌙</span>
+          <span class="nav-icon">◑</span>
         </button>
       </div>
       <div class="nav-legal-links" aria-label="法務リンク">
@@ -421,15 +421,22 @@ function buildNav(activePage = "") {
   const close = document.getElementById("navClose");
   const themeButton = document.getElementById("navThemeToggle");
   
+  const setMenuState = (isOpen) => {
+    if (!menu || !toggle) return;
+    menu.classList.toggle("active", isOpen);
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "メニューを閉じる" : "メニューを開く");
+  };
+
   if (toggle) {
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
-      menu.classList.toggle("active");
+      setMenuState(!menu.classList.contains("active"));
     });
   }
 
   if (close) {
-    close.addEventListener("click", closeMenu);
+    close.addEventListener("click", () => setMenuState(false));
   }
 
   if (themeButton) {
@@ -438,21 +445,21 @@ function buildNav(activePage = "") {
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && menu.classList.contains("active")) {
-      menu.classList.remove("active");
+      setMenuState(false);
     }
   });
 
   // 外側クリックで閉じる
   document.addEventListener("click", (e) => {
     if (nav && !nav.contains(e.target) && menu.classList.contains("active")) {
-      menu.classList.remove("active");
+      setMenuState(false);
     }
   });
 
   // リンククリックで閉じる
   document.querySelectorAll(".nav-link").forEach(link => {
     link.addEventListener("click", () => {
-      menu.classList.remove("active");
+      setMenuState(false);
     });
   });
 }
@@ -474,60 +481,71 @@ function injectCommonStyles() {
 
     /* ===== CSS変数 ===== */
     :root {
-      --brand-primary: #334155;
-      --brand-primary-dark: #1e293b;
-      --brand-secondary: #f59e0b;
-      --brand-success: #10b981;
-      --brand-danger: #ef4444;
-      --brand-warning: #f97316;
-      --text-primary: #1a1a2e;
-      --text-secondary: #6b7280;
-      --bg-light: #f9fafb;
-      --bg-card: rgba(255, 255, 255, 0.95);
-      --border-light: rgba(0, 0, 0, 0.08);
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px rgba(51, 65, 85, 0.15);
-      --shadow-xl: 0 20px 25px rgba(51, 65, 85, 0.2);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --brand-primary: #253833;
+      --brand-primary-dark: #162622;
+      --brand-secondary: #c86a4e;
+      --brand-success: #5f8f7d;
+      --brand-danger: #b65345;
+      --brand-warning: #d69a63;
+      --text-primary: #1f2a27;
+      --text-secondary: #69726d;
+      --bg-light: #f4f0e8;
+      --bg-card: rgba(255, 253, 248, 0.94);
+      --border-light: rgba(31, 42, 39, 0.16);
+      --shadow-sm: 0 1px 2px rgba(31, 42, 39, 0.05);
+      --shadow-md: 0 8px 20px rgba(31, 42, 39, 0.07);
+      --shadow-lg: 0 18px 44px rgba(31, 42, 39, 0.09);
+      --shadow-xl: 0 24px 60px rgba(31, 42, 39, 0.12);
+      --transition: all 0.25s ease;
     }
 
     html.dark {
-      --text-primary: #e2e8f0;
-      --text-secondary: #d1d5db;
-      --bg-light: #1e293b;
-      --bg-card: rgba(51, 65, 85, 0.95);
-      --border-light: rgba(255, 255, 255, 0.08);
+      --text-primary: #f3eee5;
+      --text-secondary: #b9c0b8;
+      --bg-light: #17211f;
+      --bg-card: rgba(33, 48, 44, 0.96);
+      --border-light: rgba(243, 238, 229, 0.18);
     }
 
     /* ===== ナビゲーション ===== */
     #mainNav {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 18px;
+      right: 18px;
+      width: auto;
       z-index: 999;
+      pointer-events: none;
+    }
+
+    body {
+      padding-top: 0;
+    }
+
+    #mainNav ~ main {
+      padding-top: 96px !important;
     }
 
     .nav-toggle {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+      display: flex !important;
+      pointer-events: auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      background: var(--brand-primary);
       color: white;
       border: none;
       cursor: pointer;
       font-size: 24px;
-      display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      box-shadow: 0 8px 24px rgba(51, 65, 85, 0.3);
+      box-shadow: 6px 6px 0 rgba(200, 106, 78, 0.28);
       transition: var(--transition);
       font-weight: 700;
     }
 
     .nav-toggle:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(51, 65, 85, 0.4);
+      box-shadow: 0 16px 34px rgba(23, 35, 33, 0.24);
     }
 
     .nav-toggle-icon {
@@ -538,27 +556,35 @@ function injectCommonStyles() {
     }
 
     .nav-menu {
-      position: fixed;
-      top: 0;
-      right: -420px;
-      width: 380px;
-      height: 100vh;
+      position: absolute;
+      top: 58px;
+      right: 0;
+      width: min(420px, calc(100vw - 36px));
+      max-height: calc(100vh - 88px);
+      height: auto;
       background: var(--bg-card);
-      border-left: 1px solid var(--border-light);
-      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
-      display: flex;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      box-shadow: 10px 12px 0 rgba(31, 42, 39, 0.08);
+      display: none;
       flex-direction: column;
-      transition: right 0.3s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: translateY(-6px);
+      opacity: 0;
       z-index: 998;
+      pointer-events: auto;
     }
 
     .nav-menu.active {
       right: 0 !important;
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
     }
 
     .nav-menu-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border-light);
+      padding: 0 18px;
+      border-bottom: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -566,9 +592,9 @@ function injectCommonStyles() {
     }
 
     .nav-menu-header h3 {
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 700;
-      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+      background: var(--brand-primary);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -594,6 +620,7 @@ function injectCommonStyles() {
       display: flex;
       align-items: center;
       justify-content: center;
+      display: flex;
     }
 
     .nav-close:hover {
@@ -602,29 +629,39 @@ function injectCommonStyles() {
 
     .nav-links {
       flex: 1;
+      display: block;
       padding: 12px 16px 16px;
       overflow-y: auto;
+      overflow-x: auto;
+      min-width: 0;
     }
 
     .nav-group-card {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      display: block;
       padding: 12px;
       border: 1px solid var(--border-light);
-      border-radius: 12px;
-      background: var(--bg-light);
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--bg-light) 88%, var(--brand-secondary) 12%);
     }
 
     html.dark .nav-group-card {
-      background: rgba(51, 65, 85, 0.82);
+      background: rgba(23, 35, 33, 0.82);
       border-color: rgba(226, 232, 240, 0.22);
     }
 
     .nav-group-card + .nav-group-card {
       margin-top: 10px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border-light);
     }
 
     .nav-group-title {
-      margin: 0 0 8px;
-      font-size: 12px;
+      margin: 0;
+      font-size: 11px;
       font-weight: 700;
       color: var(--text-secondary);
       letter-spacing: 0.03em;
@@ -645,7 +682,9 @@ function injectCommonStyles() {
     .nav-group-links {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .nav-guide {
@@ -653,7 +692,7 @@ function injectCommonStyles() {
       padding: 12px;
       border-radius: 10px;
       border: 1px solid var(--border-light);
-      background: rgba(51, 65, 85, 0.06);
+      background: rgba(215, 120, 85, 0.08);
       flex-shrink: 0;
     }
 
@@ -674,16 +713,16 @@ function injectCommonStyles() {
     .nav-link {
       display: flex !important;
       align-items: center !important;
-      gap: 10px;
-      padding: 10px 12px;
+      gap: 8px;
+      padding: 9px 12px;
       color: var(--text-primary);
       text-decoration: none;
       font-weight: 500;
       transition: var(--transition);
       border: 1px solid var(--border-light);
-      border-radius: 10px;
+      border-radius: 3px;
       position: relative;
-      background: var(--bg-card);
+      background: transparent;
       min-height: 0;
     }
 
@@ -694,9 +733,9 @@ function injectCommonStyles() {
     }
 
     .nav-link:hover {
-      background: rgba(51, 65, 85, 0.08);
-      border-color: #334155;
-      color: #334155;
+      background: rgba(200, 106, 78, 0.12);
+      border-color: var(--brand-secondary);
+      color: var(--brand-primary-dark);
     }
 
     html.dark .nav-link:hover {
@@ -705,9 +744,9 @@ function injectCommonStyles() {
     }
 
     .nav-link.active {
-      background: rgba(51, 65, 85, 0.12);
-      border-color: #334155;
-      color: #334155;
+      background: rgba(200, 106, 78, 0.16);
+      border-color: var(--brand-secondary);
+      color: var(--brand-primary-dark);
       font-weight: 600;
     }
 
@@ -718,7 +757,7 @@ function injectCommonStyles() {
     }
 
     .nav-link-icon {
-      font-size: 18px;
+      font-size: 17px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -727,7 +766,7 @@ function injectCommonStyles() {
     }
 
     .nav-text {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       line-height: 1.2;
       flex: 1;
@@ -739,28 +778,35 @@ function injectCommonStyles() {
       right: 10px;
       width: 6px;
       height: 6px;
-      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+      background: #d77855;
       border-radius: 999px;
       transform: translateY(-50%);
     }
 
     .nav-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border-light);
+      padding: 8px 12px 8px 0;
+      border-top: none;
+      border-left: 1px solid var(--border-light);
       display: flex;
+      justify-content: flex-end;
       gap: 10px;
       flex-shrink: 0;
     }
 
     .nav-legal-links {
-      padding: 0 20px 16px;
-      font-size: 12px;
+      display: none;
       color: var(--text-secondary);
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      padding: 0 16px 14px;
+      font-size: 0.68rem;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      opacity: 0.78;
       flex-shrink: 0;
     }
 
@@ -818,9 +864,9 @@ function injectCommonStyles() {
     }
 
     .nav-creator-link:hover {
-      background: rgba(51, 65, 85, 0.1);
-      border-color: #334155;
-      color: #334155;
+      background: rgba(215, 120, 85, 0.1);
+      border-color: #d77855;
+      color: #a94f36;
     }
 
     html.dark .nav-creator-link:hover {
@@ -830,8 +876,8 @@ function injectCommonStyles() {
     }
 
     .nav-theme-toggle:hover {
-      background: rgba(51, 65, 85, 0.1);
-      border-color: #334155;
+      background: rgba(215, 120, 85, 0.1);
+      border-color: #d77855;
     }
 
     html.dark .nav-theme-toggle:hover {
@@ -843,8 +889,8 @@ function injectCommonStyles() {
     .history-card {
       margin-bottom: 24px;
       padding: 16px;
-      background: rgba(51, 65, 85, 0.08);
-      border: 1px solid rgba(51, 65, 85, 0.15);
+      background: rgba(215, 120, 85, 0.08);
+      border: 1px solid rgba(23, 35, 33, 0.14);
       border-radius: 12px;
     }
 
@@ -868,7 +914,7 @@ function injectCommonStyles() {
       padding: 4px 12px;
       font-size: 0.8rem;
       border: none;
-      background: rgba(51, 65, 85, 0.15);
+      background: rgba(215, 120, 85, 0.15);
       border-radius: 6px;
       cursor: pointer;
       color: inherit;
@@ -884,7 +930,7 @@ function injectCommonStyles() {
     .history-link {
       padding: 10px 12px;
       background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(51, 65, 85, 0.2);
+      border: 1px solid rgba(23, 35, 33, 0.16);
       border-radius: 8px;
       text-decoration: none;
       color: inherit;
@@ -906,7 +952,7 @@ function injectCommonStyles() {
 
     .history-link:hover,
     .history-link:focus-visible {
-      background: rgba(51, 65, 85, 0.1);
+      background: rgba(215, 120, 85, 0.1);
       transform: translateY(-2px);
       outline: none;
     }
@@ -1049,8 +1095,46 @@ function injectCommonStyles() {
     }
 
     /* ===== モバイルレスポンシブ ===== */
+    @media (max-width: 1100px) and (min-width: 769px) {
+      body {
+        padding-top: 0;
+      }
+
+      .nav-menu {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+      }
+
+      .nav-menu-header {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .nav-footer {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .nav-links {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding-top: 4px;
+        padding-bottom: 10px;
+      }
+
+      .nav-link {
+        padding: 8px 9px;
+      }
+
+      .nav-text {
+        font-size: 12px;
+      }
+    }
+
     @media (max-width: 768px) {
       #mainNav {
+        position: fixed;
         top: auto;
         right: auto;
         bottom: 20px;
@@ -1058,12 +1142,15 @@ function injectCommonStyles() {
       }
 
       .nav-toggle {
+        display: flex !important;
+        pointer-events: auto;
         width: 48px;
         height: 48px;
         font-size: 20px;
       }
 
       .nav-menu {
+        display: flex;
         width: calc(100% - 40px);
         right: -100%;
         bottom: 70px;
@@ -1072,9 +1159,54 @@ function injectCommonStyles() {
         border-radius: 16px;
         border-left: none;
         border: 1px solid var(--border-light);
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-menu.active {
+        right: 0 !important;
+      }
+
+      .nav-menu-header {
+        padding: 16px 20px;
+      }
+
+      .nav-close {
+        display: flex;
+      }
+
+      .nav-links {
+        display: block;
+        padding: 12px 16px 16px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .nav-group-card {
+        display: block;
+        padding: 12px;
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        background: var(--bg-light);
+      }
+
+      .nav-group-card + .nav-group-card {
+        margin-top: 10px;
+        padding-left: 12px;
+        border-left: 1px solid var(--border-light);
+      }
+
+      .nav-group-title {
+        display: flex;
+        margin: 0 0 8px;
+      }
+
+      .nav-group-links {
+        flex-direction: column;
       }
 
       body {
+        padding-top: 0 !important;
         padding-bottom: 90px !important;
       }
     }
@@ -1114,6 +1246,125 @@ function injectCommonStyles() {
     }
   `;
   
+  document.head.appendChild(style);
+}
+
+function injectWorkbenchStyles() {
+  if (document.getElementById('workbench-styles')) return;
+
+  document.body.classList.add('tool-workspace');
+  const style = document.createElement('style');
+  style.id = 'workbench-styles';
+  style.textContent = `
+    body.tool-workspace {
+      background:
+        radial-gradient(circle at 10% 8%, rgba(239, 176, 105, 0.16), transparent 28%),
+        radial-gradient(circle at 90% 82%, rgba(132, 178, 169, 0.16), transparent 30%),
+        #f7f5ef !important;
+      color: #172321 !important;
+      font-family: "Noto Sans JP", "Yu Gothic", sans-serif !important;
+    }
+
+    body.tool-workspace .container {
+      width: min(1180px, calc(100% - 40px));
+      max-width: none;
+      padding: 96px 0 110px;
+    }
+
+    body.tool-workspace .page-header {
+      margin-bottom: 34px;
+      padding: 42px 0 28px;
+      border-bottom: 1px solid rgba(23, 35, 33, 0.16);
+    }
+
+    body.tool-workspace .page-header h1 {
+      color: #172321 !important;
+      font-family: Georgia, serif !important;
+      font-size: clamp(2.3rem, 6vw, 4.8rem) !important;
+      letter-spacing: -0.04em !important;
+    }
+
+    body.tool-workspace .page-header .subtitle,
+    body.tool-workspace .page-header p {
+      color: #65716d !important;
+    }
+
+    body.tool-workspace .tool-card,
+    body.tool-workspace .card,
+    body.tool-workspace .panel,
+    body.tool-workspace .history-card,
+    body.tool-workspace .settings-card,
+    body.tool-workspace .profile-card {
+      border: 1px solid rgba(23, 35, 33, 0.12) !important;
+      border-radius: 0 !important;
+      background: rgba(255, 255, 255, 0.78) !important;
+      box-shadow: 0 18px 44px rgba(23, 35, 33, 0.07) !important;
+    }
+
+    body.tool-workspace .tool-card-title,
+    body.tool-workspace .card-title,
+    body.tool-workspace .section-title {
+      color: #172321 !important;
+      font-family: Georgia, serif !important;
+    }
+
+    body.tool-workspace .btn,
+    body.tool-workspace button:not(.nav-toggle):not(.nav-close) {
+      border-radius: 999px !important;
+      font-family: "Noto Sans JP", "Yu Gothic", sans-serif !important;
+    }
+
+    body.tool-workspace .btn-primary,
+    body.tool-workspace .btn-primary:hover {
+      background: #172321 !important;
+      border-color: #172321 !important;
+      color: #fffdf8 !important;
+    }
+
+    body.tool-workspace input:not([type="checkbox"]):not([type="radio"]),
+    body.tool-workspace select,
+    body.tool-workspace textarea {
+      border-color: rgba(23, 35, 33, 0.18) !important;
+      border-radius: 8px !important;
+      background: #fffdf8 !important;
+      color: #172321 !important;
+    }
+
+    body.tool-workspace .palette .swatch,
+    body.tool-workspace .color-card,
+    body.tool-workspace .result-card {
+      border-color: rgba(23, 35, 33, 0.14) !important;
+      border-radius: 0 !important;
+    }
+
+    html.dark body.tool-workspace {
+      background: #1d2927 !important;
+      color: #f3eee5 !important;
+    }
+
+    html.dark body.tool-workspace .container,
+    html.dark body.tool-workspace .page-header h1,
+    html.dark body.tool-workspace .tool-card-title,
+    html.dark body.tool-workspace .card-title,
+    html.dark body.tool-workspace .section-title {
+      color: #f3eee5 !important;
+    }
+
+    html.dark body.tool-workspace .tool-card,
+    html.dark body.tool-workspace .card,
+    html.dark body.tool-workspace .panel,
+    html.dark body.tool-workspace .history-card,
+    html.dark body.tool-workspace .settings-card,
+    html.dark body.tool-workspace .profile-card {
+      background: rgba(31, 45, 42, 0.92) !important;
+      border-color: rgba(243, 238, 229, 0.15) !important;
+    }
+
+    @media (max-width: 760px) {
+      body.tool-workspace .container { width: min(100% - 28px, 1180px); padding-top: 72px; }
+      body.tool-workspace .page-header { padding-top: 28px; }
+    }
+  `;
   document.head.appendChild(style);
 }
 
@@ -1376,27 +1627,27 @@ document.addEventListener("DOMContentLoaded", () => {
   migrateStorageKeys();
   applyTheme();
   injectCommonStyles();
+  injectWorkbenchStyles();
   registerGlobalShortcuts();
   const runtimeSettings = applyRuntimePreferences();
   setupOfflineBackup(runtimeSettings);
   
   // 現在のページを履歴に追加
   const pageName = document.title.split(' - ')[0] || 'ページ';
-  const currentFile = window.location.pathname.split('/').pop() || 'index-enterprise.html';
+  const currentFile = window.location.pathname.split('/').pop() || 'palette-workbench.html';
   const pageMap = {
-    'index-enterprise.html': '🏠',
-    'random-color.html': '🎨',
-    'harmony.html': '🎯',
-    'gradient-generator.html': '🌈',
+    'random-color.html': '◌',
+    'harmony.html': '◎',
+    'gradient-generator.html': '↗',
     'contrast-checker.html': '◐',
-    'emoji-generator-enterprise.html': '😊',
-    'pose-generator-enterprise.html': '🧍',
-    'chara-generator-enterprise.html': '👥',
-    'gallery.html': '🖼️',
+    'emoji-generator-enterprise.html': '□',
+    'pose-generator-enterprise.html': '∿',
+    'chara-generator-enterprise.html': '◎',
+    'gallery.html': '▦',
     'profile-enterprise.html': '👤',
     'settings-enterprise.html': '⚙️'
   };
-  const pageEmoji = pageMap[currentFile] || '📄';
+  const pageEmoji = pageMap[currentFile] || '·';
   if (!isHiddenPageUrl(currentFile)) {
     addToHistory(currentFile, pageName, pageEmoji);
   }

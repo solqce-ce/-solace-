@@ -315,13 +315,13 @@
 
   <div class="container">
     <div class="page-header">
-      <h1>👤 プロフィール</h1>
+      <h1>プロフィール</h1>
       <p>ユーザー情報と作品統計を管理できます</p>
     </div>
 
     <div class="profile-card">
       <div class="profile-header">
-        <div class="avatar">👤</div>
+        <div class="avatar">◎</div>
         <h2 class="username" id="displayName">ユーザー</h2>
         <p class="bio" id="bio">クリエイターになろう</p>
       </div>
@@ -377,8 +377,8 @@
       </div>
 
       <div class="flex-gap-sm mt-lg">
-        <button type="button" id="saveProfileBtn" class="btn btn-primary">💾 保存</button>
-        <button type="button" id="resetProfileBtn" class="btn btn-secondary">🔄 リセット</button>
+        <button type="button" id="saveProfileBtn" class="btn btn-primary">保存</button>
+        <button type="button" id="resetProfileBtn" class="btn btn-secondary">リセット</button>
       </div>
     </div>
   </div>
@@ -434,7 +434,7 @@
       if (confirmAction('プロフィールをリセットしますか？')) {
         removeRawData('profile');
         loadProfile();
-        showToast('🔄 プロフィールをリセットしました', 2000, 'info');
+        showToast('プロフィールをリセットしました', 2000, 'info');
       }
     }
 

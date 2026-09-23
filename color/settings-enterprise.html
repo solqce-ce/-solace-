@@ -431,26 +431,26 @@
       <!-- テーマ設定 -->
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>🌙 外観設定</h3>
+          <h3>外観設定</h3>
         </div>
         <p>ダーク/ライトモードを切り替えて、快適な環境を作りましょう。</p>
-        <button type="button" id="toggleThemeBtn" class="btn btn-secondary">💡 テーマを切り替え</button>
+        <button type="button" id="toggleThemeBtn" class="btn btn-secondary">テーマを切り替え</button>
       </div>
 
       <!-- データ管理 -->
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>📦 データ管理</h3>
+          <h3>データ管理</h3>
         </div>
         <p>ローカルに保存されたすべてのデータ（作品、カラーパレット、プロフィール）をバックアップまたはリセットできます。</p>
-        <button type="button" id="exportDataBtn" class="btn btn-success">📥 データをエクスポート</button>
-        <button type="button" id="importDataBtn" class="btn btn-secondary">📤 データをインポート</button>
+        <button type="button" id="exportDataBtn" class="btn btn-success">データをエクスポート</button>
+        <button type="button" id="importDataBtn" class="btn btn-secondary">データをインポート</button>
       </div>
 
       <!-- 通知設定 -->
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>🔔 通知設定</h3>
+          <h3>通知設定</h3>
         </div>
         <div class="setting-item">
           <div>
@@ -505,7 +505,7 @@
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>👥 チームワークスペース</h3>
+          <h3>チームワークスペース</h3>
         </div>
         <p>共有パレットのレビューと承認フローをローカルで管理します。</p>
         <div class="inline-row">
@@ -519,7 +519,7 @@
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>📏 ブランドガイドライン</h3>
+          <h3>ブランドガイドライン</h3>
         </div>
         <p>禁止色と最小コントラストを設定し、逸脱を自動検知します。</p>
         <div class="inline-row">
@@ -535,7 +535,7 @@
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <h3>📊 監査レポート</h3>
+          <h3>監査レポート</h3>
         </div>
         <p>WCAG適合率と改善履歴をレポート出力します。</p>
         <div class="inline-row">
@@ -551,7 +551,7 @@
           <h3>⚠️ 危険ゾーン</h3>
         </div>
         <p>⚡ 注意：この操作は取り消せません。すべてのデータが削除されます。</p>
-        <button type="button" id="resetAllDataBtn" class="btn btn-danger">🗑️ すべてのデータを削除</button>
+        <button type="button" id="resetAllDataBtn" class="btn btn-danger">すべてのデータを削除</button>
       </div>
 
       <!-- バージョン情報 -->
@@ -593,7 +593,7 @@
         return;
       }
 
-      if (!confirmAction('🚨 この操作は取り消せません。削除しますか？')) {
+      if (!confirmAction('この操作は取り消せません。削除しますか？')) {
         return;
       }
 
@@ -707,7 +707,7 @@
       downloadBlob(`palette-vars-${dateLabel}.css`, new Blob([cssVars], { type: 'text/css' }));
       exportPalettePng(colors);
 
-      showToast('📦 JSON + PNG + CSS変数をエクスポートしました', 2200, 'success');
+      showToast('JSON + PNG + CSS変数をエクスポートしました', 2200, 'success');
     }
 
     function parseMaybeJSONString(value) {
@@ -836,7 +836,7 @@
         const reviewList = document.getElementById('reviewList');
         if (!membersList || !reviewList) return;
 
-        membersList.innerHTML = teamWorkspace.members.map((member) => `<div class="mini-item">👤 ${sanitizeHTML(member)}</div>`).join('') || '<div class="mini-item">メンバー未登録</div>';
+        membersList.innerHTML = teamWorkspace.members.map((member) => `<div class="mini-item">・ ${sanitizeHTML(member)}</div>`).join('') || '<div class="mini-item">メンバー未登録</div>';
 
         if (!Array.isArray(teamWorkspace.reviews) || teamWorkspace.reviews.length === 0) {
           reviewList.innerHTML = '<div class="mini-item">レビュー申請がありません</div>';

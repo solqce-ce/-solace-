@@ -414,7 +414,7 @@
 
   <div class="container">
     <div class="page-header">
-      <h1>🎨 ギャラリー</h1>
+      <h1>ギャラリー</h1>
       <p>作成した作品を管理・表示します</p>
     </div>
     <div class="history-nav" id="historyNav"></div>
@@ -433,7 +433,7 @@
     </div>
 
     <div id="emptyState" class="empty-state">
-      <div class="empty-state-icon">🎨</div>
+      <div class="empty-state-icon">▦</div>
       <h2>作品がありません</h2>
       <p>ジェネレーターで作品を作成するか、サンプルを追加してください</p>
     </div>
@@ -444,12 +444,12 @@
   <script src="common.js?v=20260303-navlayout4"></script>
   <script>
     const sampleArtworks = [
-      { id: 1, name: '笑顔のポートレート', emoji: '😊', date: '2024-02-27', type: 'emoji', tags: ['portrait', 'smile'], description: '柔らかい印象のプロフィール用絵文字セット', colors: ['#FFD166', '#06D6A0'] },
-      { id: 2, name: 'ジャンプポーズ', emoji: '🤸', date: '2024-02-26', type: 'pose', tags: ['action', 'sports'], description: '躍動感のあるランディング向けポーズ案', colors: ['#2563EB', '#38BDF8'] },
-      { id: 3, name: 'ファミリーシーン', emoji: '👨👩👧', date: '2024-02-25', type: 'chara', tags: ['family', 'warm'], description: '家族向けサービス訴求のビジュアル構成', colors: ['#F59E0B', '#F97316'] },
-      { id: 4, name: 'パステルパレット', emoji: '🌈', date: '2024-02-24', type: 'color', tags: ['palette', 'pastel'], description: 'SaaSの背景色・UI補助色に使える配色', colors: ['#A7F3D0', '#BFDBFE', '#FDE68A'] },
-      { id: 5, name: 'スタンディング', emoji: '🧍', date: '2024-02-23', type: 'pose', tags: ['business', 'present'], description: '提案資料で使いやすい立ちポーズ', colors: ['#1E3A8A', '#14B8A6'] },
-      { id: 6, name: 'グループ構成', emoji: '👥', date: '2024-02-22', type: 'chara', tags: ['team', 'collaboration'], description: '導入事例セクション向けのチーム構図', colors: ['#334155', '#0EA5E9'] },
+      { id: 1, name: '笑顔のポートレート', emoji: '○', date: '2024-02-27', type: 'emoji', tags: ['portrait', 'smile'], description: '柔らかい印象のプロフィール用絵文字セット', colors: ['#FFD166', '#06D6A0'] },
+      { id: 2, name: 'ジャンプポーズ', emoji: '∿', date: '2024-02-26', type: 'pose', tags: ['action', 'sports'], description: '躍動感のあるランディング向けポーズ案', colors: ['#2563EB', '#38BDF8'] },
+      { id: 3, name: 'ファミリーシーン', emoji: '◎', date: '2024-02-25', type: 'chara', tags: ['family', 'warm'], description: '家族向けサービス訴求のビジュアル構成', colors: ['#F59E0B', '#F97316'] },
+      { id: 4, name: 'パステルパレット', emoji: '◌', date: '2024-02-24', type: 'color', tags: ['palette', 'pastel'], description: 'SaaSの背景色・UI補助色に使える配色', colors: ['#A7F3D0', '#BFDBFE', '#FDE68A'] },
+      { id: 5, name: 'スタンディング', emoji: '∣', date: '2024-02-23', type: 'pose', tags: ['business', 'present'], description: '提案資料で使いやすい立ちポーズ', colors: ['#1E3A8A', '#14B8A6'] },
+      { id: 6, name: 'グループ構成', emoji: '▦', date: '2024-02-22', type: 'chara', tags: ['team', 'collaboration'], description: '導入事例セクション向けのチーム構図', colors: ['#334155', '#0EA5E9'] },
     ];
 
     let artworks = [];
@@ -572,7 +572,7 @@
       if (art) {
         art.lastUsedAt = new Date().toISOString();
         persistGallery();
-        showToast(`📖 ${art.name} を表示しました`, 2000, 'info');
+        showToast(`${art.name} を表示しました`, 2000, 'info');
       }
     }
 

@@ -3,6 +3,99 @@ const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 const navLinks = document.querySelectorAll('.nav-link');
 
+const sanitizeTextContent = (value = '') => {
+    return String(value ?? '')
+        .replace(/[\u0000-\u001F\u007F]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 2000);
+};
+
+const sanitizeHtmlFragment = (html = '') => {
+    const raw = String(html ?? '');
+    const cleaned = raw
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
+        .replace(/on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+        .replace(/javascript\s*:/gi, '');
+
+    if (!cleaned) {
+        return '';
+    }
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cleaned, 'text/html');
+    const allowedTags = new Set(['A', 'BR', 'P', 'STRONG', 'B', 'EM', 'I', 'SPAN', 'UL', 'OL', 'LI']);
+
+    const sanitizeNode = (node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            return node;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return null;
+        }
+
+        const element = node;
+        const tagName = element.tagName.toUpperCase();
+
+        if (!allowedTags.has(tagName)) {
+            const fragment = document.createDocumentFragment();
+            Array.from(element.childNodes).forEach((child) => {
+                const sanitizedChild = sanitizeNode(child);
+                if (sanitizedChild) {
+                    fragment.appendChild(sanitizedChild);
+                }
+            });
+            return fragment;
+        }
+
+        if (tagName === 'A') {
+            const href = element.getAttribute('href') || '';
+            const safeUrl = href.trim();
+            if (!safeUrl || /^javascript\s*:/i.test(safeUrl) || /^data\s*:/i.test(safeUrl)) {
+                const fragment = document.createDocumentFragment();
+                Array.from(element.childNodes).forEach((child) => {
+                    const sanitizedChild = sanitizeNode(child);
+                    if (sanitizedChild) {
+                        fragment.appendChild(sanitizedChild);
+                    }
+                });
+                return fragment;
+            }
+            element.setAttribute('target', '_blank');
+            element.setAttribute('rel', 'noopener noreferrer');
+        }
+
+        Array.from(element.attributes).forEach((attr) => {
+            if (/^on/i.test(attr.name)) {
+                element.removeAttribute(attr.name);
+            }
+        });
+
+        Array.from(element.childNodes).forEach((child) => {
+            const sanitizedChild = sanitizeNode(child);
+            if (!sanitizedChild) {
+                return;
+            }
+            if (sanitizedChild.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                element.appendChild(sanitizedChild);
+            }
+        });
+
+        return element;
+    };
+
+    const fragment = document.createDocumentFragment();
+    Array.from(doc.body.childNodes).forEach((node) => {
+        const sanitizedNode = sanitizeNode(node);
+        if (sanitizedNode) {
+            fragment.appendChild(sanitizedNode);
+        }
+    });
+
+    return fragment;
+};
+
 const inferFunnelStage = (eventName, payload = {}) => {
     const linkTarget = String(payload.link_target || '').toLowerCase();
     const label = String(payload.event_label || '').toLowerCase();
@@ -295,7 +388,7 @@ document.addEventListener('keydown', (event) => {
 
 // ===== ポートフォリオフィルター =====
 const filterButtons = document.querySelectorAll('.filter-btn');
-const portfolioItems = document.querySelectorAll('.portfolio-item');
+const portfolioItems = document.querySelectorAll('.works-gallery .portfolio-item');
 
 filterButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -305,14 +398,6 @@ filterButtons.forEach(button => {
 
         // フィルタリング
         const filterValue = button.getAttribute('data-filter');
-        const worksFeatured = document.querySelector('.works-featured');
-        const worksDivider = document.querySelector('.works-divider');
-        if (worksFeatured) {
-            worksFeatured.style.display = filterValue === 'all' ? '' : 'none';
-        }
-        if (worksDivider) {
-            worksDivider.style.display = filterValue === 'all' ? '' : 'none';
-        }
         portfolioItems.forEach(item => {
             if (filterValue === 'all' || item.getAttribute('data-filter') === filterValue) {
                 item.style.display = 'block';
@@ -373,13 +458,13 @@ if (contactForm) {
         // フォームデータを取得
         const formData = new FormData(contactForm);
         const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            company: formData.get('company') || '記載なし',
-            type: formData.get('type'),
-            message: formData.get('message'),
-            deadline: formData.get('deadline') || '未定',
-            reference: formData.get('reference') || 'なし'
+            name: sanitizeTextContent(formData.get('name')),
+            email: sanitizeTextContent(formData.get('email')),
+            company: sanitizeTextContent(formData.get('company') || '記載なし'),
+            type: sanitizeTextContent(formData.get('type')),
+            message: sanitizeTextContent(formData.get('message')),
+            deadline: sanitizeTextContent(formData.get('deadline') || '未定'),
+            reference: sanitizeTextContent(formData.get('reference') || 'なし')
         };
 
         // FormspreeのフォームID（設定済み）
@@ -413,7 +498,7 @@ if (contactForm) {
             }
         } catch (error) {
             console.error('Form error:', error);
-            alert('⚠️ 送信中にエラーが発生しました。\n\nお手数ですが、SNS DMまたはメールでお問い合わせください。');
+            alert('⚠️ 送信中にエラーが発生しました。\n\nお手数ですが、SNSのDMまたはメールでお問い合わせください。');
         }
     });
 }
@@ -1588,7 +1673,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['商用', '利用', '著作権'],
-                answer: 'はい、ゲーム、本、グッズなど、幅広い商用利用に対応しています。ご用途に応じて契約内容をご相談させていただきます。'
+                answer: 'はい、ゲーム、本、グッズなど、幅広い商用利用に対応しています。用途に応じて契約内容をご案内します。'
             },
             {
                 keywords: ['流れ', 'プロセス', '過程'],
@@ -1600,23 +1685,23 @@ class FAQChatbot {
             },
             {
                 keywords: ['価格', '料金', '費用'],
-                answer: '料金は作品の複雑さや納期によって異なります。キャラクターデザインは30,000円～、ゲームセットは80,000円～です。詳細なお見積もりはお問い合わせください。'
+                answer: '個人向け料金は1人あたり5,000円からです。複数キャラのゲームセットや背景、納期などで料金が変わるため、詳しくは料金ページをご覧ください。'
             },
             {
                 keywords: ['どんな', 'できる', 'サービス'],
-                answer: 'キャラクターデザイン、ゲームイラスト、SDキャラ、コンセプトアート、イラストレーション、修正・加筆に対応しています。詳しくは「サービス」ページをご覧ください。'
+                answer: 'キャラクターデザイン、ゲームイラスト、ミニキャラ（2〜3頭身）、コンセプトアート、イラストレーション、修正・加筆に対応しています。詳しくはポートフォリオと料金ページをご覧ください。'
             },
             {
                 keywords: ['企業', '法人', 'ビジネス'],
-                answer: '企業向けの大規模案件にも対応しております。企業向けポートフォリオページをご覧いただくか、お気軽にお問い合わせください。'
+                answer: '企業向けの大規模案件にも対応しています。企業向けポートフォリオをご覧いただくか、メールでお気軽にお問い合わせください。'
             },
             {
                 keywords: ['個人', '小規模', '同人'],
-                answer: '個人ゲーム開発や同人活動もお気軽にご相談ください。固定料金プランで気軽にご依頼いただけます。個人向けポートフォリオページもご参考ください。'
+                answer: '個人ゲーム開発や同人活動もお気軽にご相談ください。固定料金プランでご依頼いただけます。個人向けポートフォリオページもご参照ください。'
             },
             {
                 keywords: ['相談方法', '連絡方法', '問い合わせ方法', 'どう連絡'],
-                answer: 'SNS DMやメール、お問い合わせフォームからご相談いただけます。個別相談は <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> でも受け付けています。'
+                answer: 'SNSのDMやメール、お問い合わせフォームからご相談いただけます。個別相談は <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> でも受け付けています。'
             },
             {
                 keywords: ['メール', 'mail', '連絡先', '問い合わせ先'],
@@ -2180,15 +2265,15 @@ class FAQChatbot {
             },
             {
                 keywords: ['どんなイラスト', '何が描ける', '描けるもの'],
-                answer: 'キャラクターデザイン、立ち絵、SDキャラ、1枚絵、背景付きビジュアル、配信用素材、グッズ向けイラストなど幅広く対応しています。'
+                answer: 'キャラクターデザイン、立ち絵、ミニキャラ（2〜3頭身）、1枚絵、背景付きビジュアル、配信用素材、グッズ向けイラストなど幅広く対応しています。'
             },
             {
                 keywords: ['どんな依頼', '依頼できる内容', '頼めること'],
                 answer: '新規制作、差分追加、既存絵のブラッシュアップ、継続案件、商用案件、個人制作まで対応可能です。まずは用途を教えてください。'
             },
             {
-                keywords: ['sdキャラ', 'デフォルメ', 'ちびキャラ'],
-                answer: 'SDキャラ（デフォルメ）制作に対応しています。表情差分・ポーズ差分・スタンプ展開までご相談可能です。'
+                keywords: ['ミニキャラ', 'デフォルメ', 'ちびキャラ'],
+                answer: 'ミニキャラ（2〜3頭身）の制作に対応しています。表情差分・ポーズ差分・スタンプ展開までご相談可能です。'
             },
             {
                 keywords: ['立ち絵', '全身イラスト', 'キャラ立ち絵'],
@@ -2387,8 +2472,21 @@ class FAQChatbot {
     displayMessage(text, sender) {
         const messagesDiv = document.getElementById('chatbot-messages');
         const messageDiv = document.createElement('div');
+        const paragraph = document.createElement('p');
         messageDiv.className = `chatbot-message ${sender}`;
-        messageDiv.innerHTML = `<p>${text}</p>`;
+
+        if (sender === 'user') {
+            paragraph.textContent = sanitizeTextContent(text);
+        } else {
+            const sanitizedHtml = sanitizeHtmlFragment(text);
+            if (sanitizedHtml && sanitizedHtml.childNodes.length) {
+                paragraph.appendChild(sanitizedHtml);
+            } else {
+                paragraph.textContent = sanitizeTextContent(text);
+            }
+        }
+
+        messageDiv.appendChild(paragraph);
         messagesDiv.appendChild(messageDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
@@ -2406,7 +2504,7 @@ class FAQChatbot {
         }
 
         // マッチしない場合のデフォルト応答
-        return `申し訳ありません。ご質問がよく理解できませんでした。<br><br>「納期」「修正」「料金」「サービス」「企業」「個人」などのキーワードで検索してみてください。<br><br>それでもご不明な点があれば、お問い合わせフォームをご利用いただくか、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。`;
+        return `申し訳ありません。ご質問がよく理解できませんでした。<br><br>「納期」「修正」「料金」「内容」「企業」「個人」などのキーワードで検索してみてください。<br><br>それでもご不明な点があれば、お問い合わせフォームをご利用いただくか、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。`;
     }
 }
 
@@ -2498,6 +2596,10 @@ window.addEventListener('securitypolicyviolation', (e) => {
 window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
     const content = document.getElementById("main-content");
+
+    if (!loader || !content) {
+        return;
+    }
 
     setTimeout(() => {
 

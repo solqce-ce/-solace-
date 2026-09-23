@@ -52,7 +52,6 @@
 
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">ホーム</a></li>
-                <li><a href="index.html#services" class="nav-link">サービス</a></li>
                 <li><a href="index.html#portfolio" class="nav-link">ポートフォリオ</a></li>
                 <li><a href="pricing.html" class="nav-link">料金</a></li>
                 <li><a href="tools.html" class="nav-link">制作ツール</a></li>
@@ -61,40 +60,156 @@
         </nav>
     </header>
 
-    <section class="page-header">
-        <div class="section-container">
-            <h1>制作支援ツール</h1>
-            <p>ホームページ本体とは分けて、補助ツールをこちらにまとめています。</p>
-        </div>
-    </section>
-
-    <section class="target-selection">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">ツール一覧</h2>
-                <p class="section-subtitle">現在はカラージェネレーターのみ公開しています</p>
-            </div>
-
-            <p class="tools-page-note">配色検討には、まずこちらのツールをご利用ください。</p>
-
-            <div class="target-cards-grid tools-single-grid">
-                <div class="target-card" data-tool-card data-category="color" data-keywords="カラー 生成 配色 ギャラリー">
-                    <div class="target-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <span class="tool-purpose">配色づくり向け</span>
-                    <h4>カラージェネレーター</h4>
-                    <p>配色検討・アイデア整理に使えるサブツールです。</p>
-                    <ul class="target-features">
-                        <li><i class="fas fa-check"></i> 色の組み合わせ検討</li>
-                        <li><i class="fas fa-check"></i> 生成系ツールへジャンプ</li>
-                        <li><i class="fas fa-check"></i> ギャラリー連携</li>
-                    </ul>
-                    <a href="color/index-enterprise.html" class="btn btn-primary">ツールを開く</a>
+    <section class="tools-hub">
+        <div class="section-container section-container--wide">
+            <div class="tools-hub-hero">
+                <div>
+                    <span class="section-eyebrow">CREATIVE TOOLBOX</span>
+                    <h1>つくる前のひらめきを、<br><span>すぐ試せる場所。</span></h1>
+                    <p>色、キャラクター、ポーズ。思いついたアイデアを小さく試しながら、作品の方向性を見つけられます。</p>
+                </div>
+                <div class="tools-hub-mark" aria-hidden="true">
+                    <span>✦</span>
+                    <span>色</span>
+                    <span>形</span>
+                    <span>気分</span>
                 </div>
             </div>
+
+            <div class="tools-hub-toolbar">
+                <label class="tools-search">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                    <span class="sr-only">ツールを検索</span>
+                    <input type="search" id="toolSearch" placeholder="ツールを検索" autocomplete="off">
+                </label>
+                <div class="tools-filter-buttons" role="group" aria-label="ツールのカテゴリー">
+                    <button class="tools-filter-btn active" type="button" data-tool-filter="all" aria-pressed="true">すべて</button>
+                    <button class="tools-filter-btn" type="button" data-tool-filter="color" aria-pressed="false">配色</button>
+                    <button class="tools-filter-btn" type="button" data-tool-filter="generate" aria-pressed="false">生成</button>
+                    <button class="tools-filter-btn" type="button" data-tool-filter="manage" aria-pressed="false">整理</button>
+                </div>
+            </div>
+            <p class="tools-result-meta" id="toolsResultMeta" aria-live="polite"></p>
+
+            <div class="tools-hub-grid" id="toolsHubGrid">
+                <a class="tool-launch-card tool-launch-card--featured" data-tool-card data-tool-category="color" data-tool-keywords="色 カラー 配色 パレット 作業台" href="color/palette-workbench.html">
+                    <span class="tool-card-kicker">まずはここから</span>
+                    <span class="tool-card-icon" aria-hidden="true">◒</span>
+                    <h2>パレット作業台</h2>
+                    <p>色を並べて、固定しながら配色の方向をつくる。</p>
+                    <span class="tool-card-action">パレットをつくる <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="color" data-tool-keywords="色 カラー 配色 ランダム ひらめき" href="color/random-color.html">
+                    <span class="tool-card-icon" aria-hidden="true">✦</span>
+                    <h2>ランダムカラー</h2>
+                    <p>ひとつの色から、次に試したい配色のきっかけを見つける。</p>
+                    <span class="tool-card-action">色を探す <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="color" data-tool-keywords="配色 ハーモニー 色相 組み合わせ" href="color/harmony.html">
+                    <span class="tool-card-icon" aria-hidden="true">◎</span>
+                    <h2>配色ハーモニー</h2>
+                    <p>色相の関係から、まとまりのある組み合わせを試す。</p>
+                    <span class="tool-card-action">配色を組む <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="color" data-tool-keywords="グラデーション 色 背景" href="color/gradient-generator.html">
+                    <span class="tool-card-icon" aria-hidden="true">↗</span>
+                    <h2>グラデーション</h2>
+                    <p>背景や画面の空気をつくる、なめらかな色の流れ。</p>
+                    <span class="tool-card-action">流れをつくる <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="color" data-tool-keywords="コントラスト 見やすさ アクセシビリティ" href="color/contrast-checker.html">
+                    <span class="tool-card-icon" aria-hidden="true">◐</span>
+                    <h2>見やすさチェック</h2>
+                    <p>文字と背景のコントラストを確認して、読みやすく整える。</p>
+                    <span class="tool-card-action">見え方を確認 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="generate" data-tool-keywords="キャラクター 性格 設定 アイデア" href="color/chara-generator-enterprise.html">
+                    <span class="tool-card-icon" aria-hidden="true">✺</span>
+                    <h2>キャラ構成ジェネレーター</h2>
+                    <p>性格や要素を組み合わせて、キャラクターの種をつくる。</p>
+                    <span class="tool-card-action">キャラを考える <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="generate" data-tool-keywords="ポーズ 人体 構図 アイデア" href="color/pose-generator-enterprise.html">
+                    <span class="tool-card-icon" aria-hidden="true">⌁</span>
+                    <h2>ポーズジェネレーター</h2>
+                    <p>描き始める前に、動きとシルエットの方向を探す。</p>
+                    <span class="tool-card-action">ポーズを探す <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="generate" data-tool-keywords="絵文字 スタンプ 表情" href="color/emoji-generator-enterprise.html">
+                    <span class="tool-card-icon" aria-hidden="true">☺</span>
+                    <h2>絵文字ジェネレーター</h2>
+                    <p>表情や雰囲気を組み合わせて、使える一枚をつくる。</p>
+                    <span class="tool-card-action">表情をつくる <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a class="tool-launch-card" data-tool-card data-tool-category="manage" data-tool-keywords="ギャラリー 保存 履歴 お気に入り" href="color/gallery.html">
+                    <span class="tool-card-icon" aria-hidden="true">▦</span>
+                    <h2>作品ギャラリー</h2>
+                    <p>保存した配色やアイデアを、あとから見返して育てる。</p>
+                    <span class="tool-card-action">作品を整理する <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            <p class="tools-empty-state" id="toolsEmptyState" hidden>条件に合うツールが見つかりませんでした。</p>
         </div>
     </section>
+
+    <script>
+        (() => {
+            const search = document.getElementById('toolSearch');
+            const filterButtons = document.querySelectorAll('[data-tool-filter]');
+            const cards = document.querySelectorAll('[data-tool-card]');
+            const emptyState = document.getElementById('toolsEmptyState');
+            const resultMeta = document.getElementById('toolsResultMeta');
+            let activeFilter = 'all';
+
+            const updateCards = () => {
+                const query = search.value.trim().toLowerCase();
+                let visibleCount = 0;
+                cards.forEach((card) => {
+                    const matchesFilter = activeFilter === 'all' || card.dataset.toolCategory === activeFilter;
+                    const haystack = `${card.dataset.toolKeywords} ${card.textContent}`.toLowerCase();
+                    const matchesSearch = !query || haystack.includes(query);
+                    const visible = matchesFilter && matchesSearch;
+                    card.hidden = !visible;
+                    if (visible) visibleCount += 1;
+                });
+                emptyState.hidden = visibleCount !== 0;
+                resultMeta.textContent = `${visibleCount}件のツール`;
+            };
+
+            filterButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    activeFilter = button.dataset.toolFilter;
+                    filterButtons.forEach((item) => {
+                        const isActive = item === button;
+                        item.classList.toggle('active', isActive);
+                        item.setAttribute('aria-pressed', String(isActive));
+                    });
+                    updateCards();
+                });
+            });
+            search.addEventListener('input', updateCards);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === '/' && document.activeElement !== search && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+                    event.preventDefault();
+                    search.focus();
+                }
+                if (event.key === 'Escape' && document.activeElement === search) {
+                    search.value = '';
+                    search.blur();
+                    updateCards();
+                }
+            });
+            updateCards();
+        })();
+    </script>
 
     <footer class="footer">
         <div class="footer-content">
@@ -107,7 +222,6 @@
                 <h5>リンク</h5>
                 <ul>
                     <li><a href="index.html">ホーム</a></li>
-                    <li><a href="index.html#services">サービス</a></li>
                     <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
                     <li><a href="terms.html">利用規約</a></li>
                     <li><a href="tokutei-shotorihiki.html">特商法表記</a></li>
