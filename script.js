@@ -420,8 +420,7 @@ function ensureMobileToggleFallback() {
     const nav = document.getElementById('navMenu');
     if (!nav) return;
 
-    const hamVisible = ham && window.getComputedStyle(ham).display !== 'none' && ham.offsetParent !== null;
-    if (hamVisible) return; // 正常に表示されている
+    if (ham) return;
 
     if (document.getElementById('mobileMenuToggle')) return; // 既に作成済み
 
@@ -448,61 +447,6 @@ window.addEventListener('resize', () => {
     setTimeout(ensureMobileToggleFallback, 120);
 });
 
-// ===== お問い合わせフォーム送信 =====
-const contactForm = document.getElementById('contactForm');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // フォームデータを取得
-        const formData = new FormData(contactForm);
-        const data = {
-            name: sanitizeTextContent(formData.get('name')),
-            email: sanitizeTextContent(formData.get('email')),
-            company: sanitizeTextContent(formData.get('company') || '記載なし'),
-            type: sanitizeTextContent(formData.get('type')),
-            message: sanitizeTextContent(formData.get('message')),
-            deadline: sanitizeTextContent(formData.get('deadline') || '未定'),
-            reference: sanitizeTextContent(formData.get('reference') || 'なし')
-        };
-
-        // FormspreeのフォームID（設定済み）
-        const FORMSPREE_ID = 'mojnrdnd';
-
-        try {
-            const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                // 送信成功 - フォーム位置に成功メッセージを表示
-                document.getElementById('formSuccess').style.display = 'block';
-                contactForm.style.display = 'none';
-                
-                // スクロールしない（上に戻らない）
-                
-                // Google Analytics イベント送信
-                sendAnalyticsEvent('form_submission', {
-                    event_category: 'engagement',
-                    event_label: 'contact_form',
-                    form_type: formData.get('type'),
-                    page_path: window.location.pathname
-                });
-            } else {
-                alert('❌ 送信に失敗しました。もう一度お試しください。');
-            }
-        } catch (error) {
-            console.error('Form error:', error);
-            alert('⚠️ 送信中にエラーが発生しました。\n\nお手数ですが、SNSのDMまたはメールでお問い合わせください。');
-        }
-    });
-}
-
 // ===== スクロールアニメーション =====
 const observerOptions = {
     threshold: 0.1,
@@ -520,12 +464,378 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // アニメーション対象要素の初期化
-document.querySelectorAll('.service-card, .stat-card, .skill-item, .portfolio-item').forEach(el => {
+document.querySelectorAll('.service-card, .stat-card, .skill-item, .portfolio-item:not(.portfolio-archive-card)').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mascotSlots = document.querySelectorAll('.home-page [data-mascot-reveal]');
+    if (!('IntersectionObserver' in window)) return;
+
+    const mascotObserver = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.remove('is-pending');
+            entry.target.classList.add('is-visible');
+            currentObserver.unobserve(entry.target);
+        });
+    }, { threshold: 0.2 });
+
+    mascotSlots.forEach(slot => {
+        slot.classList.add('is-pending');
+        mascotObserver.observe(slot);
+    });
+});
+
+// ===== Standalone portfolio archive filters =====
+const archiveGrid = document.querySelector('.portfolio-archive-grid');
+if (archiveGrid) {
+    const archiveCards = Array.from(archiveGrid.querySelectorAll('.portfolio-archive-card'));
+    const archiveFilters = document.querySelectorAll('[data-portfolio-filter]');
+    const archiveEmptyState = document.querySelector('.portfolio-archive-empty');
+    const archiveCount = document.querySelector('.portfolio-archive-count');
+    const scrollButtons = document.querySelectorAll('[data-portfolio-scroll]');
+    const defaultScrollSnapType = archiveGrid.style.scrollSnapType;
+    let activeCardFrame = 0;
+    let wheelVelocity = 0;
+    let wheelFrame = 0;
+    let lastWheelInputAt = 0;
+    let lastWheelFrameAt = 0;
+    let wheelOriginalBehavior = '';
+    let scrollEndTimer = 0;
+    let scrollAnimationFrame = 0;
+    let scrollAnimationCleanup = null;
+    const pendingMoveDirections = [];
+
+    const getVisibleCards = () => archiveCards.filter(card => !card.hidden);
+    const getCenteredIndex = (cards = getVisibleCards()) => {
+        const centeredCard = archiveGrid.querySelector('.portfolio-archive-card.is-centered');
+        const originalCard = centeredCard?.dataset.loopClone === 'true'
+            ? cards.find(card => card.id === centeredCard.dataset.loopFor)
+            : centeredCard;
+        const index = cards.indexOf(originalCard);
+        return index >= 0 ? index : 0;
+    };
+
+    const findClosestCard = (projectedScrollLeft = archiveGrid.scrollLeft) => {
+        const gridBounds = archiveGrid.getBoundingClientRect();
+        const gridCenter = gridBounds.left + gridBounds.width / 2;
+        const projectedOffset = projectedScrollLeft - archiveGrid.scrollLeft;
+        let closestCard = null;
+        let closestDistance = Infinity;
+
+        archiveGrid.querySelectorAll('.portfolio-archive-card:not([hidden])').forEach(card => {
+            const bounds = card.getBoundingClientRect();
+            const distance = Math.abs(bounds.left + bounds.width / 2 - projectedOffset - gridCenter);
+            if (distance < closestDistance) {
+                closestCard = card;
+                closestDistance = distance;
+            }
+        });
+
+        return closestCard;
+    };
+
+    const updateGalleryState = () => {
+        const visibleCards = getVisibleCards();
+        scrollButtons.forEach(button => {
+            button.disabled = visibleCards.length <= 1;
+        });
+
+        const closestCard = findClosestCard();
+        archiveGrid.querySelectorAll('.portfolio-archive-card').forEach(card => {
+            card.classList.toggle('is-centered', !card.hidden && card === closestCard);
+        });
+    };
+
+    const scheduleGalleryState = () => {
+        if (activeCardFrame) return;
+        activeCardFrame = requestAnimationFrame(() => {
+            activeCardFrame = 0;
+            updateGalleryState();
+        });
+    };
+
+    const cancelWheelScroll = () => {
+        if (wheelFrame) {
+            cancelAnimationFrame(wheelFrame);
+            wheelFrame = 0;
+            wheelVelocity = 0;
+        }
+        archiveGrid.style.scrollSnapType = defaultScrollSnapType;
+        archiveGrid.style.scrollBehavior = wheelOriginalBehavior;
+    };
+
+    const recenterLoopClone = () => {
+        const centeredCard = findClosestCard();
+        if (centeredCard?.dataset.loopClone !== 'true') return false;
+
+        const originalCard = archiveCards.find(card => card.id === centeredCard.dataset.loopFor);
+        if (!originalCard) return false;
+
+        const cloneBounds = centeredCard.getBoundingClientRect();
+        const originalBounds = originalCard.getBoundingClientRect();
+        const previousBehavior = archiveGrid.style.scrollBehavior;
+        const previousSnapType = archiveGrid.style.scrollSnapType;
+        archiveGrid.style.scrollBehavior = 'auto';
+        archiveGrid.style.scrollSnapType = 'none';
+        archiveGrid.scrollLeft += (originalBounds.left + originalBounds.width / 2)
+            - (cloneBounds.left + cloneBounds.width / 2);
+        updateGalleryState();
+        requestAnimationFrame(() => {
+            archiveGrid.style.scrollBehavior = previousBehavior;
+            archiveGrid.style.scrollSnapType = previousSnapType;
+        });
+        return true;
+    };
+
+    const animateGalleryScroll = (distance) => {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+            archiveGrid.scrollLeft += distance;
+            return;
+        }
+
+        const start = archiveGrid.scrollLeft;
+        const duration = Math.min(850, Math.max(520, 390 + Math.sqrt(Math.abs(distance)) * 8));
+        const startedAt = performance.now();
+        const previousBehavior = archiveGrid.style.scrollBehavior;
+        const previousSnapType = archiveGrid.style.scrollSnapType;
+        archiveGrid.style.scrollBehavior = 'auto';
+        archiveGrid.style.scrollSnapType = 'none';
+        scrollAnimationCleanup = () => {
+            archiveGrid.style.scrollBehavior = previousBehavior;
+            archiveGrid.style.scrollSnapType = previousSnapType;
+            scrollAnimationCleanup = null;
+        };
+
+        const tick = (now) => {
+            const progress = Math.min((now - startedAt) / duration, 1);
+            const easedProgress = (1 - Math.cos(Math.PI * progress)) / 2;
+            archiveGrid.scrollLeft = start + distance * easedProgress;
+
+            if (progress < 1) {
+                scrollAnimationFrame = requestAnimationFrame(tick);
+                return;
+            }
+
+            scrollAnimationFrame = 0;
+            scrollAnimationCleanup?.();
+            updateGalleryState();
+            const didRecenter = recenterLoopClone();
+            if (pendingMoveDirections.length > 0) {
+                const nextDirection = pendingMoveDirections.shift();
+                if (didRecenter) {
+                    requestAnimationFrame(() => moveActiveCard(nextDirection));
+                } else {
+                    moveActiveCard(nextDirection);
+                }
+            } else {
+                window.clearTimeout(scrollEndTimer);
+                scrollEndTimer = window.setTimeout(recenterLoopClone, 180);
+            }
+        };
+
+        scrollAnimationFrame = requestAnimationFrame(tick);
+    };
+
+    const moveActiveCard = (direction, stepCount = 1) => {
+        if (scrollAnimationFrame) {
+            pendingMoveDirections.push(direction);
+            return;
+        }
+
+        cancelWheelScroll();
+        archiveGrid.style.scrollSnapType = defaultScrollSnapType;
+        window.clearTimeout(scrollEndTimer);
+        const visibleCards = getVisibleCards();
+        if (visibleCards.length <= 1) return;
+
+        const currentCard = archiveGrid.querySelector('.portfolio-archive-card.is-centered')
+            || visibleCards[getCenteredIndex(visibleCards)];
+        const orderedCards = Array.from(archiveGrid.querySelectorAll('.portfolio-archive-card:not([hidden])'));
+        const boundedSteps = stepCount % visibleCards.length;
+        if (boundedSteps === 0) return;
+        let currentPosition = orderedCards.indexOf(currentCard);
+        let nextCard = orderedCards[currentPosition + direction * boundedSteps];
+        if (!nextCard) {
+            recenterLoopClone();
+            const recenteredCard = archiveGrid.querySelector('.portfolio-archive-card.is-centered')
+                || visibleCards[getCenteredIndex(visibleCards)];
+            const recenteredCards = Array.from(archiveGrid.querySelectorAll('.portfolio-archive-card:not([hidden])'));
+            currentPosition = recenteredCards.indexOf(recenteredCard);
+            nextCard = recenteredCards[currentPosition + direction * boundedSteps];
+        }
+        if (!nextCard) return;
+
+        const currentBounds = currentCard.getBoundingClientRect();
+        const nextBounds = nextCard.getBoundingClientRect();
+        animateGalleryScroll((nextBounds.left + nextBounds.width / 2)
+            - (currentBounds.left + currentBounds.width / 2));
+    };
+
+    const updateArchive = (filter, requestedCard = null) => {
+        cancelWheelScroll();
+        archiveGrid.style.scrollSnapType = defaultScrollSnapType;
+        const sortedCards = [...archiveCards];
+        archiveGrid.querySelectorAll('[data-loop-clone="true"]').forEach(card => card.remove());
+        if (filter === 'latest') {
+            sortedCards.sort((a, b) => a.dataset.date.localeCompare(b.dataset.date));
+        }
+
+        sortedCards.forEach(card => {
+            const categories = card.dataset.category.split(/\s+/);
+            const matches = filter === 'latest' || categories.includes(filter);
+            card.hidden = !matches;
+            archiveGrid.appendChild(card);
+        });
+
+        const visibleCount = sortedCards.filter(card => !card.hidden).length;
+        if (archiveEmptyState) archiveEmptyState.hidden = visibleCount > 0;
+        if (archiveCount) archiveCount.textContent = `${String(visibleCount).padStart(2, '0')} works`;
+
+        const visibleCards = sortedCards.filter(card => !card.hidden);
+        if (visibleCards.length > 1) {
+            const beforeClones = document.createDocumentFragment();
+            const afterClones = document.createDocumentFragment();
+            visibleCards.forEach(card => {
+                const cloneCard = card.cloneNode(true);
+                cloneCard.removeAttribute('id');
+                cloneCard.dataset.loopClone = 'true';
+                cloneCard.dataset.loopFor = card.id;
+                cloneCard.dataset.loopSide = 'before';
+                cloneCard.setAttribute('aria-hidden', 'true');
+                cloneCard.removeAttribute('role');
+                cloneCard.removeAttribute('tabindex');
+                cloneCard.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
+                cloneCard.querySelectorAll('img').forEach(image => {
+                    image.loading = 'eager';
+                    image.decoding = 'sync';
+                });
+                beforeClones.appendChild(cloneCard);
+                const afterClone = cloneCard.cloneNode(true);
+                afterClone.dataset.loopSide = 'after';
+                afterClones.appendChild(afterClone);
+            });
+            archiveGrid.insertBefore(beforeClones, archiveGrid.firstChild);
+            archiveGrid.appendChild(afterClones);
+        }
+
+        const initialCard = visibleCards.includes(requestedCard)
+            ? requestedCard
+            : visibleCards[Math.floor((visibleCards.length - 1) / 2)];
+        if (initialCard) {
+            const gridBounds = archiveGrid.getBoundingClientRect();
+            const cardBounds = initialCard.getBoundingClientRect();
+            const centeredScroll = archiveGrid.scrollLeft
+                + cardBounds.left - gridBounds.left
+                + cardBounds.width / 2
+                - archiveGrid.clientWidth / 2;
+            archiveGrid.scrollTo({ left: Math.max(0, centeredScroll), behavior: 'auto' });
+        } else {
+            archiveGrid.scrollTo({ left: 0, behavior: 'auto' });
+        }
+        scheduleGalleryState();
+    };
+
+    scrollButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            moveActiveCard(Number(button.dataset.portfolioScroll));
+        });
+    });
+
+    const settleWheelScroll = () => {
+        wheelFrame = 0;
+        wheelVelocity = 0;
+        updateGalleryState();
+        archiveGrid.style.scrollBehavior = wheelOriginalBehavior;
+        archiveGrid.style.scrollSnapType = 'none';
+        recenterLoopClone();
+    };
+
+    const continueWheelScroll = (now) => {
+        const elapsed = Math.min(now - lastWheelFrameAt, 32);
+        lastWheelFrameAt = now;
+        const frameScale = Math.max(0.5, Math.min(elapsed / (1000 / 60), 2));
+        archiveGrid.scrollLeft += wheelVelocity * frameScale;
+        wheelVelocity *= Math.pow(0.9, frameScale);
+        recenterLoopClone();
+        scheduleGalleryState();
+
+        if (Math.abs(wheelVelocity) < 0.6 && now - lastWheelInputAt > 90) {
+            settleWheelScroll();
+            return;
+        }
+        wheelFrame = requestAnimationFrame(continueWheelScroll);
+    };
+
+    archiveGrid.addEventListener('wheel', event => {
+        const rawDelta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+        if (rawDelta === 0 || getVisibleCards().length <= 1) return;
+
+        event.preventDefault();
+        if (scrollAnimationFrame) {
+            cancelAnimationFrame(scrollAnimationFrame);
+            scrollAnimationFrame = 0;
+            scrollAnimationCleanup?.();
+            pendingMoveDirections.length = 0;
+        }
+        const delta = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+            ? rawDelta * 16
+            : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+                ? rawDelta * archiveGrid.clientWidth
+                : rawDelta;
+        if (!wheelFrame) {
+            wheelOriginalBehavior = archiveGrid.style.scrollBehavior;
+            archiveGrid.style.scrollSnapType = 'none';
+            archiveGrid.style.scrollBehavior = 'auto';
+            lastWheelInputAt = performance.now();
+            lastWheelFrameAt = lastWheelInputAt;
+            wheelFrame = requestAnimationFrame(continueWheelScroll);
+        }
+        wheelVelocity = Math.max(-48, Math.min(48, wheelVelocity + delta * 0.12));
+        lastWheelInputAt = performance.now();
+    }, { passive: false });
+
+    archiveGrid.addEventListener('scroll', () => {
+        if (scrollAnimationFrame || wheelFrame) return;
+        recenterLoopClone();
+        scheduleGalleryState();
+        window.clearTimeout(scrollEndTimer);
+        scrollEndTimer = window.setTimeout(recenterLoopClone, 180);
+    }, { passive: true });
+    archiveGrid.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        moveActiveCard(event.key === 'ArrowRight' ? 1 : -1);
+    });
+    archiveGrid.addEventListener('pointerdown', event => {
+        if (event.pointerType === 'touch') {
+            cancelWheelScroll();
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', scheduleGalleryState);
+
+    archiveFilters.forEach(button => {
+        button.addEventListener('click', () => {
+            archiveFilters.forEach(filterButton => {
+                const isActive = filterButton === button;
+                filterButton.classList.toggle('is-active', isActive);
+                filterButton.setAttribute('aria-pressed', String(isActive));
+            });
+            updateArchive(button.dataset.portfolioFilter);
+        });
+    });
+
+    const requestedCard = window.location.hash
+    ? document.getElementById(window.location.hash.slice(1))
+    : null;
+    updateArchive('latest', archiveCards.includes(requestedCard) ? requestedCard : null);
+}
 
 // ===== スムーズスクロール（古いブラウザ対応） =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -634,33 +944,44 @@ const setupPortfolioLightbox = () => {
 
     const lightboxImg = document.getElementById('portfolio-lightbox-img');
     const lightboxTitle = document.getElementById('portfolio-lightbox-title');
+    const lightboxDescription = document.getElementById('portfolio-lightbox-description');
     const lightboxMeta = document.getElementById('portfolio-lightbox-meta');
     const closeBtn = lightbox.querySelector('.portfolio-lightbox-close');
     const backdrop = lightbox.querySelector('.portfolio-lightbox-backdrop');
     const prevBtn = lightbox.querySelector('.portfolio-lightbox-prev');
     const nextBtn = lightbox.querySelector('.portfolio-lightbox-next');
 
-    const slides = Array.from(document.querySelectorAll('.portfolio-item.portfolio-expandable'))
-        .map((item) => {
-            const img = item.querySelector('.work-card__media img, .portfolio-image img');
-            const title = item.querySelector('.work-card__title, .portfolio-overlay h5');
-            const meta = item.querySelector('.work-card__meta, .portfolio-overlay p');
-            if (!img) {
-                return null;
-            }
-            return {
-                src: img.currentSrc || img.src,
-                alt: img.alt || '',
-                title: title ? title.textContent.trim() : img.alt,
-                meta: meta ? meta.textContent.trim() : ''
-            };
-        })
-        .filter(Boolean);
+    const getSlides = () => {
+        const archiveItems = document.querySelectorAll('.portfolio-archive-grid .portfolio-archive-card:not([data-loop-clone="true"])');
+        const items = archiveItems.length
+            ? Array.from(archiveItems).filter(item => !item.hidden)
+            : Array.from(document.querySelectorAll('.portfolio-item.portfolio-expandable'));
 
-    if (!slides.length) {
+        return items
+            .map((item) => {
+                const img = item.querySelector('.work-card__media img, .portfolio-image img');
+                const title = item.querySelector('.work-card__title, .portfolio-overlay h5');
+                const meta = item.querySelector('.work-card__meta, .portfolio-overlay p');
+                if (!img) {
+                    return null;
+                }
+                return {
+                    item,
+                    src: img.currentSrc || img.src,
+                    alt: img.alt || '',
+                    title: title ? title.textContent.trim() : img.alt,
+                    meta: meta ? meta.textContent.trim() : '',
+                    description: item.dataset.description || ''
+                };
+            })
+            .filter(Boolean);
+    };
+
+    if (!document.querySelector('.portfolio-item.portfolio-expandable')) {
         return;
     }
 
+    let slides = [];
     let activeIndex = 0;
     let lastFocusedElement = null;
 
@@ -673,12 +994,20 @@ const setupPortfolioLightbox = () => {
         lightboxImg.src = slide.src;
         lightboxImg.alt = slide.alt;
         lightboxTitle.textContent = slide.title;
+        if (lightboxDescription) {
+            lightboxDescription.textContent = slide.description;
+            lightboxDescription.hidden = !slide.description;
+        }
         lightboxMeta.textContent = slide.meta;
         prevBtn.disabled = slides.length <= 1;
         nextBtn.disabled = slides.length <= 1;
     };
 
-    const openLightbox = (index) => {
+    const openLightbox = (item) => {
+        slides = getSlides();
+        const index = slides.findIndex(slide => slide.item === item);
+        if (index < 0 || !slides[index]) return;
+
         lastFocusedElement = document.activeElement;
         renderSlide(index);
         lightbox.hidden = false;
@@ -687,7 +1016,7 @@ const setupPortfolioLightbox = () => {
         closeBtn.focus();
         sendAnalyticsEvent('portfolio_lightbox_open', {
             event_category: 'engagement',
-            event_label: slides[index]?.title || 'portfolio',
+            event_label: slides[index].title || 'portfolio',
             page_path: window.location.pathname
         });
     };
@@ -707,8 +1036,8 @@ const setupPortfolioLightbox = () => {
         renderSlide(nextIndex);
     };
 
-    document.querySelectorAll('.portfolio-item.portfolio-expandable').forEach((item, index) => {
-        const openFromItem = () => openLightbox(index);
+    document.querySelectorAll('.portfolio-item.portfolio-expandable').forEach(item => {
+        const openFromItem = () => openLightbox(item);
 
         item.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
@@ -1665,15 +1994,15 @@ class FAQChatbot {
         this.faqDatabase = [
             {
                 keywords: ['納期', 'いつ', 'どのくらい'],
-                answer: '通常、シンプルなイラストは2～3週間、複雑なキャラクターデザインは3～4週間です。急な依頼の場合はご相談ください。追加料金で対応できる場合があります。'
+                answer: '納期は制作内容・点数・確認工程・着手時期によって異なります。ご希望日を伺い、対応可否とスケジュールをお見積もり時にご案内します。'
             },
             {
                 keywords: ['修正', 'リテイク', '何回'],
-                answer: 'プランによって異なります。基本的には1～3回の修正が含まれています。大幅な変更については追加料金がかかる場合があります。'
+                answer: '修正回数・対象範囲・確認タイミングは案件ごとに相談し、見積もりや契約時に確認します。合意した仕様からの変更は、費用や納期への影響を事前にご相談します。'
             },
             {
                 keywords: ['商用', '利用', '著作権'],
-                answer: 'はい、ゲーム、本、グッズなど、幅広い商用利用に対応しています。用途に応じて契約内容をご案内します。'
+                answer: '利用できる媒体・地域・期間、改変や二次利用の可否、著作権の帰属などを案件ごとに確認し、個別契約で定めます。希望する利用範囲をお知らせください。'
             },
             {
                 keywords: ['流れ', 'プロセス', '過程'],
@@ -1681,31 +2010,31 @@ class FAQChatbot {
             },
             {
                 keywords: ['返金', 'キャンセル'],
-                answer: '納品物に対する満足が得られない場合、契約内容に応じて対応いたします。詳細はご依頼時にご相談ください。'
+                answer: '契約成立後の中止・解除や精算は、個別契約と返金・キャンセルポリシーに従います。詳細は <a href="cancellation-policy.html">返金・キャンセルポリシー</a>をご確認ください。'
             },
             {
                 keywords: ['価格', '料金', '費用'],
-                answer: '個人向け料金は1人あたり5,000円からです。複数キャラのゲームセットや背景、納期などで料金が変わるため、詳しくは料金ページをご覧ください。'
+                answer: '法人・事業者案件は、制作内容・点数・利用範囲・納期などを確認して個別にお見積もりします。ご希望内容を <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールでご相談</a>ください。'
             },
             {
                 keywords: ['どんな', 'できる', 'サービス'],
-                answer: 'キャラクターデザイン、ゲームイラスト、ミニキャラ（2〜3頭身）、コンセプトアート、イラストレーション、修正・加筆に対応しています。詳しくはポートフォリオと料金ページをご覧ください。'
+                answer: 'キャラクターデザイン、ゲーム・配信用イラスト、広告・販促用ビジュアル、デフォルメキャラクターなどをご相談いただけます。制作内容とスケジュールを確認して対応可否をご案内します。<a href="portfolio-corporate.html">法人向けの制作案内</a>もご覧ください。'
             },
             {
                 keywords: ['企業', '法人', 'ビジネス'],
-                answer: '企業向けの大規模案件にも対応しています。企業向けポートフォリオをご覧いただくか、メールでお気軽にお問い合わせください。'
+                answer: '法人・事業者のお客様からのご相談をメールで受け付けています。制作内容・点数・使用目的・希望納期などをお知らせください。<a href="portfolio-corporate.html">法人向けの制作案内</a>をご覧いただけます。'
             },
             {
                 keywords: ['個人', '小規模', '同人'],
-                answer: '個人ゲーム開発や同人活動もお気軽にご相談ください。固定料金プランでご依頼いただけます。個人向けポートフォリオページもご参照ください。'
+                answer: '個人のお客様のご依頼は、仲介サイトの<a href="https://tsunagu.cloud/users/solqc_e" target="_blank" rel="noopener noreferrer">つなぐ</a>または<a href="https://skeb.jp/@solqc_e" target="_blank" rel="noopener noreferrer">Skeb</a>で受け付けています。ご依頼・ご相談は各サイト上でお願いします。'
             },
             {
                 keywords: ['相談方法', '連絡方法', '問い合わせ方法', 'どう連絡'],
-                answer: 'SNSのDMやメール、お問い合わせフォームからご相談いただけます。個別相談は <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> でも受け付けています。'
+                answer: '法人・事業者のお客様は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールでご相談</a>ください。個人のお客様は「つなぐ」または「Skeb」からご依頼ください。'
             },
             {
                 keywords: ['メール', 'mail', '連絡先', '問い合わせ先'],
-                answer: 'メールでのご相談は、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。用途・希望納期・ご予算の目安があるとご案内がスムーズです。'
+                answer: '法人・事業者のお客様は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">solqc_e@outlook.com</a> までご連絡ください。制作内容・点数・使用目的・希望納期・ご予算の目安を分かる範囲でお知らせください。個人のお客様は「つなぐ」または「Skeb」をご利用ください。'
             },
             {
                 keywords: ['見積もりって何', '見積って何', '見積もりとは'],
@@ -1713,11 +2042,11 @@ class FAQChatbot {
             },
             {
                 keywords: ['見積もりに必要なもの', '見積もりに必要', '見積に必要なもの', '見積に必要'],
-                answer: '見積もりには「用途・希望サイズ・点数・希望納期・ご予算目安」があるとスムーズです。参考資料（イメージ画像・トンマナ）もあると精度が上がります。'
+                answer: '制作物の種類・点数、使用目的や媒体、希望納期、ご予算の目安、納品形式、利用条件などを分かる範囲でお知らせください。未確定の項目があってもご相談いただけます。'
             },
             {
                 keywords: ['概算見積', 'ざっくり見積', 'ラフ見積'],
-                answer: '要件が未確定でも概算見積もりは可能です。要件が固まり次第、正式見積もりへ更新します。'
+                answer: '要件が未確定の場合も、現時点で分かる範囲を伺って見積もり可能な範囲をご案内します。仕様が固まった段階で金額や納期が変わる場合があります。'
             },
             {
                 keywords: ['正式見積', '確定見積', '本見積'],
@@ -1757,11 +2086,11 @@ class FAQChatbot {
             },
             {
                 keywords: ['見積もり', '見積', '無料'],
-                answer: 'はい、見積もり相談は無料です。ご予算・用途・希望納期をお知らせいただければ、内容に応じたプランと概算をご案内します。'
+                answer: '見積もりをご希望の場合は、制作内容・用途・点数・希望納期・予算目安をメールでお知らせください。確認後、見積もりに必要な情報や対応可否をご案内します。'
             },
             {
                 keywords: ['支払い', '支払', '請求書', '入金'],
-                answer: '個人依頼は着手前のお支払い、企業案件は契約条件に応じた分割・請求書対応が可能です。詳細はお見積もり時にご案内します。'
+                answer: '報酬、消費税等の取扱い、支払方法・期日は、見積書または個別契約で事前に確認します。必要な書類や社内手続きがあれば、お問い合わせ時にお知らせください。'
             },
             {
                 keywords: ['納品', '形式', 'png', 'jpg', 'psd'],
@@ -1789,7 +2118,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['nda', 'NDA', '秘密保持', '非公開案件'],
-                answer: '企業案件を中心にNDA対応が可能です。事前に契約条件を確認し、公開範囲や実績掲載可否を含めて調整します。'
+                answer: 'NDAが必要な場合は、機密資料を共有する前に締結の要否と条件をご相談ください。公開範囲や実績掲載の可否も、個別契約で確認します。'
             },
             {
                 keywords: ['クレジット', '表記', 'credit'],
@@ -1937,7 +2266,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['領収書', '請求書', '書類発行'],
-                answer: '請求書・領収書の発行に対応可能です。宛名や但し書きの指定があれば事前にお知らせください。'
+                answer: '見積書・請求書など必要書類の種類や記載事項は、発注前にご相談ください。発行可否や記載内容を確認してご案内します。'
             },
             {
                 keywords: ['海外支払い', '決済', 'payment'],
@@ -1973,7 +2302,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['保守', '長期運用', '更新対応'],
-                answer: '長期運用の保守対応は継続案件としてご相談可能です。更新頻度に応じたプランをご提案します。'
+                answer: '長期運用や継続的な更新についてもご相談いただけます。更新頻度や作業範囲を伺い、対応条件を個別にお見積もりします。'
             },
             {
                 keywords: ['リサイズ', 'トリミング', '媒体向け'],
@@ -2029,7 +2358,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['契約書', '発注書'],
-                answer: '契約書の締結は可能です。企業案件では契約書・発注書・NDAなど必要書類に対応できます。'
+                answer: '契約書・発注書・NDAが必要な場合は、必要書類や希望条件を発注前にお知らせください。内容を確認して対応可否をご案内します。'
             },
             {
                 keywords: ['要件整理', '相談したい', 'FAQ外'],
@@ -2037,19 +2366,19 @@ class FAQChatbot {
             },
             {
                 keywords: ['こんにちは', 'はじめまして', 'こんばんは'],
-                answer: 'こんにちは！ご相談ありがとうございます。気になることをそのまま入力してください。必要に応じてメール相談（solqc_e@outlook.com）にもご案内できます。'
+                answer: 'お問い合わせありがとうございます。このチャットでは法人・事業者向けに、見積もり・納期・修正・利用範囲・納品形式などをご案内します。法人・事業者の個別案件は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メール</a>、個人のお客様は「つなぐ」または「Skeb」からご依頼ください。'
             },
             {
                 keywords: ['ありがとう', '助かった', '助かりました'],
-                answer: 'ありがとうございます！ほかにも気になる点があれば続けてご質問ください。個別相談は solqc_e@outlook.com でも対応しています。'
+                answer: 'ご利用ありがとうございます。ほかに確認したいことがあれば続けてご質問ください。法人・事業者の個別案件は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メール</a>、個人のお客様は「つなぐ」または「Skeb」をご利用ください。'
             },
             {
                 keywords: ['見積に必要', '何を送れば', '見積情報'],
-                answer: '見積もり時は「用途・希望サイズ・点数・希望納期・ご予算目安」があるとスムーズです。参考資料があればあわせてご共有ください。'
+                answer: '制作物の種類・点数、使用目的や媒体、希望納期、ご予算の目安、納品形式、利用条件などを分かる範囲でお知らせください。未確定の項目があってもご相談いただけます。'
             },
             {
                 keywords: ['予算が少ない', '低予算', '予算相談'],
-                answer: 'ご予算に合わせて仕様調整のご提案が可能です。優先度（クオリティ/納期/点数）を共有いただければ現実的なプランをご案内します。'
+                answer: 'ご予算に応じた仕様調整をご相談いただけます。優先したい条件（品質・納期・点数など）を共有いただければ、制作範囲と費用を個別に検討します。'
             },
             {
                 keywords: ['納品形式おすすめ', 'どの形式', '最適な形式'],
@@ -2065,7 +2394,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['修正費用', '追加修正', '修正料金'],
-                answer: '規定回数内の修正はプランに含まれます。大幅変更や回数超過は追加費用となる場合があるため、事前にご案内します。'
+                answer: '修正回数・対象範囲は案件ごとに見積もりや契約で定めます。合意した範囲を超える変更は、追加費用や納期への影響を事前にご相談します。'
             },
             {
                 keywords: ['途中共有', 'WIP', '進捗共有'],
@@ -2173,7 +2502,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['修正回数', '何回修正', 'リテイク回数'],
-                answer: '修正回数はプランごとに設定しています。要件に応じて回数増加のプラン調整も可能です。'
+                answer: '修正回数や対象範囲は案件ごとにご相談のうえ、見積もりや契約時に確認します。'
             },
             {
                 keywords: ['二次配布', '再配布', '再販売'],
@@ -2217,7 +2546,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['連絡先教えて', 'メール教えて', 'メールアドレス'],
-                answer: 'お問い合わせ先は <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> です。ご相談内容を添えてご連絡ください。'
+                answer: '法人・事業者のお問い合わせ先は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">solqc_e@outlook.com</a> です。個人のお客様は「つなぐ」または「Skeb」からご依頼ください。'
             },
             {
                 keywords: ['x', 'X', 'twitter', 'ツイッター', 'xアカウント'],
@@ -2317,7 +2646,7 @@ class FAQChatbot {
             },
             {
                 keywords: ['個人依頼', '同人依頼', '個人案件'],
-                answer: '個人依頼・同人案件にも対応可能です。ご予算や目的に合わせた進め方をご提案します。'
+                answer: '個人のお客様は、仲介サイトの<a href="https://tsunagu.cloud/users/solqc_e" target="_blank" rel="noopener noreferrer">つなぐ</a>または<a href="https://skeb.jp/@solqc_e" target="_blank" rel="noopener noreferrer">Skeb</a>をご利用ください。'
             },
             {
                 keywords: ['vtuber立ち絵', '配信立ち絵', 'live2d立ち絵'],
@@ -2361,15 +2690,15 @@ class FAQChatbot {
             },
             {
                 keywords: ['相談窓口', '問い合わせ窓口', '連絡先どこ'],
-                answer: 'ご相談はフォームまたは <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> で受け付けています。'
+                answer: '法人・事業者のお客様は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールでご相談</a>ください。個人のお客様は「つなぐ」または「Skeb」からご依頼ください。'
             },
             {
                 keywords: ['発注手順', '依頼手順', 'どう頼む'],
-                answer: 'まず用途と希望内容を共有いただき、見積もり確認後に制作開始となります。チャットかメールで最初の相談が可能です。'
+                answer: '法人・事業者のお客様は、用途や希望内容をメールでお知らせください。個人のお客様は「つなぐ」または「Skeb」からご依頼ください。制作は内容・条件の確認と合意後に開始します。'
             },
             {
                 keywords: ['ラフ提出回数', 'ラフ修正', '初稿修正'],
-                answer: 'ラフ段階で方向性を合わせるための確認・修正に対応しています。回数や範囲はプランごとにご案内します。'
+                answer: 'ラフ段階で方向性を確認します。提出回数や修正範囲は案件ごとに相談し、見積もりや契約時に確認します。'
             },
             {
                 keywords: ['商用案件', '商用プロジェクト', '法人利用'],
@@ -2377,11 +2706,11 @@ class FAQChatbot {
             },
             {
                 keywords: ['趣味依頼', '個人利用', '非商用依頼'],
-                answer: '非商用・趣味用途のご依頼にも対応しています。目的に合わせて過不足のない仕様をご提案します。'
+                answer: '個人利用・趣味用途のご依頼は、「つなぐ」または「Skeb」からお申し込みください。ご依頼内容や条件は各サイト上でご確認ください。'
             },
             {
                 keywords: ['メールで見積', 'メール見積依頼', '見積メール'],
-                answer: 'メール見積もりは <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> 宛に、用途・納期・ご予算・参考資料をお送りください。'
+                answer: '法人・事業者のお客様は、見積もりのご相談を <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">solqc_e@outlook.com</a> で受け付けています。用途・点数・希望納期・ご予算を分かる範囲でお知らせください。個人のお客様は仲介サイトをご利用ください。'
             },
             {
                 keywords: ['海外', '英語', 'international'],
@@ -2402,24 +2731,24 @@ class FAQChatbot {
         const chatHTML = `
             <div id="chatbot-widget" class="chatbot-widget">
                 <div class="chatbot-header">
-                    <h4>よくある質問</h4>
-                    <a href="mailto:solqc_e@outlook.com" class="chatbot-mail-link" title="メールで相談"><i class="fas fa-envelope" aria-hidden="true"></i><span>メール</span></a>
+                    <h4>法人向けご相談</h4>
+                    <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="chatbot-mail-link" title="法人・事業者案件をメールで相談"><i class="fas fa-envelope" aria-hidden="true"></i><span>法人メール</span></a>
                     <button id="chatbot-close" class="chatbot-close" aria-label="チャットを閉じる">×</button>
                 </div>
                 <div id="chatbot-messages" class="chatbot-messages">
                     <div class="chatbot-message bot">
-                        <p>こんにちは！ご質問やお困りのことはありませんか？<br>「納期」「修正」「料金」など、キーワードで検索できます！<br><br>個別相談は <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> でも受け付けています。</p>
+                        <p>法人・事業者のお客様向けFAQです。<br>「見積もり」「納期」「修正」「利用範囲」「NDA」「納品形式」などで検索できます。<br><br>法人・事業者の個別案件は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メール</a>、個人のお客様は <a href="https://tsunagu.cloud/users/solqc_e" target="_blank" rel="noopener noreferrer">つなぐ</a> または <a href="https://skeb.jp/@solqc_e" target="_blank" rel="noopener noreferrer">Skeb</a>をご利用ください。</p>
                     </div>
                 </div>
                 <div class="chatbot-input-area">
-                    <input type="text" id="chatbot-input" placeholder="質問を入力..." autocomplete="off">
+                    <input type="text" id="chatbot-input" placeholder="例：見積もり、納期、利用範囲" autocomplete="off">
                     <button id="chatbot-send" class="chatbot-send-btn">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
                 <div class="chatbot-contact-row">
-                    <span>メール相談:</span>
-                    <a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a>
+                    <span>法人・事業者案件:</span>
+                    <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールで相談</a>
                 </div>
             </div>
             <button id="chatbot-toggle" class="chatbot-toggle-btn" title="質問を開く" aria-label="質問チャットを開く">
@@ -2494,17 +2823,23 @@ class FAQChatbot {
     generateResponse(userMessage) {
         const lowerMessage = userMessage.toLowerCase();
         
-        // キーワードマッチング
+        // Prefer the most specific matching keyword over broad terms such as "利用".
+        let matchedFaq = null;
+        let matchedKeywordLength = 0;
         for (let faq of this.faqDatabase) {
             for (let keyword of faq.keywords) {
-                if (lowerMessage.includes(keyword)) {
-                    return faq.answer;
+                if (keyword.length > matchedKeywordLength && lowerMessage.includes(keyword)) {
+                    matchedFaq = faq;
+                    matchedKeywordLength = keyword.length;
                 }
             }
         }
+        if (matchedFaq) {
+            return matchedFaq.answer;
+        }
 
         // マッチしない場合のデフォルト応答
-        return `申し訳ありません。ご質問がよく理解できませんでした。<br><br>「納期」「修正」「料金」「内容」「企業」「個人」などのキーワードで検索してみてください。<br><br>それでもご不明な点があれば、お問い合わせフォームをご利用いただくか、<a href="mailto:solqc_e@outlook.com">solqc_e@outlook.com</a> までご連絡ください。`;
+        return `ご質問に合う回答を見つけられませんでした。<br><br>「見積もり」「納期」「修正」「利用範囲」「NDA」「納品形式」などのキーワードでお試しください。<br><br>法人・事業者の個別案件は <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールでご相談</a>ください。個人のお客様は <a href="https://tsunagu.cloud/users/solqc_e" target="_blank" rel="noopener noreferrer">つなぐ</a> または <a href="https://skeb.jp/@solqc_e" target="_blank" rel="noopener noreferrer">Skeb</a>をご利用ください。`;
     }
 }
 

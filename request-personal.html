@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="個人向けのイラスト制作サービス。個人ゲーム開発、グッズ制作、同人活動向け。気軽な相談から内容に合わせたお見積もりまで対応。">
+    <meta name="description" content="個人向けイラスト制作のご依頼は、仲介サイト「つなぐ」から受け付けています。">
     <meta name="keywords" content="個人向けイラスト,同人イラスト,グッズイラスト,キャラクターデザイン,個人ゲーム開発">
     <meta name="theme-color" content="#E67E22">
     <link rel="canonical" href="https://solace-illustration.com/request-personal.html">
-    <meta property="og:title" content="個人向け依頼フォーム | solace">
-    <meta property="og:description" content="個人・小規模向けのイラスト制作。気軽にご相談ください。">
+    <meta property="og:title" content="個人向けご依頼 | solace">
+    <meta property="og:description" content="個人向けイラスト制作のご依頼は、仲介サイト「つなぐ」から受け付けています。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://solace-illustration.com/request-personal.html">
     <meta property="og:site_name" content="solace">
@@ -17,10 +17,11 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="個人向け依頼フォーム | solace">
-    <meta name="twitter:description" content="個人・小規模向けのイラスト制作。気軽にご相談ください。">
+    <meta name="twitter:title" content="個人向けご依頼 | solace">
+    <meta name="twitter:description" content="個人向けイラスト制作のご依頼は、仲介サイト「つなぐ」から受け付けています。">
     <meta name="twitter:image" content="https://solace-illustration.com/images/og-default.png">
-    <title>個人向け依頼フォーム | solace - Professional Illustration Studio</title>    <!-- Google tag (gtag.js) -->
+    <title>個人向けご依頼 | solace - Professional Illustration Studio</title>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -52,10 +53,8 @@
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">ホーム</a></li>
-                <li><a href="index.html#portfolio" class="nav-link">ポートフォリオ</a></li>
+                <li><a href="portfolio.html" class="nav-link">ポートフォリオ</a></li>
                 <li><a href="pricing.html" class="nav-link">料金</a></li>
-                <li><a href="tools.html" class="nav-link">制作ツール</a></li>
-                <li><a href="index.html#contact" class="nav-link">相談</a></li>
             </ul>
         </nav>
     </header>
@@ -63,92 +62,24 @@
     <!-- ===== ページヘッダー ===== -->
     <section class="page-header">
         <div class="section-container">
-            <h1>個人向け依頼フォーム</h1>
-            <p>個人向けのイラスト制作を承ります</p>
+            <h1>個人向けのご依頼</h1>
+            <p>個人のお客様のご依頼は、下記の仲介サイト「つなぐ」または「Skeb」をご利用ください</p>
         </div>
     </section>
 
-    <!-- ===== フォームセクション ===== -->
     <section class="contact">
         <div class="section-container">
             <div class="contact-content">
-                <div class="contact-methods mb-2xl">
-                    <div class="contact-method">
-                        <i class="fas fa-user"></i>
-                        <h5>個人・小規模向け</h5>
-                        <p>個人ゲーム開発、グッズ制作、<br>同人活動など、お気軽にご依頼ください</p>
+                <div class="contact-method">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                    <h2>個人のお客様のご依頼</h2>
+                    <p>下記の仲介サイト「つなぐ」または「Skeb」をご利用ください。</p>
+                    <div class="conversion-band-actions">
+                        <a href="https://tsunagu.cloud/users/solqc_e" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">つなぐで依頼する</a>
+                        <a href="https://skeb.jp/@solqc_e" class="btn btn-outline btn-large" target="_blank" rel="noopener noreferrer">Skebでリクエスト</a>
                     </div>
                 </div>
-
-                <form class="contact-form" id="contactFormPersonal">
-                    <div class="form-group">
-                        <label for="name">お名前 <span class="required">*</span></label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">メールアドレス <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="project-name">プロジェクト名（任意）</label>
-                        <input type="text" id="project-name" name="projectName" placeholder="例：◇◇ゲーム、同人誌『▲▲』など">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="work-type">制作内容 <span class="required">*</span></label>
-                        <select id="work-type" name="workType" required>
-                            <option value="">選択してください</option>
-                            <option value="character">キャラクターデザイン</option>
-                            <option value="game">ゲームイラスト</option>
-                            <option value="icon">アイコン・グッズ</option>
-                            <option value="other">その他</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="character-count">制作キャラクター数（任意）</label>
-                        <input type="text" id="character-count" name="characterCount" placeholder="例：1体、3体など">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="project-message">詳細・ご要望 <span class="required">*</span></label>
-                        <textarea id="project-message" name="message" rows="6" required placeholder="キャラクターの説明、こんな雰囲気が好きなど、できるだけ詳しくお知らせください"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="desired-deadline">希望納期（任意）</label>
-                        <input type="date" id="desired-deadline" name="deadline">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reference-image">参考画像URL（任意）</label>
-                        <input type="url" id="reference-image" name="reference" placeholder="https://... (参考になる画像があれば)">
-                    </div>
-
-                    <div class="form-group checkbox">
-                        <input type="checkbox" id="privacy-personal" name="privacy" required>
-                        <label for="privacy-personal">
-                            <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer" aria-label="プライバシーポリシーを開く（新しいタブ）">プライバシーポリシー</a>、<a href="terms.html" target="_blank" rel="noopener noreferrer" aria-label="利用規約を開く（新しいタブ）">利用規約</a>、<a href="tokutei-shotorihiki.html" target="_blank" rel="noopener noreferrer" aria-label="特定商取引法に基づく表記を開く（新しいタブ）">特定商取引法に基づく表記</a>および<a href="cancellation-policy.html" target="_blank" rel="noopener noreferrer" aria-label="返金・キャンセルポリシーを開く（新しいタブ）">返金・キャンセルポリシー</a>に同意します <span class="required">*</span>
-                        </label>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-large">送信する</button>
-                    <p class="form-note">※ ご送信いただいた情報は適切に管理いたします</p>
-                    <p class="form-success text-success text-center mt-lg d-none" id="formSuccessPersonal" hidden>
-                        ✅ 送信ありがとうございました！<br>内容を確認のうえ、メールでご連絡します。
-                    </p>
-                </form>
             </div>
-        </div>
-    </section>
-
-    <!-- ===== CTA ===== -->
-    <section class="cta-section text-center">
-        <div class="section-container">
-            <h3 class="text-white mb-md">質問がありますか？</h3>
-            <p class="mb-lg text-muted">SNSのDMでもお気軽にお問い合わせください。<br>Instagram・X（旧Twitter）で受け付けています。</p>
         </div>
     </section>
 
@@ -164,9 +95,7 @@
                 <h5>リンク</h5>
                 <ul>
                     <li><a href="index.html">ホーム</a></li>
-                    <li><a href="index.html#portfolio">ポートフォリオ</a></li>
-                    <li><a href="index.html#contact">相談</a></li>
-                    <li><a href="tokutei-shotorihiki.html">特商法表記</a></li>
+                    <li><a href="portfolio.html">ポートフォリオ</a></li>
                     <li><a href="cancellation-policy.html">返金・キャンセル</a></li>
                 </ul>
             </div>
@@ -191,62 +120,5 @@
     </footer>
 
     <script src="script.js?v=20260302-chatfix" defer></script>
-    <script>
-        // 個人向けフォーム処理
-        const contactFormPersonal = document.getElementById('contactFormPersonal');
-        if (contactFormPersonal) {
-            contactFormPersonal.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                // ローディング表示
-                showFormLoading('contactFormPersonal');
-
-                const formData = new FormData(contactFormPersonal);
-                const data = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    projectName: formData.get('projectName') || 'なし',
-                    workType: formData.get('workType'),
-                    characterCount: formData.get('characterCount') || '未定',
-                    message: formData.get('message'),
-                    deadline: formData.get('deadline') || '未定',
-                    reference: formData.get('reference') || 'なし'
-                };
-
-                const FORMSPREE_ID = 'mojnrdnd';
-
-                // バリデーション
-                if (!validateFormData(data)) {
-                    hideFormLoading('contactFormPersonal');
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    if (response.ok) {
-                        const successMessage = document.getElementById('formSuccessPersonal');
-                        successMessage.hidden = false;
-                        successMessage.classList.remove('d-none');
-                        contactFormPersonal.style.display = 'none';
-                    } else {
-                        hideFormLoading('contactFormPersonal');
-                        alert('❌ 送信に失敗しました。もう一度お試しください。');
-                    }
-                } catch (error) {
-                    hideFormLoading('contactFormPersonal');
-                    console.error('Form error:', error);
-                    alert('⚠️ 送信中にエラーが発生しました。');
-                }
-            });
-        }
-    </script>
 </body>
 </html>
-

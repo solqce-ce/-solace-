@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="solace（そらす）はゲーム業界を中心に活動するプロフェッショナルなイラストレーター。キャラクターデザイン、ゲームイラスト、コンセプトアートなど、感情に届くイラスト制作を提供します。">
+    <meta name="description" content="solace（そらす）はキャラクターデザイン、ゲームイラスト、コンセプトアートなど、感情に届くイラスト制作を提供します。">
     <meta name="keywords" content="イラストレーター,キャラクターデザイン,ゲーム制作,イラスト依頼,アニメーション,デジタルアート">
     <meta name="author" content="solace">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -20,17 +20,17 @@
     <meta name="twitter:title" content="solace - Professional Illustration & Character Design">
     <meta name="twitter:description" content="感情に届くイラスト制作。ゲーム、アニメーション、商用プロジェクト対応。">
     <meta name="twitter:image" content="https://solace-illustration.com/images/og-default.png">
-    <meta name="theme-color" content="#0a0c10">
+    <meta name="theme-color" content="#10172f">
     
     <!-- ===== セキュリティヘッダー ===== -->
     <!-- Content Security Policy (CSP) - XSS / インジェクション攻撃対策 -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
                    script-src 'self' https://www.googletagmanager.com https://cdnjs.cloudflare.com;
+                   connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com;
                    style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
                    img-src 'self' data: https:;
                    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   frame-ancestors 'none';
                    base-uri 'self';
                    form-action 'self';">
     
@@ -57,8 +57,8 @@
     {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
-        "name": "solace",
-        "alternateName": "そらす",
+        "name": "空澄そら",
+        "alternateName": "そらすそら",
         "description": "キャラクターデザイン・立ち絵・ミニキャラ（2〜3頭身）など、感情に届くイラスト制作",
         "url": "https://solace-illustration.com/",
         "image": "https://solace-illustration.com/images/og-default.png",
@@ -74,39 +74,7 @@
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP" crossorigin="anonymous"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        
-        gtag('config', 'G-17HK77SMHP', {
-            'page_path': window.location.pathname,
-            'page_title': document.title
-        });
-
-        // カスタムイベント - お問い合わせフォーム送信
-        function trackFormSubmit() {
-            gtag('event', 'form_submit', {
-                'event_category': 'engagement',
-                'event_label': 'contact_form'
-            });
-        }
-
-        // カスタムイベント - ボタンクリック
-        function trackButtonClick(buttonName) {
-            gtag('event', 'button_click', {
-                'event_category': 'navigation',
-                'event_label': buttonName
-            });
-        }
-
-        // メールアドレス保護関数 - スパムボット対策
-        function revealmailaddr() {
-            const encoded = 'c29scWNfZUBvdXRsb29rLmNvbQ==';
-            const decoded = atob(encoded);
-            window.location.href = 'mailto:' + decoded;
-        }
-    </script>
+    <script src="home-analytics.js" defer></script>
 </head>
 
 <body class="studio-site home-page">
@@ -143,9 +111,8 @@
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link">ホーム</a></li>
-                <li><a href="#portfolio" class="nav-link">ポートフォリオ</a></li>
+                <li><a href="portfolio.html" class="nav-link">ポートフォリオ</a></li>
                 <li><a href="pricing.html" class="nav-link">料金</a></li>
-                <li><a href="tools.html" class="nav-link">制作ツール</a></li>
                 <li><a href="#target-selection" class="nav-link">相談</a></li>
             </ul>
 
@@ -160,12 +127,12 @@
         <div class="hero-content">
             <p class="hero-eyebrow">イラストのご相談、歓迎です</p>
 <h2 class="hero-title">
-    想いを、<span>キャラクターで伝えます。</span>
+    想いを、<span><span class="hero-title-phrase">キャラクターで</span><br class="hero-title-break">伝えます。</span>
 </h2>
             <p class="hero-subtitle">ゲームやVTuber、商用案件向けに、キャラクターデザイン・立ち絵・キービジュアルを制作しています。まだイメージがまとまっていなくても大丈夫。お話を伺いながら、ぴったりの形を一緒に考えます。</p>
             <div class="hero-cta">
                 <a href="#target-selection" class="btn btn-primary">制作の相談をする</a>
-                <a href="#portfolio" class="btn btn-outline">作品を見る</a>
+                <a href="portfolio.html" class="btn btn-outline">作品を見る</a>
             </div>
         </div>
         <div class="hero-visual" aria-hidden="true">
@@ -179,6 +146,9 @@
                 </div>
             </div>
         </div>
+        <div class="mascot-slot mascot-slot--hero" data-mascot-reveal aria-hidden="true">
+            <img class="mascot-slot__image" src="images/solacechibi-sparkle.png" alt="" width="512" height="640" decoding="async">
+        </div>
         <p class="hero-scroll" aria-hidden="true">Scroll</p>
     </section>
 
@@ -190,7 +160,7 @@
             <header class="section-head">
                 <span class="section-eyebrow">Studio</span>
                 <h2 class="section-title">solace について</h2>
-                <p class="section-lead">キャラクターの魅力を最大限に引き出すイラスト制作を、企画段階から伴走します。</p>
+                <p class="section-lead">キャラクターの魅力を最大限に引き出すイラスト制作を。</p>
             </header>
 
             <div class="profile-grid">
@@ -214,146 +184,37 @@
         </div>
     </section>
 
-    <!-- ===== 制作実績 ===== -->
+    <!-- ===== Portfolio ===== -->
     <section class="portfolio works" id="portfolio">
         <div class="section-container section-container--wide">
             <header class="section-head">
                 <span class="section-eyebrow">代表作</span>
-                <h2 class="section-title">制作実績</h2>
+                <h2 class="section-title">Portfolio</h2>
                 <p class="section-lead">キャラクターデザインからキービジュアルまで。依頼したい雰囲気が、すぐに伝わる作品をまとめています。</p>
             </header>
 
             <div class="works-featured">
-                <article class="work-card work-card--lead portfolio-item portfolio-expandable" data-filter="fanart" tabindex="0" role="button" aria-label="作品を拡大: KOF - SHERMIE">
+                <a class="work-card work-card--lead portfolio-item" href="portfolio.html#work-shermie" aria-label="ポートフォリオでKOF - SHERMIEを見る">
                     <div class="work-card__media">
                         <img src="images/sheru.png" alt="KOF - SHERMIE" loading="lazy">
                     </div>
-                    <div class="work-card__overlay">
-                        <span class="work-card__tag">Fan Art · Character</span>
-                        <h3 class="work-card__title">KOF - SHERMIE</h3>
-                        <p class="work-card__meta">Digital Painting · 2025</p>
-                        <span class="work-card__action">View Work</span>
-                    </div>
-                </article>
+                </a>
                 <div class="works-featured-col">
-                    <article class="work-card work-card--sub portfolio-item portfolio-expandable" data-filter="original" tabindex="0" role="button" aria-label="作品を拡大: 飾り耳">
+                    <a class="work-card work-card--sub portfolio-item" href="portfolio.html#work-kazarimi" aria-label="ポートフォリオで飾り耳を見る">
                         <div class="work-card__media">
                             <img src="images/usagimimi.png" alt="飾り耳" loading="lazy">
                         </div>
-                        <div class="work-card__overlay">
-                            <span class="work-card__tag">Original</span>
-                            <h3 class="work-card__title">飾り耳</h3>
-                            <p class="work-card__meta">Digital Painting · 2025</p>
-                            <span class="work-card__action">View Work</span>
-                        </div>
-                    </article>
-                    <article class="work-card work-card--sub portfolio-item portfolio-expandable" data-filter="fanart" tabindex="0" role="button" aria-label="作品を拡大: PERSONA5 - Panther">
+                    </a>
+                    <a class="work-card work-card--sub portfolio-item" href="portfolio.html#work-panther" aria-label="ポートフォリオでPERSONA5 - Pantherを見る">
                         <div class="work-card__media">
                             <img src="images/panther.png" alt="PERSONA5 - Panther" loading="lazy">
                         </div>
-                        <div class="work-card__overlay">
-                            <span class="work-card__tag">Fan Art</span>
-                            <h3 class="work-card__title">PERSONA5 - Panther</h3>
-                            <p class="work-card__meta">Digital Painting · 2025</p>
-                            <span class="work-card__action">View Work</span>
-                        </div>
-                    </article>
+                    </a>
                 </div>
-            </div>
-
-            <p class="works-divider">その他の作品</p>
-
-            <div class="works-toolbar">
-                <p class="portfolio-hint">カテゴリで絞り込み</p>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">すべて</button>
-                    <button class="filter-btn" data-filter="character">キャラクター</button>
-                    <button class="filter-btn" data-filter="original">オリジナル</button>
-                    <button class="filter-btn" data-filter="fanart">ファンアート</button>
-                    <button class="filter-btn" data-filter="web">その他</button>
-                </div>
-            </div>
-
-            <div class="portfolio-grid works-gallery">
-                <div class="portfolio-item portfolio-expandable" data-filter="fanart">
-                    <div class="portfolio-image">
-                        <img src="images/sheru.png" alt="SHERMIE" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>KOF - SHERMIE</h5>
-                            <p>2025 / Digital Painting</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item portfolio-expandable" data-filter="original">
-                    <div class="portfolio-image">
-                        <img src="images/usagimimi.png" alt="飾り耳" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>飾り耳</h5>
-                            <p>2025 / Digital Painting</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item portfolio-expandable" data-filter="fanart">
-                    <div class="portfolio-image">
-                        <img src="images/panther.png" alt="Panther" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>PERSONA5 - Panther</h5>
-                            <p>2025 / Digital Painting</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item portfolio-expandable" data-filter="character">
-                    <div class="portfolio-image">
-                        <img src="images/sample1.jpg" alt="ゲームキャラクター イラスト" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>ゲームキャラクター</h5>
-                            <p>2025 / Photoshop</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item portfolio-expandable" data-filter="character">
-                    <div class="portfolio-image">
-                        <img src="images/sample2.jpg" alt="キャラクターデザイン 立ち絵" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>キャラクターデザイン</h5>
-                            <p>2024 / Clip Studio</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item portfolio-expandable" data-filter="character">
-                    <div class="portfolio-image">
-                        <img src="images/sample3.jpg" alt="ミニキャラ（2〜3頭身）" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>キャラデザイン</h5>
-                            <p>2025 / Illustrator</p>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="tools.html" class="portfolio-item" data-filter="web">
-                    <div class="portfolio-image">
-                        <img src="images/sample2.jpg" alt="制作支援Webツール" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <h5>制作支援ツール</h5>
-                            <p>2025 / Web開発</p>
-                            <span class="portfolio-caption">こんなものも作りました →</span>
-                        </div>
-                    </div>
-                </a>
             </div>
 
             <div class="works-footer">
-                <div class="works-footer-text">
-                    <h4>ほかの作品も公開しています</h4>
-                    <p>SNSやpixivでも、制作過程や最新のイラストを更新しています。</p>
-                </div>
                 <div class="portfolio-cta">
-                    <p class="visually-hidden">SNSリンク</p>
                 <div class="social-links">
                     <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
                     <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
@@ -366,6 +227,9 @@
                     <a href="#target-selection" class="btn btn-primary">この雰囲気で依頼する</a>
                 </div>
             </div>
+        </div>
+        <div class="mascot-slot mascot-slot--portfolio" data-mascot-reveal aria-hidden="true">
+            <img class="mascot-slot__image" src="images/solacechibi1.png" alt="" width="512" height="640" loading="lazy" decoding="async">
         </div>
     </section>
 
@@ -397,7 +261,7 @@
                     <span class="workflow-step-num" aria-hidden="true">03</span>
                     <div class="workflow-step-body">
                         <h4>ラフ・制作</h4>
-                        <p>ラフ提出後、ご確認いただきながら本制作へ進みます。修正回数はプランにより異なります。</p>
+                        <p>ラフ提出後、ご確認いただきながら本制作へ進みます。</p>
                     </div>
                 </li>
                 <li class="workflow-step">
@@ -410,15 +274,23 @@
             </ol>
 
         </div>
+        <div class="mascot-slot mascot-slot--workflow" data-mascot-reveal aria-hidden="true">
+            <img class="mascot-slot__image" src="images/solacechibi-smile.png" alt="" width="512" height="640" loading="lazy" decoding="async">
+        </div>
     </section>
 
     <section class="conversion-band" aria-label="ご依頼の案内">
+        <div class="mascot-slot mascot-slot--conversion" data-mascot-reveal aria-hidden="true">
+            <img class="mascot-slot__image" src="images/solacechibi1.png" alt="" width="512" height="640" loading="lazy" decoding="async">
+        </div>
         <div class="conversion-band-inner">
             <h2>制作のご相談を受け付けています</h2>
             <p>キャラクターデザインや立ち絵、キービジュアルなど、内容とスケジュールに合わせてお見積もりします。まずはお気軽にご連絡ください。</p>
+            <p>個人のお客様は、仲介サイト「つなぐ」または「Skeb」をご利用ください。</p>
             <div class="conversion-band-actions">
-                <a href="mailto:solqc_e@outlook.com?subject=%E3%82%A4%E3%83%A9%E3%82%B9%E3%83%88%E5%88%B6%E4%BD%9C%E3%81%AE%E3%81%8A%E8%A6%8B%E7%A9%8D%E3%82%82%E3%82%8A%E4%BE%9D%E9%A0%BC" class="btn btn-primary">企業の方はこちら</a>
-                <a href="request-personal.html" class="btn btn-outline">個人の方はこちら</a>
+                <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="btn btn-primary">法人案件をメールで相談する</a>
+                <a href="https://tsunagu.cloud/users/solqc_e" class="btn btn-outline" target="_blank" rel="noopener noreferrer">つなぐで依頼する</a>
+                <a href="https://skeb.jp/@solqc_e" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Skebでリクエスト</a>
             </div>
         </div>
     </section>
@@ -428,40 +300,50 @@
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">よくある質問</h2>
-                <p class="section-subtitle">よくいただくご質問と回答</p>
+                <p class="section-subtitle">法人・事業者のお客様からよくいただくご質問</p>
             </div>
 
-            <p class="faq-contact-note">詳しい内容は右下のチャットでも確認できます。解決しない場合は、<a href="mailto:solqc_e@outlook.com" class="email-protected"><i class="fas fa-envelope" aria-hidden="true"></i><span>メールでお問い合わせ</span></a>ください。</p>
+            <p class="faq-contact-note">案件ごとの条件や対応可否は、<a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="email-protected"><i class="fas fa-envelope" aria-hidden="true"></i><span>メールでご相談</span></a>ください。</p>
 
             <div class="faq-list">
                 <details class="faq-item">
-                    <summary>納期はどのくらいですか？</summary>
-                    <p>通常、シンプルなイラストは2～3週間、複雑なキャラクターデザインは3～4週間です。急な依頼の場合はご相談ください。追加料金で対応できる場合があります。</p>
+                    <summary>法人・商用案件を依頼できますか？</summary>
+                    <p>ご相談いただけます。制作内容や点数、用途、希望納期を確認し、対応可否とお見積もりをご案内します。内容によってはお受けできない場合もあります。</p>
                 </details>
 
                 <details class="faq-item">
-                    <summary>修正は何回まで可能ですか？</summary>
-                    <p>プランによって異なります。基本的には1～3回の修正が含まれています。大幅な変更については追加料金がかかる場合があります。</p>
+                    <summary>見積もりには何を伝えればよいですか？</summary>
+                    <p>制作物の種類・点数、使用目的や媒体、希望納期、ご予算の目安、納品形式、利用条件などを分かる範囲でお知らせください。未確定の項目があってもご相談いただけます。</p>
                 </details>
 
                 <details class="faq-item">
-                    <summary>商用利用は可能ですか？</summary>
-                    <p>はい、可能です。ゲーム、本、グッズなど、幅広い商用利用に対応しています。用途に応じて契約内容をご案内します。</p>
+                    <summary>法人案件の納期はどのくらいですか？</summary>
+                    <p>制作内容・点数・確認工程・着手時期によって異なります。ご希望日を伺い、対応可否とスケジュールを見積もり時にご案内します。発注者様の確認や資料提供の時期も、納期に影響する場合があります。</p>
                 </details>
 
                 <details class="faq-item">
-                    <summary>料金の目安はどのくらいですか？</summary>
-                    <p>料金は作品の複雑さや納期によって変動します。内容を伺ったうえで、用途に合わせたお見積もりをご案内します。</p>
+                    <summary>修正回数や確認方法は決められますか？</summary>
+                    <p>修正回数・対象範囲・確認タイミングは案件ごとに相談し、見積もりや契約時に確認します。合意した仕様からの変更は、追加費用や納期への影響を事前にご相談します。</p>
                 </details>
 
                 <details class="faq-item">
-                    <summary>著作権はどうなりますか？</summary>
-                    <p>基本的に著作権はsolaceに帰属します。ただし、商用利用される場合は著作権譲渡も可能です。ご依頼時にご相談ください。</p>
+                    <summary>制作物の著作権や利用範囲はどう決まりますか？</summary>
+                    <p>著作権の帰属、利用できる媒体・地域・期間、改変や二次利用の可否などを案件ごとに確認し、個別契約で定めます。希望する利用範囲をお問い合わせ時にお知らせください。</p>
                 </details>
 
                 <details class="faq-item">
-                    <summary>FAQにない内容を相談したいです</summary>
-                    <p>右下のチャットでもお答えできる場合があります。解決しない場合は、<a href="mailto:solqc_e@outlook.com" class="email-protected"><i class="fas fa-envelope" aria-hidden="true"></i><span>メールでお問い合わせ</span></a>ください。</p>
+                    <summary>秘密保持契約（NDA）の締結や機密資料の共有はできますか？</summary>
+                    <p>必要な場合は、資料を共有する前にNDAの要否や締結方法をご相談ください。契約前に、公開前の企画資料や個人情報などの機密情報をメールへ添付することはお控えください。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>見積書・請求書や発注書に対応できますか？</summary>
+                    <p>必要な書類の種類や記載事項、支払方法・期日は、発注前にご相談ください。対応可能な条件を確認し、見積書または個別契約で合意した内容をご案内します。適格請求書発行事業者の登録状況は、見積書・請求書等でご確認ください。</p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>納品データの形式や元データの受け取りは指定できますか？</summary>
+                    <p>希望するファイル形式・サイズ・カラーモードなどを事前にお知らせください。編集可能な元データの納品可否や条件も、制作範囲・利用条件とあわせて個別に確認します。</p>
                 </details>
             </div>
         </div>
@@ -469,11 +351,14 @@
 
     <!-- ===== お問い合わせ ===== -->
     <section class="contact target-selection" id="target-selection">
+        <div class="mascot-slot mascot-slot--contact" data-mascot-reveal aria-hidden="true">
+            <img class="mascot-slot__image" src="images/solacechibi1.png" alt="" width="512" height="640" loading="lazy" decoding="async">
+        </div>
         <div class="section-container">
             <header class="section-head section-head--center">
                 <span class="section-eyebrow">お問い合わせ</span>
                 <h2 class="section-title">ご依頼・ご相談</h2>
-                <p class="section-lead">企業の方はメール、個人の方は専用フォームから、お気軽にご連絡ください。</p>
+                <p class="section-lead">企業・事業者の方はメールでご相談ください。個人の方は「つなぐ」または「Skeb」をご利用ください。</p>
             </header>
 
             <div class="target-cards-grid">
@@ -481,38 +366,43 @@
                     <div class="target-icon">
                         <i class="fas fa-building"></i>
                     </div>
-                    <h4>企業向けメール相談</h4>
+                    <h4>法人・事業者向けのご相談</h4>
                     <p>ゲーム開発、アニメーション制作、<br>商用プロジェクト向け</p>
                     <ul class="target-features">
-                        <li><i class="fas fa-check"></i> 大規模案件対応</li>
-                        <li><i class="fas fa-check"></i> カスタム見積もり</li>
-                        <li><i class="fas fa-check"></i> 詳細なヒアリング</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> 内容に合わせたお見積もり</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> 契約・利用条件を事前に確認</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> ご要望に合わせてご提案</li>
                     </ul>
-                    <a href="mailto:solqc_e@outlook.com?subject=%E3%82%A4%E3%83%A9%E3%82%B9%E3%83%88%E5%88%B6%E4%BD%9C%E3%81%AE%E3%81%8A%E8%A6%8B%E7%A9%8D%E3%82%82%E3%82%8A%E4%BE%9D%E9%A0%BC" class="btn btn-primary">メールで相談する</a>
+                    <a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="btn btn-primary">法人案件をメールで相談する</a>
+                    <a href="portfolio-corporate.html" class="btn btn-outline">法人向けの制作内容を見る</a>
                 </div>
 
                 <div class="target-card personal">
                     <div class="target-icon">
                         <i class="fas fa-user"></i>
                     </div>
-                    <h4>個人向け依頼フォーム</h4>
+                    <h4>個人向けのご依頼</h4>
                     <p>個人ゲーム開発、グッズ制作、<br>同人活動向け</p>
                     <ul class="target-features">
-                        <li><i class="fas fa-check"></i> 気軽にご相談</li>
-                        <li><i class="fas fa-check"></i> 分かりやすい料金案内</li>
-                        <li><i class="fas fa-check"></i> 迅速な対応</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> イメージ段階から相談OK</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> 内容に合わせてお見積もり</li>
+                        <li><span class="feature-star" aria-hidden="true">✦</span> 分かりやすくご案内</li>
                     </ul>
-                    <a href="request-personal.html" class="btn btn-primary">個人向けフォームへ</a>
+                    <p>個人のお客様は、仲介サイト「つなぐ」または「Skeb」をご利用ください。</p>
+                    <div class="conversion-band-actions">
+                        <a href="https://tsunagu.cloud/users/solqc_e" class="btn btn-primary" target="_blank" rel="noopener noreferrer">つなぐで依頼する</a>
+                        <a href="https://skeb.jp/@solqc_e" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Skebでリクエスト</a>
+                    </div>
                 </div>
             </div>
 
             <p class="text-center text-light font-sm mt-lg">
-                ご依頼前に <a href="privacy-policy.html">プライバシーポリシー</a> ・ <a href="terms.html">利用規約</a> ・ <a href="tokutei-shotorihiki.html">特商法表記</a> ・ <a href="cancellation-policy.html">返金・キャンセルポリシー</a> をご確認ください。
+                ご依頼前に <a href="privacy-policy.html">プライバシーポリシー</a> ・ <a href="terms.html">利用規約</a> ・ <a href="cancellation-policy.html">返金・キャンセルポリシー</a> をご確認ください。
             </p>
 
             <div class="text-center mt-xl pt-xl border-top-subtle">
                 <p class="text-light mb-lg">
-                    SNSのDMでもお気軽にお問い合わせください
+                    制作のお問い合わせは、個人のお客様は仲介サイト「つなぐ」または「Skeb」、法人・事業者のお客様はメールをご利用ください。SNSでは作品や活動情報をご覧いただけます。
                 </p>
                 <div class="social-links">
                     <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" title="X" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
@@ -540,13 +430,11 @@
                 <h5>リンク</h5>
                 <ul>
                     <li><a href="#home">ホーム</a></li>
-                    <li><a href="#portfolio">ポートフォリオ</a></li>
+                    <li><a href="portfolio.html">ポートフォリオ</a></li>
                     <li><a href="#target-selection">相談</a></li>
-                    <li><a href="before-after.html">ビフォーアフター</a></li>
                     <li><a href="request.html">依頼方法のご案内</a></li>
                     <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
                     <li><a href="terms.html">利用規約</a></li>
-                    <li><a href="tokutei-shotorihiki.html">特商法表記</a></li>
                     <li><a href="cancellation-policy.html">返金・キャンセル</a></li>
                 </ul>
             </div>
@@ -570,6 +458,10 @@
         </div>
     </footer>
 
+    <div class="mascot-slot mascot-slot--edge" aria-hidden="true">
+        <img class="mascot-slot__image" src="images/solacechibi1.png" alt="" width="512" height="640" loading="lazy" decoding="async">
+    </div>
+
     <div id="portfolio-lightbox" class="portfolio-lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="portfolio-lightbox-title">
         <button type="button" class="portfolio-lightbox-backdrop" aria-label="閉じる"></button>
         <div class="portfolio-lightbox-panel">
@@ -589,4 +481,3 @@
     <script src="script.js?v=20260519-studio" defer></script>
 </body>
 </html>
-

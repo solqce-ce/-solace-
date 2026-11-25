@@ -12,7 +12,6 @@
                    style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
                    img-src 'self' data: https:;
                    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   frame-ancestors 'none';
                    base-uri 'self';
                    form-action 'self';">
     
@@ -35,15 +34,6 @@
     <link rel="stylesheet" href="studio.css">
     <link rel="stylesheet" href="icons-fix.css">
 
-    <!-- メールアドレス保護スクリプト -->
-    <script>
-        // メールアドレス保護関数 - スパムボット対策
-        function revealmailaddr() {
-            const encoded = 'c29scWNfZUBvdXRsb29rLmNvbQ==';
-            const decoded = atob(encoded);
-            window.location.href = 'mailto:' + decoded;
-        }
-    </script>
 </head>
 <body class="studio-site">
     <header class="header">
@@ -59,13 +49,12 @@
             </button>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html#home" class="nav-link">ホーム</a></li>
-                <li><a href="index.html#portfolio" class="nav-link">ポートフォリオ</a></li>
+                <li><a href="portfolio.html" class="nav-link">ポートフォリオ</a></li>
                 <li><a href="pricing.html" class="nav-link">料金</a></li>
-                <li><a href="tools.html" class="nav-link">制作ツール</a></li>
-                <li><a href="index.html#contact" class="nav-link">相談</a></li>
+                <li><a href="request-personal.html" class="nav-link">ご依頼</a></li>
             </ul>
             <div class="nav-cta">
-                <a href="request.html" class="btn btn-nav-contact">依頼する</a>
+                <a href="request-personal.html" class="btn btn-nav-contact">依頼する</a>
             </div>
         </nav>
     </header>
@@ -75,14 +64,11 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2 class="section-title">個人向け料金表</h2>
-                    <p class="section-subtitle">個人向け・1人あたり5,000円から。企業案件は相談フォームよりお問い合わせください。</p>
+                    <p class="section-subtitle">個人向けの参考料金です。法人・事業者案件は仕様を伺い、個別にお見積もりします。<a href="portfolio-corporate.html">法人向けのご案内はこちら</a></p>
                 </div>
 
                 <div class="pricing-intro">
                     <p>このページは個人のお客様向けの代表的なプランです。基本料金は1人あたり5,000円から。商用・企業案件のご依頼は別途ヒアリングが必要になります。</p>
-                    <div class="text-center" style="margin-top:12px;">
-                        <a href="mailto:solqc_e@outlook.com?subject=%E3%82%A4%E3%83%A9%E3%82%B9%E3%83%88%E5%88%B6%E4%BD%9C%E3%81%AE%E3%81%8A%E8%A6%8B%E7%A9%8D%E3%82%82%E3%82%8A%E4%BE%9D%E9%A0%BC" class="btn btn-secondary">企業の方はこちら（メール相談）</a>
-                    </div>
                 </div>
 
                 <div class="pricing-grid">
@@ -150,7 +136,7 @@
 
                 <div class="pricing-note">
                     <p>※ 上記は個人向けの参考料金です。1人あたり5,000円から、仕様や納期、著作権条件により変動します。</p>
-                    <p>複雑な案件や商用利用については事前にご相談ください。お見積もりは無料です。</p>
+                    <p>法人・事業者案件のお見積もりは<a href="mailto:solqc_e@outlook.com?subject=%E6%B3%95%E4%BA%BA%E6%A1%88%E4%BB%B6%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">メールでご相談ください</a>。仕様・利用条件を確認してご案内します。</p>
                 </div>
 
                 <!-- 料金FAQ -->
@@ -174,7 +160,7 @@
 
                         <details class="pricing-faq-item">
                             <summary><i class="fas fa-circle-question"></i> キャンセルはできますか？</summary>
-                            <p>入金前はキャンセル料なし、入金後かつ制作着手前は振込手数料を差し引いて返金、ラフ制作着手後は代金の50％、清書着手後は100％を原則としてキャンセル料とします。詳細は<a href="cancellation-policy.html">キャンセルポリシー</a>をご確認ください。</p>
+                            <p>個人のお客様は、ご利用の仲介サイトに掲載された規約および取引画面上の条件をご確認ください。<a href="cancellation-policy.html">当サイトの返金・キャンセルポリシー</a>は、法人・事業者との直接取引に適用されます。</p>
                         </details>
 
                         <details class="pricing-faq-item">
@@ -213,9 +199,9 @@
                 <h5>リンク</h5>
                 <ul>
                     <li><a href="index.html#home">ホーム</a></li>
-                    <li><a href="index.html#portfolio">ポートフォリオ</a></li>
+                    <li><a href="portfolio.html">ポートフォリオ</a></li>
                     <li><a href="pricing.html">料金</a></li>
-                    <li><a href="index.html#contact">相談</a></li>
+                    <li><a href="request-personal.html">個人向けのご依頼</a></li>
                 </ul>
             </div>
 

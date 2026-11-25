@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="solaceのイラストポートフォリオ。オリジナル、ファンアート、ミニキャラクター、ご依頼作品をカテゴリ別にご覧いただけます。">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="canonical" href="https://solace-illustration.com/portfolio.html">
+    <meta property="og:title" content="Portfolio | solace Illustration Studio">
+    <meta property="og:description" content="作品をカテゴリ別にご紹介。オリジナル、ファンアートなどをご覧いただけます。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://solace-illustration.com/portfolio.html">
+    <meta property="og:site_name" content="solace">
+    <meta property="og:image" content="https://solace-illustration.com/images/og-default.png">
+    <meta name="theme-color" content="#142128">
+    <title>Portfolio | solace Illustration Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="studio.css">
+    <link rel="stylesheet" href="icons-fix.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-17HK77SMHP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-17HK77SMHP');
+    </script>
+</head>
+<body class="studio-site portfolio-page">
+    <header class="header">
+        <nav class="navbar" aria-label="メインナビゲーション">
+            <a class="logo-section" href="index.html" aria-label="solace ホーム">
+                <span class="logo">solace</span>
+                <span class="logo-subtitle">Illustration Studio</span>
+            </a>
+            <button class="hamburger" id="hamburger" type="button" aria-label="メニューを開閉" aria-controls="navMenu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="portfolio.html" class="nav-link" aria-current="page">ポートフォリオ</a></li>
+                <li><a href="pricing.html" class="nav-link">料金</a></li>
+                <li><a href="index.html#target-selection" class="nav-link">相談</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="index.html#target-selection" class="btn btn-nav-contact">依頼する</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="portfolio-archive-hero">
+            <div class="portfolio-archive-hero__inner">
+                <p class="portfolio-archive-kicker">Selected Works <span>—</span> Illustration &amp; Character</p>
+                <h1>Portfolio<span aria-hidden="true">✦</span></h1>
+                <p class="portfolio-archive-lead">キャラクターの表情や、物語の気配を大切に。<br>これまでに描いた作品をご紹介します。</p>
+                <a class="portfolio-archive-scroll" href="#works" aria-label="作品一覧へ">
+                    <span>Explore works</span><i class="fas fa-arrow-down" aria-hidden="true"></i>
+                </a>
+                <span class="portfolio-archive-index" aria-hidden="true">01 / GALLERY</span>
+            </div>
+        </section>
+
+        <section class="portfolio-archive" id="works">
+            <div class="portfolio-archive__inner">
+                <header class="portfolio-archive-heading">
+                    <div>
+                        <span class="section-eyebrow">The collection</span>
+                        <h2 class="section-title">作品一覧</h2>
+                    </div>
+                    <p>気になるジャンルから、作品をご覧ください。</p>
+                </header>
+
+                <div class="portfolio-archive-toolbar">
+                    <div class="portfolio-archive-filters" role="group" aria-label="作品カテゴリ">
+                        <button class="portfolio-filter is-active" type="button" data-portfolio-filter="latest" aria-pressed="true">新着順</button>
+                        <button class="portfolio-filter" type="button" data-portfolio-filter="original" aria-pressed="false">Original <span>一次創作</span></button>
+                        <button class="portfolio-filter" type="button" data-portfolio-filter="fanart" aria-pressed="false">Fan Art <span>二次創作</span></button>
+                        <button class="portfolio-filter" type="button" data-portfolio-filter="chibi" aria-pressed="false">Mini Characters <span>デフォルメキャラクター</span></button>
+                        <button class="portfolio-filter" type="button" data-portfolio-filter="commission" aria-pressed="false">Commission <span>ご依頼作品</span></button>
+                    </div>
+                    <div class="portfolio-archive-controls">
+                        <p class="portfolio-archive-count" aria-live="polite"></p>
+                        <span class="portfolio-archive-hint">横にスクロールして作品を見る</span>
+                        <div class="portfolio-archive-arrows" role="group" aria-label="作品を横に移動">
+                            <button type="button" class="portfolio-archive-arrow" data-portfolio-scroll="-1" aria-label="前の作品へ" disabled><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+                            <button type="button" class="portfolio-archive-arrow" data-portfolio-scroll="1" aria-label="次の作品へ"><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-archive-grid" tabindex="0" aria-label="横スクロールできる作品一覧">
+                    <article id="work-yunoyuno-commission" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="commission" data-year="2026" data-date="2026-07-07" data-description="Commission illustration for Yuno Yuno, completed 2026-07-07." tabindex="0" role="button" aria-label="作品を拡大: Commission">
+                        <div class="work-card__media">
+                            <img src="images/yunoyuno-commission.png" alt="Commission illustration for Yuno Yuno" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Commission · Client: Yuno Yuno · 2026-07-07</span>
+                            <h3 class="work-card__title">Commission</h3>
+                            <p class="work-card__meta">Commission · 2026-07-07</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-hakuto" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="chibi original" data-year="2026" data-date="2026-02-16" data-description="一次創作のデフォルメキャラクター「白兎」。" tabindex="0" role="button" aria-label="作品を拡大: 白兎">
+                        <div class="work-card__media">
+                            <img src="images/hakuto.png" alt="白兎" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Mini Character · Original · 2026-02-16</span>
+                            <h3 class="work-card__title">白兎</h3>
+                            <p class="work-card__meta">デフォルメキャラクター · 一次創作 · 2026-02-16</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-chibi-solace" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="chibi original" data-year="2026" data-date="2026-11-26" data-description="solaceのオリジナルデフォルメキャラクター。" tabindex="0" role="button" aria-label="作品を拡大: ちびsolace">
+                        <div class="work-card__media">
+                            <img src="images/solacechibi-portfolio.png" alt="ちびsolace" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Mini Character · Original · 2026-11-26</span>
+                            <h3 class="work-card__title">ちびsolace</h3>
+                            <p class="work-card__meta">デフォルメキャラクター · 一次創作 · 2026-11-26</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-playback" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="fanart" data-year="2026" data-date="2026-11-13" data-description="二次創作イラスト「プレイバック」。" tabindex="0" role="button" aria-label="作品を拡大: プレイバック">
+                        <div class="work-card__media">
+                            <img src="images/playback.png" alt="プレイバック" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Fan Art · 2026-11-13</span>
+                            <h3 class="work-card__title">プレイバック</h3>
+                            <p class="work-card__meta">二次創作 · 2026-11-13</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-shermie" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="fanart" data-year="2025" data-date="2025-07-26" data-description="KOFのシェルミーを描いたファンアート。キャラクターの印象的なシルエットと華やかな色使いを表現しました。" tabindex="0" role="button" aria-label="作品を拡大: KOF - SHERMIE">
+                        <div class="work-card__media">
+                            <img src="images/sheru.png" alt="KOF - SHERMIE" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Fan Art · 2025-07-26</span>
+                            <h3 class="work-card__title">KOF — SHERMIE</h3>
+                            <p class="work-card__meta">二次創作 · 2025-07-26</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-kazarimi" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="original" data-year="2026" data-date="2026-04-20" data-description="耳飾りをモチーフにしたオリジナルキャラクター。やわらかな光と色合いで仕上げました。" tabindex="0" role="button" aria-label="作品を拡大: 飾り耳">
+                        <div class="work-card__media">
+                            <img src="images/usagimimi.png" alt="飾り耳" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Original · 2026-04-20</span>
+                            <h3 class="work-card__title">飾り耳</h3>
+                            <p class="work-card__meta">一次創作 · 2026-04-20</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                    <article id="work-panther" class="portfolio-archive-card work-card portfolio-item portfolio-expandable" data-category="fanart" data-year="2026" data-date="2026-02-03" data-description="PERSONA5のパンサーを描いたファンアート。赤を基調に、キャラクターの力強さをイラストにしました。" tabindex="0" role="button" aria-label="作品を拡大: PERSONA5 - Panther">
+                        <div class="work-card__media">
+                            <img src="images/panther.png" alt="PERSONA5 - Panther" loading="lazy">
+                        </div>
+                        <div class="portfolio-archive-card__caption">
+                            <span class="work-card__tag">Fan Art · 2026-02-03</span>
+                            <h3 class="work-card__title">PERSONA5 — Panther</h3>
+                            <p class="work-card__meta">二次創作 · 2026-02-03</p>
+                            <span class="portfolio-archive-card__arrow" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
+                        </div>
+                    </article>
+                </div>
+                <p class="portfolio-archive-empty" hidden>このジャンルの作品は、ただいま準備中です。新しい作品を楽しみにお待ちください。</p>
+
+                <div id="portfolio-lightbox" class="portfolio-lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="portfolio-lightbox-title">
+                    <button type="button" class="portfolio-lightbox-backdrop" aria-label="閉じる"></button>
+                    <div class="portfolio-lightbox-panel">
+                        <button type="button" class="portfolio-lightbox-close" aria-label="閉じる"><i class="fas fa-times" aria-hidden="true"></i></button>
+                        <button type="button" class="portfolio-lightbox-nav portfolio-lightbox-prev" aria-label="前の作品"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+                        <button type="button" class="portfolio-lightbox-nav portfolio-lightbox-next" aria-label="次の作品"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+                        <figure class="portfolio-lightbox-figure">
+                            <img src="" alt="" id="portfolio-lightbox-img">
+                            <figcaption class="portfolio-lightbox-caption">
+                                <h3 id="portfolio-lightbox-title"></h3>
+                                <p id="portfolio-lightbox-description"></p>
+                                <p id="portfolio-lightbox-meta"></p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="portfolio-archive-contact">
+            <span class="section-eyebrow">Your story, in color</span>
+            <h2>こんな作品を描いてほしい、と思ったら。</h2>
+            <p>イメージが決まっていなくても大丈夫です。ご希望を伺いながら、一緒に形にしていきます。</p>
+            <a href="index.html#target-selection" class="btn btn-primary">制作を相談する <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>solace</h5>
+                <p>Professional Illustration &amp; Character Design Studio</p>
+            </div>
+            <div class="footer-section">
+                <h5>Links</h5>
+                <ul>
+                    <li><a href="index.html">ホーム</a></li>
+                    <li><a href="portfolio.html">ポートフォリオ</a></li>
+                    <li><a href="pricing.html">料金</a></li>
+                    <li><a href="index.html#target-selection">お問い合わせ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h5>Follow</h5>
+                <div class="footer-social">
+                    <a href="https://x.com/solqc_e" target="_blank" rel="noopener noreferrer" aria-label="Xを開く（新しいタブ）"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.pixiv.net/users/87167514" target="_blank" rel="noopener noreferrer" aria-label="pixivを開く（新しいタブ）"><i class="fas fa-images"></i></a>
+                    <a href="https://www.instagram.com/solqc_e/" target="_blank" rel="noopener noreferrer" aria-label="Instagramを開く（新しいタブ）"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 solace. All rights reserved.</p></div>
+    </footer>
+
+    <script src="script.js?v=20261125-portfolio" defer></script>
+</body>
+</html>

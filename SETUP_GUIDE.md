@@ -5,41 +5,14 @@
 
 ---
 
-## 🔧 1. Formspree（メール送信機能）のセットアップ
+## 📮 1. お問い合わせ窓口
 
-### 目的
-お問い合わせフォームから直接メールを受け取るためのサービスです。
+現在、サイト内のお問い合わせフォームは設置していません。受付窓口は次のとおりです。
 
-### セットアップ手順
+- 個人のお客様： [つなぐ](https://tsunagu.cloud/users/solqc_e) または [Skeb](https://skeb.jp/@solqc_e)
+- 法人・事業者のお客様： `solqc_e@outlook.com` へメール
 
-#### ステップ1: Formspreeに登録
-1. https://formspree.io にアクセス
-2. 「Sign Up」をクリック
-3. メールアドレスを入力して登録
-4. メール認証を完了
-
-#### ステップ2: 新しいフォームを作成
-1. ダッシュボードで「New Form」をクリック
-2. フォーム名を入力（例：Contact Form）
-3. 「Create」をクリック
-4. **フォームID（例：f_abc123def456）** をコピー
-
-#### ステップ3: HTMLに設定
-1. `index.html`を開く
-2. 以下の行を探す：
-   ```
-   <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-   ```
-3. `YOUR_FORM_ID` を手順2でコピーしたIDに置き換え
-   例：`https://formspree.io/f/f_abc123def456`
-
-#### ステップ4: テスト送信
-1. ホームページを開く
-2. お問い合わせフォームに入力
-3. 「送信する」ボタンをクリック
-4. 登録したメールアドレスに確認メールが届くか確認
-
-✅ **メール送信機能が有効になります！**
+窓口を変更する場合は、`index.html`、`request.html`、`request-personal.html`、`pricing.html` 内の案内・リンクもあわせて更新し、個人向けの受付が仲介サイト経由のままになっていることを確認してください。
 
 ---
 
@@ -134,16 +107,17 @@ this.faqDatabase = [
 ```
 📁 solace-website
 ├── 📄 index.html ................... メインページ
-├── 📄 blog.html .................... ブログ一覧
-├── 📄 before-after.html ............ 修正前後比較
-├── 📄 portfolio-corporate.html ..... 企業向けポートフォリオ
+├── 📄 portfolio.html ............... ポートフォリオ一覧
+├── 📄 portfolio-corporate.html ..... 法人・事業者向け案内
 ├── 📄 portfolio-personal.html ...... 個人向けポートフォリオ
+├── 📄 request.html ................. 依頼・相談案内
+├── 📄 request-personal.html ........ 個人向け依頼案内
+├── 📄 pricing.html ................. 個人向け参考料金
+├── 📄 terms.html ................... 法人・事業者向け利用規約
+├── 📄 cancellation-policy.html ..... 法人・事業者向け返金・キャンセル方針
 ├── 📄 style.css .................... スタイルシート
 ├── 📄 script.js .................... JavaScript
-├── 📁 images ....................... 画像フォルダ
-│   ├── sample1.jpg
-│   ├── sample2.jpg
-│   └── sample3.jpg
+├── 📄 sitemap.xml ................. サイトマップ
 └── 📄 SETUP_GUIDE.md .............. このファイル
 ```
 
@@ -151,9 +125,9 @@ this.faqDatabase = [
 
 ## 🎨 カスタマイズガイド
 
-### メールアドレスの変更
-- `index.html`の「Contact」セクションで、メールアドレスを変更できます
-- Formspree経由なので、直接のメール設定は不要です
+### メールアドレス・受付先の変更
+- 法人・事業者向けメールアドレスは、`index.html`、`request.html`、`portfolio-corporate.html`、`pricing.html` などの `mailto:` リンクと案内文で更新します。
+- 個人のお客様の受付先は、仲介サイトへのリンクを各依頼案内ページで更新します。個人向けの連絡先としてメールやSNSのDMを案内しないでください。
 
 ### SNSリンクの更新
 - `index.html`と各ページ内のSNSリンク（Instagram, X, Pixiv等）をあなたのアカウントに置き換え
@@ -162,8 +136,7 @@ this.faqDatabase = [
 - `index.html`内の「solace」や説明文をあなたの情報に置き換え
 
 ### 画像の追加
-- `images/`フォルダに画像を保存
-- `sample1.jpg`, `sample2.jpg`, `sample3.jpg` をあなたの作品に置き換え
+- `images/`フォルダに画像を保存し、掲載するHTMLの画像パスと代替テキストを設定します。
 
 ---
 
@@ -195,10 +168,10 @@ this.faqDatabase = [
 
 セットアップ完了時の確認項目：
 
-- [ ] Formspreeでメール送信テスト済み
 - [ ] Google Analyticsダッシュボード確認済み
 - [ ] チャットボットが右下に表示される
 - [ ] 画像がすべて表示されている
+- [ ] 個人向け受付が仲介サイト、法人・事業者向け受付がメールになっている
 - [ ] SNSリンクが正しい
 - [ ] モバイルでも見やすい（レスポンシブ確認）
 - [ ] ホスティングサービスにアップロード済み
@@ -206,12 +179,6 @@ this.faqDatabase = [
 ---
 
 ## 🆘 トラブルシューティング
-
-### Q: フォームが送信できない
-**A:** 
-- Formspreeの測定IDが正しく設定されているか確認
-- メールアドレスが登録済みか確認
-- フォームの `method="POST"` が設定されているか確認
 
 ### Q: Google Analyticsが表示されない
 **A:** 

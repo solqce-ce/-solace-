@@ -1,11 +1,10 @@
 # -solace-
-solace　ホームページ、ジェネレーター、ブログ（予定）
+solace ホームページ、ジェネレーター
 
 ## 入口
 
 - ホームページ: [index.html](index.html)
 - 制作ツール: [tools.html](tools.html)
-- ブログ（予定）: [blog.html](blog.html)
 - 計測レポートガイド: [ANALYTICS_REPORT_GUIDE.md](ANALYTICS_REPORT_GUIDE.md)
 
 ## SNSカード確認手順
@@ -33,4 +32,3 @@ solace　ホームページ、ジェネレーター、ブログ（予定）
 
 - サイトマップ: [sitemap.xml](sitemap.xml)
 - robots設定: [robots.txt](robots.txt)
-
